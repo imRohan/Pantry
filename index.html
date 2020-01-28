@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World with Webpack</title>
+    <meta name="author" content="name">
+    <meta name="description" content="description here">
+    <meta name="keywords" content="keywords,here">
+    <link rel="shortcut icon" href="" type="image/vnd.microsoft.icon">
+  </head>
+  <body>
+    <div class="app">
+      <h1>
+        {{ name }}
+      </h1>
+      <h1>
+        {{ response }}
+      </h1>
+      <button @click="getDataFromExpressServer()">Sample Get</button> 
+    </div>
+  </body>
+  <script type="text/javascript" src='bundle.js'></script>
+</html>
+

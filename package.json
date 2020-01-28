@@ -1,0 +1,65 @@
+{
+  "name": "node-express-vuejs-typescript-boilerplate",
+  "version": "0.0.1",
+  "author": "Rohan Likhite <rlikhite@gmail.com>",
+  "license": "MIT",
+  "description": "A Node, Express, VueJS, Typescript Boilerplate",
+  "main": "src/main.ts",
+  "repository": {
+    "url": "https://github.com/imRohan/node-express-vuejs.git",
+    "type": "git"
+  },
+  "scripts": {
+    "dev": "concurrently -k 'tsc && node dist/main.js' 'webpack --config webpack.dev.js'",
+    "dev-server": "tsc && node --inspect=[0.0.0.0] dist/main.js",
+    "linter": "tslint -c tslint.json -p tsconfig.json",
+    "tests": "tsc && concurrently -k 'node dist/main.js' 'jest'",
+    "build": "webpack --config webpack.prod.js",
+    "server": "tsc && node dist/main.js"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts)$": "<rootDir>/node_modules/ts-jest"
+    },
+    "testRegex": "./tests/.*.test.js$"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-es2015": "^6.24.1",
+    "concurrently": "^3.6.0",
+    "css-loader": "^1.0.0",
+    "html-loader": "^0.5.5",
+    "jest": "^23.6.0",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^7.0.3",
+    "style-loader": "^0.21.0",
+    "ts-jest": "^23.10.5",
+    "ts-loader": "^6.2.1",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.4",
+    "uglifyjs-webpack-plugin": "^1.2.7",
+    "vue-loader": "^15.2.4",
+    "vue-resource": "^1.5.1",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.3"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.3",
+    "request": "^2.87.0",
+    "url-loader": "^1.0.1",
+    "vue": "^2.5.16"
+  }
+}

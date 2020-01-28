@@ -1,0 +1,14 @@
+{
+    "defaultSeverity": "warning",
+    "extends": ["tslint:recommended"],
+    "jsRules": {},
+    "rules": {
+      "semicolon": false,
+      "quotemark": [true, "single"],
+      "variable-name": [true, "allow-leading-underscore"],
+      "align": [true, "parameters", "statements", "members", "elements"],
+      "no-console": false,
+      "no-var-requires": false,
+      "object-literal-sort-keys": [false]
+    }
+}

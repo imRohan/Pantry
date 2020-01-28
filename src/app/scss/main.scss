@@ -1,0 +1,11 @@
+// Follow BEM SASS Convention
+// Global = Designated for app wide styles and SASS helpers
+// Elements = HTML elements and overrides
+// Components = Stylesheets for custom VueJS components
+// Views = View specific stylesheets. Route components.
+
+$color: red;
+
+h1 {
+  color: $color;
+}
