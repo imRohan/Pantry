@@ -18,6 +18,17 @@ class AccountController {
       throw new Error('Could not create account at this time')
     }
   }
+
+  public static async get(uuid: string): Promise<IAccount> {
+    try {
+      const _account = await Account.get(uuid)
+      console.log('Account - Fetched account!')
+      return _account
+    } catch(error) {
+      console.log(`Accounts - Could not get account: ${error.message}`)
+      throw new Error('Could not get account at this time')
+    }
+  }
 }
 
 export = AccountController

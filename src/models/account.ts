@@ -34,12 +34,28 @@ class Account {
       const _client = redis.createClient()
       const _setAsync = promisify(_client.set).bind(_client)
 
-      const _accountKey = this.generateRedisKey()
+      const _accountKey = Account.generateRedisKey(this.uuid)
       const _stringifiedAccount = this.generateRedisPayload()
       await _setAsync(_accountKey, _stringifiedAccount, 'EX', this.lifeSpan)
       _client.quit()
     } catch (error) {
       throw new Error(`Account - failed to store account: ${error.message}`)
+    }
+  }
+
+  public static async get(uuid: string): Promise<IAccount> {
+    try {
+      const _client = redis.createClient()
+      const _getAsync = promisify(_client.get).bind(_client)
+
+      const _accountKey = Account.generateRedisKey(uuid)
+      const _stringifiedAccount = await _getAsync(_accountKey)
+      _client.quit()
+  
+      const _account = Account.convertRedisPayload(_stringifiedAccount)
+      return _account
+    } catch (error) {
+      throw new Error(`Account - failed to get account: ${error.message}`)
     }
   }
 
@@ -55,13 +71,18 @@ class Account {
     return JSON.stringify(_accountDetails)
   }
 
-  private generateRedisKey(): string {
+  private static convertRedisPayload(stringifiedAccount: string): IAccount {
     try {
-      if (!this.uuid) {
-        throw new Error('no uuid found')
-      }
+      const _account = JSON.parse(stringifiedAccount)
+      return _account
+    } catch (error) {
+      throw new Error(`Account - failed to convert redis payload: ${error.message}`)
+    }
+  }
 
-      return `account:${this.uuid}`
+  private static generateRedisKey(uuid: string): string {
+    try {
+      return `account:${uuid}`
     } catch (error) {
       throw new Error(`Account - failed to generate rkey: ${error.message}`)
     }

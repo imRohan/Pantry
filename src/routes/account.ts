@@ -19,4 +19,16 @@ router.post('/create', async (req, res) => {
   }
 })
 
+router.get('/get/:uuid', async (req, res) => {
+  try {
+    console.log('Account - Got request /get')
+
+    const _account = await AccountController.get(req.params.uuid)
+
+    res.send(_account)
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+})
+
 module.exports = router
