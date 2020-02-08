@@ -21,7 +21,6 @@ server.get('/', (request, response) => {
   response.sendFile('index.html', { root: process.env.PWD })
 })
 
-
 function startApplication() {
   // Start the Express Server & Init the application
   const _serverInstance = server.listen(process.env.API_SERVER_PORT, () => {
@@ -34,4 +33,3 @@ function startApplication() {
 }
 
 startApplication()
-

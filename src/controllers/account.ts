@@ -15,7 +15,8 @@ class AccountController {
       console.log('Account - Created account!')
       const { uuid } = _account
       return uuid
-    } catch(error) {
+    } catch (error) {
+      console.log(error.message)
       throw error
     }
   }
@@ -25,7 +26,8 @@ class AccountController {
       const _account = await Account.get(uuid)
       console.log('Account - Fetched account!')
       return _account
-    } catch(error) {
+    } catch (error) {
+      console.log(error.message)
       throw error
     }
   }
