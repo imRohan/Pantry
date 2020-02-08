@@ -7,15 +7,15 @@ import Account = require('../models/account')
 import { IAccount } from '../interfaces/account'
 
 class AccountController {
-  public static async create(params: IAccount): Promise<IAccount> {
+  public static async create(params: IAccount): Promise<string> {
     try {
       const _account = new Account(params)
       await _account.store()
-      console.log('Account - Created new account!')
-      return _account
+
+      const { uuid } = _account
+      return uuid
     } catch(error) {
-      console.log(`Accounts - Could not create account: ${error.message}`)
-      throw new Error('Could not create account at this time')
+      throw error
     }
   }
 
@@ -25,8 +25,7 @@ class AccountController {
       console.log('Account - Fetched account!')
       return _account
     } catch(error) {
-      console.log(`Accounts - Could not get account: ${error.message}`)
-      throw new Error('Could not get account at this time')
+      throw error
     }
   }
 }

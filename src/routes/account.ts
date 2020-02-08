@@ -11,9 +11,9 @@ router.post('/create', async (req, res) => {
     console.log('Account - Got request /create')
 
     const { body } = req
-    const _newAccount = await AccountController.create(body)
+    const _newAccountUUID = await AccountController.create(body)
 
-    res.send(_newAccount)
+    res.send(_newAccountUUID)
   } catch (error) {
     res.status(400).send(error.message)
   }

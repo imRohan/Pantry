@@ -51,9 +51,14 @@ class Account {
       const _accountKey = Account.generateRedisKey(uuid)
       const _stringifiedAccount = await _getAsync(_accountKey)
       _client.quit()
+
+      if (!_stringifiedAccount) {
+        throw new Error('Account does not exist')
+      }
   
       const _account = Account.convertRedisPayload(_stringifiedAccount)
-      return _account
+      const _accountSanitized = Account.sanitize(_account)
+      return _accountSanitized
     } catch (error) {
       throw new Error(`Account - failed to get account: ${error.message}`)
     }
@@ -85,6 +90,15 @@ class Account {
       return `account:${uuid}`
     } catch (error) {
       throw new Error(`Account - failed to generate rkey: ${error.message}`)
+    }
+  }
+
+  private static sanitize(account: IAccount): IAccount {
+    try {
+      const { name, description, contactEmail } = account
+      return { name, description, contactEmail }
+    } catch (error) {
+      throw new Error(`Account - failed to sanitize account: ${error.message}`)
     }
   }
 }
