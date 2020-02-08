@@ -8,8 +8,6 @@ const router = express.Router()
 
 router.post('/create', async (req, res) => {
   try {
-    console.log('Account - Got request /create')
-
     const { body } = req
     const _newAccountUUID = await AccountController.create(body)
 
@@ -21,8 +19,6 @@ router.post('/create', async (req, res) => {
 
 router.get('/get/:uuid', async (req, res) => {
   try {
-    console.log('Account - Got request /get')
-
     const _account = await AccountController.get(req.params.uuid)
 
     res.send(_account)

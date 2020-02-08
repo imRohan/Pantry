@@ -12,6 +12,7 @@ class AccountController {
       const _account = new Account(params)
       await _account.store()
 
+      console.log('Account - Created account!')
       const { uuid } = _account
       return uuid
     } catch(error) {
