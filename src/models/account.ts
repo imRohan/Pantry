@@ -1,5 +1,6 @@
 // Extarnal Libs
 import { IsString, IsNotEmpty } from 'class-validator'
+import uuidv4 = require('uuid/v4')
 
 // External Files
 
@@ -12,7 +13,7 @@ class Account {
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
-    this.uuid = '12345'
+    this.uuid = uuidv4()
   }
 
   @IsNotEmpty()

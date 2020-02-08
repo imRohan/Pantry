@@ -10,7 +10,6 @@ class AccountController {
   public static async create(params: IAccount): Promise<IAccount> {
     try {
       const _account = new Account(params)
-
       console.log('Account - Created new account!')
       return _account
     } catch(error) {
