@@ -17,7 +17,7 @@ _accountRouter.post('/create', async (req, res) => {
   }
 })
 
-_accountRouter.get('/get/:uuid', async (req, res) => {
+_accountRouter.get('/:uuid', async (req, res) => {
   try {
     const { params } = req
     const { uuid } = params

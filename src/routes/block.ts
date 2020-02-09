@@ -6,7 +6,7 @@ import BlockController = require('../controllers/block')
 
 const _blockRouter = express.Router()
 
-_blockRouter.post('/create/:account', async (req, res) => {
+_blockRouter.post('/:account', async (req, res) => {
   try {
     const { body, params } = req
     const { account } = params
@@ -18,7 +18,7 @@ _blockRouter.post('/create/:account', async (req, res) => {
   }
 })
 
-_blockRouter.get('/get/:account/:name', async (req, res) => {
+_blockRouter.get('/:account/:name', async (req, res) => {
   try {
     const { params } = req
     const { account, name } = params
