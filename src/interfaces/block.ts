@@ -1,5 +1,5 @@
 export interface IBlock {
   accountUUID: string,
-  payload: string,
-  uuid: string,
+  name: string,
+  payload: any,
 }

@@ -4,9 +4,9 @@ import express = require('express')
 // External Files
 import AccountController = require('../controllers/account')
 
-const router = express.Router()
+const _accountRouter = express.Router()
 
-router.post('/create', async (req, res) => {
+_accountRouter.post('/create', async (req, res) => {
   try {
     const { body } = req
     const _newAccountUUID = await AccountController.create(body)
@@ -17,9 +17,11 @@ router.post('/create', async (req, res) => {
   }
 })
 
-router.get('/get/:uuid', async (req, res) => {
+_accountRouter.get('/get/:uuid', async (req, res) => {
   try {
-    const _account = await AccountController.get(req.params.uuid)
+    const { params } = req
+    const { uuid } = params
+    const _account = await AccountController.get(uuid)
 
     res.send(_account)
   } catch (error) {
@@ -27,4 +29,4 @@ router.get('/get/:uuid', async (req, res) => {
   }
 })
 
-module.exports = router
+module.exports = _accountRouter

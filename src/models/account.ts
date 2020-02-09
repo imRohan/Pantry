@@ -10,6 +10,14 @@ import uuidv4 = require('uuid/v4')
 import { IAccount } from '../interfaces/account'
 
 class Account {
+  public static async checkIfExists(uuid: string): Promise<boolean> {
+    try {
+      const _account = await Account.get(uuid)
+      return _account ? true : false
+    } catch (error) {
+      return false
+    }
+  }
 
   public static async get(uuid: string): Promise<IAccount> {
     try {
@@ -21,14 +29,14 @@ class Account {
       _client.quit()
 
       if (!_stringifiedAccount) {
-        throw new Error('Account does not exist')
+        throw new Error('account does not exist')
       }
 
       const _account = Account.convertRedisPayload(_stringifiedAccount)
       const _accountSanitized = Account.sanitize(_account)
       return _accountSanitized
     } catch (error) {
-      throw new Error(`Account - failed to get account: ${error.message}`)
+      throw new Error(`failed to get account: ${error.message}`)
     }
   }
 
@@ -37,7 +45,7 @@ class Account {
       const _account = JSON.parse(stringifiedAccount)
       return _account
     } catch (error) {
-      throw new Error(`Account - failed to convert redis payload: ${error.message}`)
+      throw new Error(`failed to convert redis payload: ${error.message}`)
     }
   }
 
@@ -45,7 +53,7 @@ class Account {
     try {
       return `account:${uuid}`
     } catch (error) {
-      throw new Error(`Account - failed to generate rkey: ${error.message}`)
+      throw new Error(`failed to generate rkey: ${error.message}`)
     }
   }
 
@@ -54,7 +62,7 @@ class Account {
       const { name, description, contactEmail, notifications, blocks } = account
       return { name, description, contactEmail, notifications, blocks }
     } catch (error) {
-      throw new Error(`Account - failed to sanitize account: ${error.message}`)
+      throw new Error(`failed to sanitize account: ${error.message}`)
     }
   }
 
