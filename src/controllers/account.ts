@@ -24,6 +24,7 @@ class AccountController {
   public static async get(uuid: string): Promise<IAccount> {
     try {
       const _account = await Account.get(uuid)
+
       console.log('Account - Fetched account!')
       return _account
     } catch (error) {

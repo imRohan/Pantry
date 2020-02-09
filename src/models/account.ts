@@ -1,5 +1,5 @@
 // Extarnal Libs
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsBoolean, IsNotEmpty, IsString, validate } from 'class-validator'
 import redis = require('redis')
 import { promisify } from 'util'
 import uuidv4 = require('uuid/v4')
@@ -51,8 +51,8 @@ class Account {
 
   private static sanitize(account: IAccount): IAccount {
     try {
-      const { name, description, contactEmail } = account
-      return { name, description, contactEmail }
+      const { name, description, contactEmail, notifications } = account
+      return { name, description, contactEmail, notifications }
     } catch (error) {
       throw new Error(`Account - failed to sanitize account: ${error.message}`)
     }
@@ -67,21 +67,31 @@ class Account {
   @IsNotEmpty()
   @IsString()
   public contactEmail: string
+  @IsNotEmpty()
+  @IsBoolean()
+  public notifications: boolean
   public uuid: string
 
   // Constants
   private readonly lifeSpan = 432000
 
   constructor(params: IAccount) {
-    const { name, description, contactEmail } = params
+    const { name, description, contactEmail, notifications } = params
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
+    this.notifications = notifications ?? false
     this.uuid = uuidv4()
   }
 
   public async store(): Promise<void> {
     try {
+      // Validate the account object
+      const _errors = await validate(this)
+      if (_errors.length > 0) {
+        throw new Error(`Validation failed: ${_errors}`)
+      }
+
       const _client = redis.createClient()
       const _setAsync = promisify(_client.set).bind(_client)
 
@@ -95,10 +105,11 @@ class Account {
   }
 
   private generateRedisPayload(): string {
-    const _accountDetails = {
+    const _accountDetails: IAccount = {
       name: this.name,
       description: this.description,
       contactEmail: this.contactEmail,
+      notifications: this.notifications,
       uuid: this.uuid,
     }
     return JSON.stringify(_accountDetails)
