@@ -3,5 +3,6 @@ export interface IAccount {
   description: string,
   contactEmail: string,
   notifications: boolean,
+  blocks: string[],
   uuid?: string,
 }

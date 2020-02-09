@@ -1,5 +1,5 @@
 // Extarnal Libs
-import { IsBoolean, IsNotEmpty, IsString, validate } from 'class-validator'
+import { IsBoolean, IsNotEmpty, IsString, IsArray, validate } from 'class-validator'
 import redis = require('redis')
 import { promisify } from 'util'
 import uuidv4 = require('uuid/v4')
@@ -51,8 +51,8 @@ class Account {
 
   private static sanitize(account: IAccount): IAccount {
     try {
-      const { name, description, contactEmail, notifications } = account
-      return { name, description, contactEmail, notifications }
+      const { name, description, contactEmail, notifications, blocks } = account
+      return { name, description, contactEmail, notifications, blocks }
     } catch (error) {
       throw new Error(`Account - failed to sanitize account: ${error.message}`)
     }
@@ -70,6 +70,9 @@ class Account {
   @IsNotEmpty()
   @IsBoolean()
   public notifications: boolean
+  @IsNotEmpty()
+  @IsArray()
+  public blocks: string[]
   public uuid: string
 
   // Constants
@@ -81,6 +84,7 @@ class Account {
     this.description = description
     this.contactEmail = contactEmail
     this.notifications = notifications ?? false
+    this.blocks = []
     this.uuid = uuidv4()
   }
 
@@ -110,6 +114,7 @@ class Account {
       description: this.description,
       contactEmail: this.contactEmail,
       notifications: this.notifications,
+      blocks: this.blocks,
       uuid: this.uuid,
     }
     return JSON.stringify(_accountDetails)
