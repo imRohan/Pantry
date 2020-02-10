@@ -1,5 +1,12 @@
 // Extarnal Libs
-import { IsArray, IsBoolean, IsNotEmpty, IsString, validate } from 'class-validator'
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+  validate
+} from 'class-validator'
 import redis = require('redis')
 import { promisify } from 'util'
 import uuidv4 = require('uuid/v4')
@@ -98,6 +105,7 @@ class Account {
   @IsNotEmpty()
   @IsArray()
   public blocks: string[]
+  @IsUUID("4")
   public uuid: string
 
   // Constants
