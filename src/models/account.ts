@@ -1,5 +1,5 @@
 // Extarnal Libs
-import { IsBoolean, IsNotEmpty, IsString, IsArray, validate } from 'class-validator'
+import { IsArray, IsBoolean, IsNotEmpty, IsString, validate } from 'class-validator'
 import redis = require('redis')
 import { promisify } from 'util'
 import uuidv4 = require('uuid/v4')

@@ -1,5 +1,5 @@
 // Extarnal Libs
-import { IsObject, IsNotEmptyObject, IsNotEmpty, IsString, validate } from 'class-validator'
+import { IsNotEmpty, IsNotEmptyObject, IsObject, IsString, validate } from 'class-validator'
 import redis = require('redis')
 import { promisify } from 'util'
 
