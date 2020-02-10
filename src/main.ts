@@ -16,8 +16,8 @@ server.use(bodyParser.json())
 server.use(express.static(__dirname))
 
 // Routes
-server.use('/api/account', _accountRoutes)
-server.use('/api/block', _blockRoutes)
+server.use('/api/basket', _accountRoutes)
+server.use('/api/jar', _blockRoutes)
 
 server.get('/', (request, response) => {
   response.sendFile('index.html', { root: process.env.PWD })
