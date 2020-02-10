@@ -40,6 +40,23 @@ class Account {
     }
   }
 
+  public static async addBlock(uuid: string, blockName: string): Promise<void> {
+    try {
+      const _account = await Account.get(uuid)
+      const { blocks } = _account
+
+      // Add the existing blocks to updated account, along with the current uuid
+      const _updatedBlocks = [ ...blocks, blockName ]
+      _account.blocks = _updatedBlocks
+      _account.uuid = uuid
+
+      const _updatedAccount = new Account(_account)
+      await _updatedAccount.store()
+    } catch (error) {
+      throw new Error(`failed to add block to account: ${error.message}`)
+    }
+  }
+
   private static convertRedisPayload(stringifiedAccount: string): IAccount {
     try {
       const _account = JSON.parse(stringifiedAccount)
@@ -87,13 +104,13 @@ class Account {
   private readonly lifeSpan = 432000
 
   constructor(params: IAccount) {
-    const { name, description, contactEmail, notifications } = params
+    const { name, description, contactEmail, notifications, blocks, uuid } = params
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
     this.notifications = notifications ?? false
-    this.blocks = []
-    this.uuid = uuidv4()
+    this.blocks = blocks ?? []
+    this.uuid = uuid ?? uuidv4()
   }
 
   public async store(): Promise<void> {

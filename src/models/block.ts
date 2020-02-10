@@ -19,7 +19,7 @@ class Block {
       _client.quit()
 
       if (!_stringifiedBlock) {
-        throw new Error('block does not exist')
+        throw new Error(`${name} does not exist`)
       }
 
       const _block = Block.convertRedisPayload(_stringifiedBlock)
@@ -93,7 +93,7 @@ class Block {
       await _setAsync(_blockKey, _stringifiedBlock, 'EX', this.lifeSpan)
       _client.quit()
     } catch (error) {
-      throw new Error(`Block - failed to store account: ${error.message}`)
+      throw new Error(`Block - failed to store block: ${error.message}`)
     }
   }
 

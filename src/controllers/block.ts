@@ -12,16 +12,19 @@ class BlockController {
     try {
       // Check if account exists
       const _accountExists = await Account.checkIfExists(accountUUID)
-
       if (!_accountExists) {
         throw new Error(`Could not create block, account does not exist`)
       }
 
+      // Create/update block for given account
       const { name } = params
       const _block = new Block(accountUUID, params)
       await _block.store()
-
       console.log(`Block - Created new block: ${name} for account: ${accountUUID}`)
+
+      // Store block name in account entity
+      await Account.addBlock(accountUUID, name)
+
       return `Created new block: ${name}!`
     } catch (error) {
       console.log(`Block/create - ${error.message}`)
@@ -33,7 +36,6 @@ class BlockController {
     try {
       // Check if account exists
       const _accountExists = await Account.checkIfExists(accountUUID)
-
       if (!_accountExists) {
         throw new Error(`Could not create block, account does not exist`)
       }
