@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 // TODO
-// - Clean up error logging, and output to users (maybe use friendly, verbose?)
 // - Remove blocks from accounts when they expire
-// - Figure out naming conventions for end users (account/block basket/jars)
+// - Add max number of baskets
 // - Build the front end (v.1)
+// - Clean up error logging, and output to users (maybe use friendly, verbose?)
 // - Deploy on AWS Litesail
 // - Write unit tests
 // - Setup Travis or something to run pipelines and run tests
