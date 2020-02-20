@@ -5,7 +5,7 @@ import {
   IsNotEmpty,
   IsString,
   IsUUID,
-  validate
+  validate,
 } from 'class-validator'
 import redis = require('redis')
 import { promisify } from 'util'
@@ -122,7 +122,7 @@ class Account {
   @IsNotEmpty()
   @IsArray()
   public blocks: string[]
-  @IsUUID("4")
+  @IsUUID('4')
   public uuid: string
 
   // Constants
