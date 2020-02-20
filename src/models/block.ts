@@ -9,6 +9,15 @@ import { promisify } from 'util'
 import { IBlock } from '../interfaces/block'
 
 class Block {
+  public static async checkIfExists(accountUUID: string, name: string): Promise<boolean> {
+    try {
+      const _block = await Block.get(accountUUID, name)
+      return _block ? true : false
+    } catch (error) {
+      return false
+    }
+  }
+
   public static async get(accountUUID: string, name: string): Promise<any> {
     try {
       const _client = redis.createClient()

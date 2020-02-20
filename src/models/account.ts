@@ -64,6 +64,23 @@ class Account {
     }
   }
 
+  public static async removeBlock(uuid: string, blockName: string): Promise<void> {
+    try {
+      const _account = await Account.get(uuid)
+      const { blocks } = _account
+
+      // Remove the block in question
+      const _updatedBlocks = blocks.filter((name) => name !== blockName)
+      _account.blocks = _updatedBlocks
+      _account.uuid = uuid
+
+      const _updatedAccount = new Account(_account)
+      await _updatedAccount.store()
+    } catch (error) {
+      throw new Error(`failed to add block to account: ${error.message}`)
+    }
+  }
+
   private static convertRedisPayload(stringifiedAccount: string): IAccount {
     try {
       const _account = JSON.parse(stringifiedAccount)
