@@ -14,7 +14,7 @@ _blockRouter.post('/:account', async (req, res) => {
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(error.message)
+    res.status(400).send(`Could not create basket: ${error.message}`)
   }
 })
 
@@ -26,7 +26,7 @@ _blockRouter.get('/:account/:name', async (req, res) => {
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(error.message)
+    res.status(400).send(`Could not get basket: ${error.message}`)
   }
 })
 

@@ -37,14 +37,14 @@ class Account {
       _client.quit()
 
       if (!_stringifiedAccount) {
-        throw new Error('account does not exist')
+        throw new Error(`nothing found for ${uuid}`)
       }
 
       const _account = Account.convertRedisPayload(_stringifiedAccount)
       const _accountSanitized = Account.sanitize(_account)
       return _accountSanitized
     } catch (error) {
-      throw new Error(`failed to get account: ${error.message}`)
+      throw error
     }
   }
 
@@ -61,7 +61,7 @@ class Account {
       const _updatedAccount = new Account(_account)
       await _updatedAccount.store()
     } catch (error) {
-      throw new Error(`failed to add block to account: ${error.message}`)
+      throw new Error(`failed to add: ${error.message}`)
     }
   }
 
@@ -78,7 +78,7 @@ class Account {
       const _updatedAccount = new Account(_account)
       await _updatedAccount.store()
     } catch (error) {
-      throw new Error(`failed to add block to account: ${error.message}`)
+      throw new Error(`failed to remove: ${error.message}`)
     }
   }
 
@@ -89,7 +89,7 @@ class Account {
 
       return blocks.length === _account.maxNumberOfBlocks
     } catch (error) {
-      throw new Error(`failed to check if account is full: ${error.message}`)
+      throw new Error(`failed to check if full: ${error.message}`)
     }
   }
 
@@ -98,7 +98,7 @@ class Account {
       const _account = JSON.parse(stringifiedAccount)
       return _account
     } catch (error) {
-      throw new Error(`failed to convert redis payload: ${error.message}`)
+      throw new Error(`failed to convert payload: ${error.message}`)
     }
   }
 
@@ -115,7 +115,7 @@ class Account {
       const { name, description, contactEmail, notifications, blocks, maxNumberOfBlocks } = account
       return { name, description, contactEmail, notifications, blocks, maxNumberOfBlocks }
     } catch (error) {
-      throw new Error(`failed to sanitize account: ${error.message}`)
+      throw new Error(`failed to sanitize: ${error.message}`)
     }
   }
 
@@ -171,7 +171,7 @@ class Account {
       await _setAsync(_accountKey, _stringifiedAccount, 'EX', this.lifeSpan)
       _client.quit()
     } catch (error) {
-      throw new Error(`Account - failed to store account: ${error.message}`)
+      throw error
     }
   }
 

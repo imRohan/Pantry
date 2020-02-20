@@ -13,7 +13,7 @@ _accountRouter.post('/create', async (req, res) => {
 
     res.send(_newAccountUUID)
   } catch (error) {
-    res.status(400).send(error.message)
+    res.status(400).send(`Could not create new pantry: ${error.message}`)
   }
 })
 
@@ -25,7 +25,7 @@ _accountRouter.get('/:uuid', async (req, res) => {
 
     res.send(_account)
   } catch (error) {
-    res.status(400).send(error.message)
+    res.status(400).send(`Could not get pantry: ${error.message}`)
   }
 })
 
