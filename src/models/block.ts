@@ -1,10 +1,16 @@
 // Extarnal Libs
-import { IsNotEmpty, IsNotEmptyObject, IsObject, IsString, validate } from 'class-validator'
+import {
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsObject,
+  IsString,
+  validate,
+} from 'class-validator'
 import redis = require('redis')
 import { promisify } from 'util'
 
 // External Files
-
+import { IsValidPayloadSize } from '../decorators/block'
 // Interfaces
 import { IBlock } from '../interfaces/block'
 
@@ -74,6 +80,7 @@ class Block {
   @IsNotEmpty()
   @IsObject()
   @IsNotEmptyObject()
+  @IsValidPayloadSize()
   public payload: any
 
   // Constants
