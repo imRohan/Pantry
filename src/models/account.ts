@@ -1,9 +1,9 @@
 // Extarnal Libs
 import {
   IsArray,
-  IsNumber,
   IsBoolean,
   IsNotEmpty,
+  IsNumber,
   IsString,
   IsUUID,
   validate,
