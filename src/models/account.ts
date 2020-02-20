@@ -1,6 +1,7 @@
 // Extarnal Libs
 import {
   IsArray,
+  IsNumber,
   IsBoolean,
   IsNotEmpty,
   IsString,
@@ -81,6 +82,17 @@ class Account {
     }
   }
 
+  public static async checkIfFull(uuid: string): Promise<boolean> {
+    try {
+      const _account = await Account.get(uuid)
+      const { blocks } = _account
+
+      return blocks.length === _account.maxNumberOfBlocks
+    } catch (error) {
+      throw new Error(`failed to check if account is full: ${error.message}`)
+    }
+  }
+
   private static convertRedisPayload(stringifiedAccount: string): IAccount {
     try {
       const _account = JSON.parse(stringifiedAccount)
@@ -100,8 +112,8 @@ class Account {
 
   private static sanitize(account: IAccount): IAccount {
     try {
-      const { name, description, contactEmail, notifications, blocks } = account
-      return { name, description, contactEmail, notifications, blocks }
+      const { name, description, contactEmail, notifications, blocks, maxNumberOfBlocks } = account
+      return { name, description, contactEmail, notifications, blocks, maxNumberOfBlocks }
     } catch (error) {
       throw new Error(`failed to sanitize account: ${error.message}`)
     }
@@ -120,6 +132,9 @@ class Account {
   @IsBoolean()
   public notifications: boolean
   @IsNotEmpty()
+  @IsNumber()
+  public maxNumberOfBlocks: number
+  @IsNotEmpty()
   @IsArray()
   public blocks: string[]
   @IsUUID('4')
@@ -127,6 +142,7 @@ class Account {
 
   // Constants
   private readonly lifeSpan = 432000
+  private readonly defaultMaxNumberOfBlocks = 50
 
   constructor(params: IAccount) {
     const { name, description, contactEmail, notifications, blocks, uuid } = params
@@ -134,6 +150,7 @@ class Account {
     this.description = description
     this.contactEmail = contactEmail
     this.notifications = notifications ?? false
+    this.maxNumberOfBlocks = this.defaultMaxNumberOfBlocks
     this.blocks = blocks ?? []
     this.uuid = uuid ?? uuidv4()
   }
@@ -164,6 +181,7 @@ class Account {
       description: this.description,
       contactEmail: this.contactEmail,
       notifications: this.notifications,
+      maxNumberOfBlocks: this.maxNumberOfBlocks,
       blocks: this.blocks,
       uuid: this.uuid,
     }

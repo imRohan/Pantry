@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // TODO
-// - Add max number of baskets
+// - Restrict long payloads 
 // - Build the front end (v.1)
 // - Clean up error logging, and output to users (maybe use friendly, verbose?)
 // - Deploy on AWS Litesail

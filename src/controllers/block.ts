@@ -13,7 +13,13 @@ class BlockController {
       // Check if account exists
       const _accountExists = await Account.checkIfExists(accountUUID)
       if (!_accountExists) {
-        throw new Error(`Could not create block, account does not exist`)
+        throw new Error(`account does not exist`)
+      }
+
+      // Check if account has reached max number of blocks
+      const _accountFull = await Account.checkIfFull(accountUUID)
+      if (_accountFull) {
+        throw new Error('max number of blocks reached')
       }
 
       // Create/update block for given account
@@ -37,7 +43,7 @@ class BlockController {
       // Check if account exists
       const _accountExists = await Account.checkIfExists(accountUUID)
       if (!_accountExists) {
-        throw new Error(`Could not create block, account does not exist`)
+        throw new Error(`account does not exist`)
       }
 
       // Check if block exists
@@ -50,7 +56,7 @@ class BlockController {
 
       const _block = await Block.get(accountUUID, name)
 
-      console.log('Block - Fetched block!')
+      console.log(`Block - Fetched block: ${name} for account: ${accountUUID}`)
       return _block
     } catch (error) {
       console.log(`Block/get - ${error.message}`)

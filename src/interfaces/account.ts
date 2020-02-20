@@ -3,6 +3,7 @@ export interface IAccount {
   description: string,
   contactEmail: string,
   notifications: boolean,
+  maxNumberOfBlocks: number,
   blocks: string[],
   uuid?: string,
 }
