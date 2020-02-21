@@ -1,0 +1,26 @@
+body, html {
+  margin: 0px;
+  padding: 0px;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: $leftside-width auto;
+  grid-template-rows: $topbar-height auto;
+  height: 100vh;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+button {
+  background: $primary-color;
+  padding: 0.5em 2em;
+  border-radius: 50px;
+  border: none;
+  color: $white;
+}
+
+.button {
+  &--large {
+    font-size: 1.3em;
+  }
+}

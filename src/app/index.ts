@@ -12,14 +12,12 @@ require('./scss/main.scss')
 // Constants
 const API_PATH = configs.apiPath
 
-const boilerplate = new vue({
+const pantry = new vue({
   el: '.app',
   data: {
-    name: 'Node-Express-VueJS-Typescript Boilerplate',
-    response: null,
+    accountUUID: null,
   },
   components: {
-
   },
   methods: {
     getDataFromExpressServer() {
@@ -34,4 +32,4 @@ const boilerplate = new vue({
   },
 })
 
-export = boilerplate
+export = pantry
