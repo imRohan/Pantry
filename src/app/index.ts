@@ -12,12 +12,16 @@ require('./scss/main.scss')
 // Constants
 const API_PATH = configs.apiPath
 
+// Components
+const landingLeft = require('./components/landingLeft.ts')
+
 const pantry = new vue({
   el: '.app',
   data: {
     accountUUID: null,
   },
   components: {
+    landingLeft,
   },
   methods: {
     getDataFromExpressServer() {

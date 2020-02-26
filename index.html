@@ -10,27 +10,22 @@
   </head>
   <body>
     <div class="app">
-      <div class="landing__logo">
-        Pantry.
-      </div>
-      <div class="landing__left">
-        <svg
-          width="700"
-          height="auto"
-          viewBox="0 0 350 330"
-          xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(100,100)">
-            <path d="M126.8,-186.5C172.1,-168.2,222,-146.2,229.4,-110.5C236.7,-74.8,201.5,-25.5,187.4,22.3C173.3,70.1,180.4,116.2,164.9,153.8C149.4,191.4,111.3,220.4,69.2,230.5C27,240.5,-19.2,231.6,-45.6,202.3C-72,173.1,-78.7,123.5,-115.7,93.3C-152.6,63.1,-219.8,52.2,-247.3,20.8C-274.7,-10.6,-262.4,-62.4,-228.5,-90.9C-194.5,-119.3,-138.9,-124.4,-97.2,-144.4C-55.5,-164.4,-27.8,-199.2,6.5,-209.3C40.7,-219.4,81.5,-204.7,126.8,-186.5Z" fill="#00ffb3" />
-        </g>
-        </svg>
-      </div>
+      <landing-left></landing-left>
       <div class="landing__right">
         <template v-if="accountUUID">
           account set up
         </template>
         <template v-else>
-          <h1 class="text--dark">Hero Title</h1>
-          <p class="text--dark">llorem ipsum lorem ipsumolorem ipsum lorem ipsumlorem ipsum lorem ipsumrem ipsum lorem ipsum</p>
+          <h1 class="text--dark">
+            Unburden yourself from data storage woes.
+          </h1>
+          <p class="text--dark">
+            Focus your efforts on building your next great
+            project and leave the data strage with us. With free NoSQL cloud
+            storage for you and your users, Pantry lets you speed up development
+            and build awesome things - fast!
+            Just click below to start a free Pantry.
+          </p>
           <button class="button--large">Start a Pantry</button>
         </template>
       </div>

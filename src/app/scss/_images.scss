@@ -1,0 +1,13 @@
+.images {
+  &--blob {
+    position: fixed;
+    z-index: 1;
+  }
+  &--hero {
+    width: 30em;
+    height: 30em;
+    background-repeat: no-repeat;
+    background-image: url('../assets/MeditatingDoodle.svg'), none;
+    z-index: 2;
+  }
+}

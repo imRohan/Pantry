@@ -40,9 +40,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|svg)$/,
-        loaders: [
-          'file-loader?name=/app/images/[name].[ext]'
-        ]
+        loaders: ['url-loader'],
       },
       {
         test: /\.vue$/,

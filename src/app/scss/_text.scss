@@ -1,5 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display:900&display=swap');
+
+h1 {
+  font-family: 'Playfair Display', 'sans-serif';
+  font-size: 3em;
+  line-height: 1em;
+}
+
 .text {
   &--dark {
-    color: $secondary-color;
+    color: $text-color;
   }
 }

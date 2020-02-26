@@ -9,6 +9,8 @@ body, html {
   grid-template-rows: $topbar-height auto;
   height: 100vh;
   font-family: Helvetica, Arial, sans-serif;
+  overflow-y: hidden;
+  background: $background;
 }
 
 button {
@@ -16,7 +18,7 @@ button {
   padding: 0.5em 2em;
   border-radius: 50px;
   border: none;
-  color: $white;
+  color: #ffffff;
 }
 
 .button {
