@@ -11,23 +11,7 @@
   <body>
     <div class="app">
       <landing-left></landing-left>
-      <div class="landing__right">
-        <template v-if="accountUUID">
-          account set up
-        </template>
-        <template v-else>
-          <h1 class="text--dark">
-            Unburden yourself from data storage woes.
-          </h1>
-          <p class="text--dark">
-            Focus your efforts on building your next project and leave
-            the data storage to us. With free NoSQL cloud storage for you and
-            your users, Pantry speeds up development time and letting you
-            build awesome things - fast!
-          </p>
-          <button class="button--large">Start a Pantry</button>
-        </template>
-      </div>
+      <landing-right></landing-right>
     </div>
   </body>
   <script type="text/javascript" src='bundle.js'></script>

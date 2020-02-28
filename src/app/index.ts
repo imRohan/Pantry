@@ -1,38 +1,18 @@
 const vue = require('vue')
-const axios = require('axios')
-
-// Configs
-const configs = require('./configs.ts')
-
-// Components
 
 // CSS
 require('./scss/main.scss')
 
-// Constants
-const API_PATH = configs.apiPath
-
 // Components
 const landingLeft = require('./components/landingLeft.ts')
+const landingRight = require('./components/landingRight.ts')
 
 const pantry = new vue({
   el: '.app',
-  data: {
-    accountUUID: null,
-  },
+  data: {},
   components: {
     landingLeft,
-  },
-  methods: {
-    getDataFromExpressServer() {
-      axios({
-        method: 'GET',
-        url: `${API_PATH}/api/sample/hello`,
-      }).then((res) => {
-        console.log(res)
-        this.response = res.data
-      })
-    },
+    landingRight,
   },
 })
 

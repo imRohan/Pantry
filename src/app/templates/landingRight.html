@@ -1,0 +1,27 @@
+<div class="landing__right">
+  <template v-if="pantryId">
+    <h1 class="text--dark">
+      Your Pantry's been created, here's your key!
+    </h1>
+    <p class="text--dark">
+      Keep this key safe, we won't be sharing this with you (or anyone else for that matter) ever again.
+    </p>
+    {{ pantryId }}
+  </template>
+  <template v-else>
+    <h1 class="text--dark">
+      Unburden yourself from data storage woes.
+    </h1>
+    <p class="text--dark">
+      Focus your efforts on building your next project and leave
+      the data storage to us. With free NoSQL cloud storage for you and
+      your users, Pantry speeds up development time and letting you
+      build awesome things - fast!
+    </p>
+    <button
+      @click="createNewPantry"
+      class="button--large">
+      Create New Pantry
+    </button>
+  </template>
+</div>
