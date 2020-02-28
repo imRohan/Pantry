@@ -7,10 +7,11 @@ body, html {
   display: grid;
   grid-template-columns: $leftside-width auto;
   grid-template-rows: $topbar-height auto;
-  height: 100vh;
   font-family: Helvetica, Arial, sans-serif;
-  overflow-y: hidden;
   background: $background;
+  padding-bottom: 2em;
+  min-height: 100vh;
+  height: auto;
 }
 
 button {
@@ -19,10 +20,11 @@ button {
   border-radius: 50px;
   border: none;
   color: #ffffff;
+  font-size: 1.3em;
 }
 
 .button {
-  &--large {
-    font-size: 1.3em;
+  &--alt {
+    background: $secondary-color;
   }
 }

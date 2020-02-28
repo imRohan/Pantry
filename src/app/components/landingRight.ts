@@ -14,17 +14,13 @@ const { IView } = require('../../interfaces/view.ts')
 const API_PATH = configs.apiPath
 
 const landingRight = {
+  props: ['view'],
   name: 'landingRight',
   data: function() {
     return {
-      view: IView.home,
       pantryId: 'Whoops! This was not supposed to happen.',
+      apiPath: 'http://getpantry.io/api',
     }
-  },
-  watch: {
-    view: function () {
-      this.$emit('change-view', this.view)
-    },
   },
   template: landingRightTemplate,
   methods: {
@@ -40,10 +36,13 @@ const landingRight = {
       })
 
       this.pantryId = data
-      this.view = IView.created
+      this.$emit('change-view', IView.created)
+    },
+    getStarted() {
+      this.$emit('change-view', IView.getStarted)
     },
     showDocs() {
-      this.view = IView.docs
+      this.$emit('change-view', IView.docs)
     },
   },
 }

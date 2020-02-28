@@ -6,35 +6,106 @@
     <p class="text--dark">
       Focus your efforts on building your next project and leave
       the data storage to us. With free NoSQL cloud storage for you and
-      your users, Pantry speeds up development time and letting you
+      your users, Pantry speeds up development time letting you
       build awesome things - fast!
     </p>
-    <button
-      @click="createNewPantry"
-      class="button--large">
+    <button @click="createNewPantry">
       Create New Pantry
+    </button>
+    <button
+      @click="showDocs"
+      class="button--alt">
+      View Docs
     </button>
   </template>
   <template v-if="view === 'created'">
     <h1>
       Your Pantry's been created!
     </h1>
+    <h2> Save your PantryID</h2>
     <p>
-      Keep this key safe! We won't be sharing it with you again.
+      Here is your <b>pantryID</b>! Keep this safe as we won't be sharing it with you again.
+      Once you've saved it somewhere, hit the button below and we'll show you how to add items to your pantry.
     </p>
-    <div class="text__keyContainer">
+    <p class="text__container text--key">
       {{ pantryId }}
-    </div>
-    <p>
-      Once you've saved it somewhere, hit the button below and we'll show you
-      how to add items to your pantry.
     </p>
-    <button
-      @click="showDocs"
-      class="button--large">
-      Show Me The Docs!
+    <button @click="getStarted">
+      Let's Get Started!
+    </button>
+  </template>
+  <template v-if="view === 'getStarted'">
+    <h1>
+      How to use your Pantry.
+    </h1>
+    <h2>Add & Update Item</h2>
+    <p>
+      To add or update an item in your pantry, simply send a <b>POST</b> request
+      to our API with the <b>name</b> and the <b>payload</b> of the item. Your
+      <b>pantryID</b> has already been added to the api path.
+    </p>
+    <p class="text__container text--code">
+      curl -XPOST -H "Content-type: application/json" -d '{
+        "name": "myNewItem",
+        "payload": {
+            "key": "value"
+              
+            }
+
+            }' '{{apiPath}}/pantry/{{pantryId}}''
+    </p>
+    <h2>Get an Item</h2>
+    <p>
+      To retrieve an item, send a <b>GET</b> request to our API with the
+      <b>name</b> of the item. Your <b>pantryID</b> has already been added to
+      the api path.
+    </p>
+    <p class="text__container text--code">
+      curl -XGET -H "Content-type: application/json"
+      '{{apiPath}}/pantry/{{pantryId}}/myNewItem'
+    </p>
+    <button @click="showDocs">
+      Show Me The API Docs!
     </button>
   </template>
   <template v-if="view === 'docs'">
+    <h1>
+      Api Documentation
+    </h1>
+    <h2>Get Pantry Details</h2>
+    <p>
+      To retrieve details about your pantry, simply send a <b>GET</b> request to
+      our API with your <b>pantryID</b> of your pantry
+    </p>
+    <p class="text__container text--code">
+      curl -XGET -H "Content-type: application/json"
+      '{{apiPath}}/{pantryID}'
+    </p>
+    <h2>Add & Update Item</h2>
+    <p>
+      To add or update an item in your pantry, simply send a <b>POST</b> request
+      to our API with the <b>name</b> and the <b>payload</b> of the item. If the
+      name matches a current item, that item will be updated with the new
+      payload
+    </p>
+    <p class="text__container text--code">
+      curl -XPOST -H "Content-type: application/json" -d '{
+        "name": "myNewItem",
+        "payload": {
+            "key": "value"
+              
+            }
+
+            }' '{{apiPath}}/pantry/{pantryID}''
+    </p>
+    <h2>Get an Item</h2>
+    <p>
+      To retrieve an item, spmply send a <b>GET</b> request to our API with the
+      <b>name</b> of the item.
+    </p>
+    <p class="text__container text--code">
+      curl -XGET -H "Content-type: application/json"
+      '{{apiPath}}/pantry/{pantryID}/myNewItem'
+    </p>
   </template>
 </div>

@@ -11,7 +11,6 @@
       fill="#F5BDA4" />
     </g>
   </svg>
-
   <svg
     class="images--blob"
     height="600"
@@ -23,12 +22,14 @@
       fill="#f9e9e987" />
     </g>
   </svg>
-  {{ view }}
   <template v-if="view === 'home'">
     <div class="images__character images--hero"></div>
   </template>
   <template v-if="view === 'created'">
     <div class="images__character images--created"></div>
+  </template>
+  <template v-if="view === 'getStarted'">
+    <div class="images__character images--getStarted"></div>
   </template>
   <template v-if="view === 'docs'">
     <div class="images__character images--docs"></div>

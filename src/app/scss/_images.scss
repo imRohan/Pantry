@@ -1,9 +1,11 @@
 .images {
   &--blob {
+    top: 0;
     position: fixed;
     z-index: 1;
   }
   &__character {
+    position: fixed;
     width: 30em;
     height: 30em;
     background-repeat: no-repeat;
@@ -15,7 +17,10 @@
   &--created {
     background-image: url('../assets/SprintingDoodle.svg'), none;
   }
-  &--docs {
+  &--getStarted {
     background-image: url('../assets/ReadingSideDoodle.svg'), none;
+  }
+  &--docs {
+    background-image: url('../assets/ReadingDoodle.svg'), none;
   }
 }
