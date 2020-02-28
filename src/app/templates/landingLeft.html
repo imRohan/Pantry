@@ -15,13 +15,22 @@
   <svg
     class="images--blob"
     height="600"
-  viewBox="0 0 600 600"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <g transform="translate(300,300)">
-    <path d="M168.4,-144C195.1,-100.9,177.5,-32.2,163.4,40.5C149.4,113.2,138.9,190,98.3,212.9C57.7,235.8,-13,204.8,-71,168.7C-128.9,132.6,-174.2,91.3,-183.7,43.7C-193.1,-4,-166.9,-58.1,-130.4,-103.5C-93.8,-148.8,-46.9,-185.4,12,-195C70.9,-204.5,141.8,-187.1,168.4,-144Z"
-    fill="#f9e9e987" />
-  </g>
-</svg>
-  <div class="images--hero"></div>
+    viewBox="0 0 600 600"
+    xmlns="http://www.w3.org/2000/svg"
+    >
+    <g transform="translate(300,300)">
+      <path d="M168.4,-144C195.1,-100.9,177.5,-32.2,163.4,40.5C149.4,113.2,138.9,190,98.3,212.9C57.7,235.8,-13,204.8,-71,168.7C-128.9,132.6,-174.2,91.3,-183.7,43.7C-193.1,-4,-166.9,-58.1,-130.4,-103.5C-93.8,-148.8,-46.9,-185.4,12,-195C70.9,-204.5,141.8,-187.1,168.4,-144Z"
+      fill="#f9e9e987" />
+    </g>
+  </svg>
+  {{ view }}
+  <template v-if="view === 'home'">
+    <div class="images__character images--hero"></div>
+  </template>
+  <template v-if="view === 'created'">
+    <div class="images__character images--created"></div>
+  </template>
+  <template v-if="view === 'docs'">
+    <div class="images__character images--docs"></div>
+  </template>
 </div>

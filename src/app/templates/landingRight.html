@@ -1,14 +1,5 @@
 <div class="landing__right">
-  <template v-if="pantryId">
-    <h1 class="text--dark">
-      Your Pantry's been created, here's your key!
-    </h1>
-    <p class="text--dark">
-      Keep this key safe, we won't be sharing this with you (or anyone else for that matter) ever again.
-    </p>
-    {{ pantryId }}
-  </template>
-  <template v-else>
+  <template v-if="view === 'home'">
     <h1 class="text--dark">
       Unburden yourself from data storage woes.
     </h1>
@@ -23,5 +14,27 @@
       class="button--large">
       Create New Pantry
     </button>
+  </template>
+  <template v-if="view === 'created'">
+    <h1>
+      Your Pantry's been created!
+    </h1>
+    <p>
+      Keep this key safe! We won't be sharing it with you again.
+    </p>
+    <div class="text__keyContainer">
+      {{ pantryId }}
+    </div>
+    <p>
+      Once you've saved it somewhere, hit the button below and we'll show you
+      how to add items to your pantry.
+    </p>
+    <button
+      @click="showDocs"
+      class="button--large">
+      Show Me The Docs!
+    </button>
+  </template>
+  <template v-if="view === 'docs'">
   </template>
 </div>

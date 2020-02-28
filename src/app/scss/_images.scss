@@ -3,11 +3,19 @@
     position: fixed;
     z-index: 1;
   }
-  &--hero {
+  &__character {
     width: 30em;
     height: 30em;
     background-repeat: no-repeat;
-    background-image: url('../assets/MeditatingDoodle.svg'), none;
     z-index: 2;
+  }
+  &--hero {
+    background-image: url('../assets/MeditatingDoodle.svg'), none;
+  }
+  &--created {
+    background-image: url('../assets/SprintingDoodle.svg'), none;
+  }
+  &--docs {
+    background-image: url('../assets/ReadingSideDoodle.svg'), none;
   }
 }

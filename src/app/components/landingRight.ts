@@ -7,6 +7,9 @@ const configs = require('../configs.ts')
 // Templates
 const landingRightTemplate = require('../templates/landingRight.html')
 
+// Interfaces
+const { IView } = require('../../interfaces/view.ts')
+
 // Constants
 const API_PATH = configs.apiPath
 
@@ -14,8 +17,14 @@ const landingRight = {
   name: 'landingRight',
   data: function() {
     return {
-      pantryId: null,
+      view: IView.home,
+      pantryId: 'Whoops! This was not supposed to happen.',
     }
+  },
+  watch: {
+    view: function () {
+      this.$emit('change-view', this.view)
+    },
   },
   template: landingRightTemplate,
   methods: {
@@ -31,6 +40,10 @@ const landingRight = {
       })
 
       this.pantryId = data
+      this.view = IView.created
+    },
+    showDocs() {
+      this.view = IView.docs
     },
   },
 }

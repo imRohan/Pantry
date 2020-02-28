@@ -4,10 +4,20 @@ h1 {
   font-family: 'Playfair Display', 'sans-serif';
   font-size: 3em;
   line-height: 1em;
+  width: 90%;
+  color: $text-color;
+}
+
+p {
+  color: $text-color;
 }
 
 .text {
-  &--dark {
-    color: $text-color;
+  &__keyContainer {
+    padding: 1em;
+    background: rgba(255,255,255,0.5);
+    border-radius: 5px;
+    color: $primary-color;
+    font-weight: bold;
   }
 }
