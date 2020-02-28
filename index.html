@@ -10,8 +10,10 @@
   </head>
   <body>
     <div class="app">
-      <landing-left></landing-left>
-      <landing-right></landing-right>
+      <landing-left :view="view">
+      </landing-left>
+      <landing-right @change-view="changeView">
+      </landing-right>
     </div>
   </body>
   <script type="text/javascript" src='bundle.js'></script>
