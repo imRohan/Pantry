@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 // TODO
-// - Build the front end (v.1)
-// - Clean up error logging, and output to users (maybe use friendly, verbose?)
+// - Add a Logo
+// - Figure out App lingo. Items vs. Jars vs. Baskets
 // - Deploy on AWS Litesail
 // - Write unit tests
 // - Setup Travis or something to run pipelines and run tests
