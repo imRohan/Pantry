@@ -28,7 +28,7 @@ class BlockController {
       // Store block name in account entity
       await Account.addBlock(accountUUID, name)
 
-      return `Created new basket: ${name}!`
+      return `Your Pantry was updated with basket: ${name}!`
     } catch (error) {
       console.log(`Block/create - ${error.message}`)
       throw error
