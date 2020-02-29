@@ -1,12 +1,12 @@
 {
-  "name": "node-express-vuejs-typescript-boilerplate",
+  "name": "Pantry",
   "version": "0.0.1",
   "author": "Rohan Likhite <rlikhite@gmail.com>",
   "license": "MIT",
-  "description": "A Node, Express, VueJS, Typescript Boilerplate",
+  "description": "Free JSON storage for small projects",
   "main": "src/main.ts",
   "repository": {
-    "url": "https://github.com/imRohan/node-express-vuejs.git",
+    "url": "https://github.com/imRohan/Pantry",
     "type": "git"
   },
   "scripts": {
