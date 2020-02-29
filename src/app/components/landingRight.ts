@@ -16,7 +16,7 @@ const API_PATH = configs.apiPath
 const landingRight = {
   props: ['view'],
   name: 'landingRight',
-  data: function() {
+  data() {
     return {
       pantryId: 'Whoops! This was not supposed to happen.',
       apiPath: 'http://getpantry.io/apiv1',
@@ -30,7 +30,7 @@ const landingRight = {
         data: {
           name: 'defaultAccountName',
           description: 'defaultDescription',
-          contactEmail: 'default@email.com'
+          contactEmail: 'default@email.com',
         },
         url: `${API_PATH}/apiv1/pantry/create`,
       })

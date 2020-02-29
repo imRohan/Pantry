@@ -13,7 +13,7 @@ const { IView } = require('../interfaces/view.ts')
 
 const pantry = new vue({
   el: '.app',
-  data: function() {
+  data() {
     return {
       view: IView.home,
     }
@@ -21,7 +21,7 @@ const pantry = new vue({
   methods: {
     changeView(view: string) {
       this.view = IView[view]
-    }
+    },
   },
   components: {
     landingLeft,
