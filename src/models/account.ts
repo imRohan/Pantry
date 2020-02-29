@@ -40,7 +40,7 @@ class Account {
         throw new Error(`nothing found for ${uuid}`)
       }
 
-      const _accountParams= Account.convertRedisPayload(_stringifiedAccount)
+      const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
 
       const _accountObject = new Account(_accountParams)
       return _accountObject

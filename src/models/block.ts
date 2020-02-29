@@ -38,7 +38,7 @@ class Block {
       }
 
       const _blockParams = Block.convertRedisPayload(_stringifiedBlock)
-      const _blockObject = new Block(accountUUID,_blockParams)
+      const _blockObject = new Block(accountUUID, _blockParams)
 
       const _blockSanitized = _blockObject.sanitize()
       return _blockSanitized
