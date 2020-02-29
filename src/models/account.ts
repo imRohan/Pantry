@@ -34,7 +34,7 @@ class Account {
       const _stringifiedAccount = await _client.get(_accountKey)
 
       if (!_stringifiedAccount) {
-        throw new Error(`nothing found for ${uuid}`)
+        throw new Error(`pantry with id: ${uuid} not found`)
       }
 
       const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
@@ -43,35 +43,6 @@ class Account {
       return _accountObject
     } catch (error) {
       throw error
-    }
-  }
-
-  public static async addBlock(uuid: string, blockName: string): Promise<void> {
-    try {
-      const _account = await Account.get(uuid)
-      await _account.addBlock(blockName)
-    } catch (error) {
-      throw new Error(`failed to add: ${error.message}`)
-    }
-  }
-
-  public static async removeBlock(uuid: string, blockName: string): Promise<void> {
-    try {
-      const _account = await Account.get(uuid)
-      await _account.removeBlock(blockName)
-    } catch (error) {
-      throw new Error(`failed to remove: ${error.message}`)
-    }
-  }
-
-  public static async checkIfFull(uuid: string): Promise<boolean> {
-    try {
-      const _account = await Account.get(uuid)
-      const _isFull = _account.checkIfFull()
-
-      return _isFull
-    } catch (error) {
-      throw new Error(`failed to check if full: ${error.message}`)
     }
   }
 
@@ -114,7 +85,7 @@ class Account {
   private uuid: string
 
   // Constants
-  private readonly lifeSpan = 432000
+  private readonly lifeSpan = Number(86400 * 5)
   private readonly defaultMaxNumberOfBlocks = 50
 
   constructor(params: any) {

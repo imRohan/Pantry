@@ -75,7 +75,7 @@ class Block {
   public payload: any
 
   // Constants
-  private readonly lifeSpan = 432000
+  private readonly lifeSpan = 10
 
   constructor(accountUUID: string, params: IBlock) {
     const { name, payload } = params

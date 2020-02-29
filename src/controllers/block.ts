@@ -10,11 +10,10 @@ import { IBlock } from '../interfaces/block'
 class BlockController {
   public static async create(accountUUID: string, params: IBlock): Promise<string> {
     try {
-      // Check if account exists
-      await this.checkIfAccountExists(accountUUID)
+      const _account = await Account.get(accountUUID)
 
       // Check if account has reached max number of blocks
-      const _accountFull = await Account.checkIfFull(accountUUID)
+      const _accountFull = await _account.checkIfFull()
       if (_accountFull) {
         throw new Error('max number of blocks reached')
       }
@@ -26,7 +25,7 @@ class BlockController {
       console.log(`Block - Created new block: ${name} for account: ${accountUUID}`)
 
       // Store block name in account entity
-      await Account.addBlock(accountUUID, name)
+      await _account.addBlock(name)
 
       return `Your Pantry was updated with basket: ${name}!`
     } catch (error) {
@@ -37,14 +36,13 @@ class BlockController {
 
   public static async get(accountUUID: string, name: string): Promise<any> {
     try {
-      // Check if account exists
-      await this.checkIfAccountExists(accountUUID)
+      const _account = await Account.get(accountUUID)
 
       // Check if block exists
       const _blockExists = await Block.checkIfExists(accountUUID, name)
       if (!_blockExists) {
         // Remove the block from the Account
-        await Account.removeBlock(accountUUID, name)
+        await _account.removeBlock(name)
         throw new Error(`${name} does not exist`)
       }
 
@@ -55,13 +53,6 @@ class BlockController {
     } catch (error) {
       console.log(`Block/get - ${error.message}`)
       throw error
-    }
-  }
-
-  private static async checkIfAccountExists(uuid: string): Promise<void> {
-    const _accountExists = await Account.checkIfExists(uuid)
-    if (!_accountExists) {
-      throw new Error(`pantry does not exist`)
     }
   }
 }
