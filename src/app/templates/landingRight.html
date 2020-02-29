@@ -38,10 +38,10 @@
     <h1>
       How to use your Pantry.
     </h1>
-    <h2>Add & Update Item</h2>
+    <h2>Add & Update Basket</h2>
     <p>
-      To add or update an item in your pantry, simply send a <b>POST</b> request
-      to our API with the <b>name</b> and the <b>payload</b> of the item. Your
+      To add or update a basket in your pantry, send a <b>POST</b> request
+      to our API with the <b>name</b> and the <b>payload</b> of the basket Your
       <b>pantryID</b> has already been added to the api path.
     </p>
     <p class="text__container text--code">
@@ -52,13 +52,13 @@
               
             }
 
-            }' '{{apiPath}}/pantry/{{pantryId}}''
+            }' '{{apiPath}}/pantry/{{pantryId}}'
     </p>
-    <h2>Get an Item</h2>
+    <h2>Get the contents of a Basket</h2>
     <p>
-      To retrieve an item, send a <b>GET</b> request to our API with the
-      <b>name</b> of the item. Your <b>pantryID</b> has already been added to
-      the api path.
+      To retrieve an basket, send a <b>GET</b> request to our API with the
+      <b>name</b> of the basket in the url.Your <b>pantryID</b> has already
+      been added to the api path.
     </p>
     <p class="text__container text--code">
       curl -XGET -H "Content-type: application/json"
@@ -73,20 +73,26 @@
       Api Documentation
     </h1>
     <h2>Get Pantry Details</h2>
+    <p class="text__container text--code">
+      GET {{apiPath}}/{pantryID}
+    </p>
     <p>
       To retrieve details about your pantry, simply send a <b>GET</b> request to
-      our API with your <b>pantryID</b> of your pantry
+      our API with the <b>pantryID</b> of your pantry
     </p>
     <p class="text__container text--code">
       curl -XGET -H "Content-type: application/json"
       '{{apiPath}}/{pantryID}'
     </p>
-    <h2>Add & Update Item</h2>
+    <h2>Add & Update a Basket</h2>
+    <p class="text__container text--code">
+      POST {{apiPath}}/pantry/{pantryID}
+    </p>
     <p>
-      To add or update an item in your pantry, simply send a <b>POST</b> request
-      to our API with the <b>name</b> and the <b>payload</b> of the item. If the
-      name matches a current item, that item will be updated with the new
-      payload
+      To add or update a basket in your pantry, simply send a <b>POST</b> request
+      to our API with the <b>name</b> and the <b>payload</b> of the basket. If the
+      name matches an existing basket in your pantry, that basket will be updated
+      with the new payload.
     </p>
     <p class="text__container text--code">
       curl -XPOST -H "Content-type: application/json" -d '{
@@ -96,16 +102,19 @@
               
             }
 
-            }' '{{apiPath}}/pantry/{pantryID}''
+            }' '{{apiPath}}/pantry/{pantryID}'
     </p>
-    <h2>Get an Item</h2>
+    <h2>Get the contents of a Basket</h2>
+    <p class="text__container text--code">
+      GET {{apiPath}}/pantry/{pantryID}/{basketName}
+    </p>
     <p>
-      To retrieve an item, spmply send a <b>GET</b> request to our API with the
-      <b>name</b> of the item.
+      To retrieve an basket, send a <b>GET</b> request to our API with the
+      <b>name</b> of the basket in the url.
     </p>
     <p class="text__container text--code">
       curl -XGET -H "Content-type: application/json"
-      '{{apiPath}}/pantry/{pantryID}/myNewItem'
+      '{{apiPath}}/pantry/{pantryID}/{basketName}'
     </p>
   </template>
 </div>
