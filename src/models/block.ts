@@ -6,11 +6,11 @@ import {
   IsString,
   validate,
 } from 'class-validator'
-import redis = require('redis')
-import { promisify } from 'util'
 
 // External Files
 import { IsValidPayloadSize } from '../decorators/block'
+import DataStore = require('../services/dataStore')
+
 // Interfaces
 import { IBlock } from '../interfaces/block'
 
@@ -26,12 +26,10 @@ class Block {
 
   public static async get(accountUUID: string, name: string): Promise<any> {
     try {
-      const _client = redis.createClient()
-      const _getAsync = promisify(_client.get).bind(_client)
-
       const _blockKey = Block.generateRedisKey(accountUUID, name)
-      const _stringifiedBlock = await _getAsync(_blockKey)
-      _client.quit()
+
+      const _client = new DataStore()
+      const _stringifiedBlock = await _client.get(_blockKey)
 
       if (!_stringifiedBlock) {
         throw new Error(`${name} does not exist`)
@@ -94,13 +92,11 @@ class Block {
         throw new Error(`Validation failed: ${_errors}`)
       }
 
-      const _client = redis.createClient()
-      const _setAsync = promisify(_client.set).bind(_client)
-
       const _blockKey = Block.generateRedisKey(this.accountUUID, this.name)
       const _stringifiedBlock = this.generateRedisPayload()
-      await _setAsync(_blockKey, _stringifiedBlock, 'EX', this.lifeSpan)
-      _client.quit()
+
+      const _client = new DataStore()
+      await _client.set(_blockKey, _stringifiedBlock, this.lifeSpan)
     } catch (error) {
       throw new Error(`Block - failed to store block: ${error.message}`)
     }
