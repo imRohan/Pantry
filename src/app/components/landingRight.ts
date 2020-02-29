@@ -19,7 +19,7 @@ const landingRight = {
   data: function() {
     return {
       pantryId: 'Whoops! This was not supposed to happen.',
-      apiPath: 'http://getpantry.io/api',
+      apiPath: 'http://getpantry.io/apiv1',
     }
   },
   template: landingRightTemplate,
@@ -32,7 +32,7 @@ const landingRight = {
           description: 'defaultDescription',
           contactEmail: 'default@email.com'
         },
-        url: `${API_PATH}/api/create`,
+        url: `${API_PATH}/apiv1/pantry/create`,
       })
 
       this.pantryId = data

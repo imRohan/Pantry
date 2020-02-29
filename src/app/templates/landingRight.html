@@ -52,7 +52,7 @@
               
             }
 
-            }' '{{apiPath}}/pantry/{{pantryId}}'
+            }' '{{apiPath}}/pantry/{{pantryId}}/basket'
     </p>
     <h2>Get the contents of a Basket</h2>
     <p>
@@ -62,7 +62,7 @@
     </p>
     <p class="text__container text--code">
       curl -XGET -H "Content-type: application/json"
-      '{{apiPath}}/pantry/{{pantryId}}/myNewItem'
+      '{{apiPath}}/pantry/{{pantryId}}/basket/myNewItem'
     </p>
     <button @click="showDocs">
       Show Me The API Docs!
@@ -74,7 +74,7 @@
     </h1>
     <h2>Get Pantry Details</h2>
     <p class="text__container text--code">
-      GET {{apiPath}}/{pantryID}
+      GET {{apiPath}}/pantry/{pantryID}
     </p>
     <p>
       To retrieve details about your pantry, simply send a <b>GET</b> request to
@@ -82,11 +82,11 @@
     </p>
     <p class="text__container text--code">
       curl -XGET -H "Content-type: application/json"
-      '{{apiPath}}/{pantryID}'
+      '{{apiPath}}/pantry/{pantryID}'
     </p>
     <h2>Add & Update a Basket</h2>
     <p class="text__container text--code">
-      POST {{apiPath}}/pantry/{pantryID}
+      POST {{apiPath}}/pantry/{pantryID}/basket
     </p>
     <p>
       To add or update a basket in your pantry, simply send a <b>POST</b> request
@@ -102,11 +102,11 @@
               
             }
 
-            }' '{{apiPath}}/pantry/{pantryID}'
+            }' '{{apiPath}}/pantry/{pantryID}/basket'
     </p>
     <h2>Get the contents of a Basket</h2>
     <p class="text__container text--code">
-      GET {{apiPath}}/pantry/{pantryID}/{basketName}
+      GET {{apiPath}}/pantry/{pantryID}/basket/{basketName}
     </p>
     <p>
       To retrieve an basket, send a <b>GET</b> request to our API with the
@@ -114,7 +114,7 @@
     </p>
     <p class="text__container text--code">
       curl -XGET -H "Content-type: application/json"
-      '{{apiPath}}/pantry/{pantryID}/{basketName}'
+      '{{apiPath}}/pantry/{pantryID}/basket/{basketName}'
     </p>
   </template>
 </div>

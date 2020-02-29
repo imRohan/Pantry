@@ -15,8 +15,7 @@ import express = require('express')
 require('dotenv').config()
 
 // Routes
-import _accountRoutes = require('./routes/account')
-import _blockRoutes = require('./routes/block')
+import _routesV1 = require('./routes/apiV1')
 
 // Express server setup and start
 const server = express()
@@ -25,8 +24,7 @@ server.use(bodyParser.json())
 server.use(express.static(__dirname))
 
 // Routes
-server.use('/api/', _accountRoutes)
-server.use('/api/basket', _blockRoutes)
+server.use('/apiv1/pantry', _routesV1)
 
 server.get('/', (request, response) => {
   response.sendFile('index.html', { root: process.env.PWD })
