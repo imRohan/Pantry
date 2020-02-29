@@ -15,7 +15,7 @@ import uuidv4 = require('uuid/v4')
 // External Files
 
 // Interfaces
-import { IAccount } from '../interfaces/account'
+import { IAccountBase, IAccountPrivate } from '../interfaces/account'
 
 class Account {
   public static async checkIfExists(uuid: string): Promise<boolean> {
@@ -27,7 +27,7 @@ class Account {
     }
   }
 
-  public static async get(uuid: string): Promise<IAccount> {
+  public static async get(uuid: string): Promise<Account> {
     try {
       const _client = redis.createClient()
       const _getAsync = promisify(_client.get).bind(_client)
@@ -40,9 +40,10 @@ class Account {
         throw new Error(`nothing found for ${uuid}`)
       }
 
-      const _account = Account.convertRedisPayload(_stringifiedAccount)
-      const _accountSanitized = Account.sanitize(_account)
-      return _accountSanitized
+      const _accountParams= Account.convertRedisPayload(_stringifiedAccount)
+
+      const _accountObject = new Account(_accountParams)
+      return _accountObject
     } catch (error) {
       throw error
     }
@@ -51,15 +52,7 @@ class Account {
   public static async addBlock(uuid: string, blockName: string): Promise<void> {
     try {
       const _account = await Account.get(uuid)
-      const { blocks } = _account
-
-      // Add the existing blocks to updated account, along with the current uuid
-      const _updatedBlocks = [ ...blocks, blockName ]
-      _account.blocks = _updatedBlocks
-      _account.uuid = uuid
-
-      const _updatedAccount = new Account(_account)
-      await _updatedAccount.store()
+      await _account.addBlock(blockName)
     } catch (error) {
       throw new Error(`failed to add: ${error.message}`)
     }
@@ -68,15 +61,7 @@ class Account {
   public static async removeBlock(uuid: string, blockName: string): Promise<void> {
     try {
       const _account = await Account.get(uuid)
-      const { blocks } = _account
-
-      // Remove the block in question
-      const _updatedBlocks = blocks.filter((name) => name !== blockName)
-      _account.blocks = _updatedBlocks
-      _account.uuid = uuid
-
-      const _updatedAccount = new Account(_account)
-      await _updatedAccount.store()
+      await _account.removeBlock(blockName)
     } catch (error) {
       throw new Error(`failed to remove: ${error.message}`)
     }
@@ -85,15 +70,15 @@ class Account {
   public static async checkIfFull(uuid: string): Promise<boolean> {
     try {
       const _account = await Account.get(uuid)
-      const { blocks } = _account
+      const _isFull = _account.checkIfFull()
 
-      return blocks.length === _account.maxNumberOfBlocks
+      return _isFull
     } catch (error) {
       throw new Error(`failed to check if full: ${error.message}`)
     }
   }
 
-  private static convertRedisPayload(stringifiedAccount: string): IAccount {
+  private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
     try {
       const _account = JSON.parse(stringifiedAccount)
       return _account
@@ -110,41 +95,32 @@ class Account {
     }
   }
 
-  private static sanitize(account: IAccount): IAccount {
-    try {
-      const { name, description, contactEmail, notifications, blocks, maxNumberOfBlocks } = account
-      return { name, description, contactEmail, notifications, blocks, maxNumberOfBlocks }
-    } catch (error) {
-      throw new Error(`failed to sanitize: ${error.message}`)
-    }
-  }
-
   @IsNotEmpty()
   @IsString()
-  public name: string
+  private name: string
   @IsNotEmpty()
   @IsString()
-  public description: string
+  private description: string
   @IsNotEmpty()
   @IsString()
-  public contactEmail: string
+  private contactEmail: string
   @IsNotEmpty()
   @IsBoolean()
-  public notifications: boolean
+  private notifications: boolean
   @IsNotEmpty()
   @IsNumber()
-  public maxNumberOfBlocks: number
+  private maxNumberOfBlocks: number
   @IsNotEmpty()
   @IsArray()
-  public blocks: string[]
+  private blocks: string[]
   @IsUUID('4')
-  public uuid: string
+  private uuid: string
 
   // Constants
   private readonly lifeSpan = 432000
   private readonly defaultMaxNumberOfBlocks = 50
 
-  constructor(params: IAccount) {
+  constructor(params: any) {
     const { name, description, contactEmail, notifications, blocks, uuid } = params
     this.name = name
     this.description = description
@@ -155,7 +131,7 @@ class Account {
     this.uuid = uuid ?? uuidv4()
   }
 
-  public async store(): Promise<void> {
+  public async store(): Promise<string> {
     try {
       // Validate the account object
       const _errors = await validate(this)
@@ -170,13 +146,62 @@ class Account {
       const _stringifiedAccount = this.generateRedisPayload()
       await _setAsync(_accountKey, _stringifiedAccount, 'EX', this.lifeSpan)
       _client.quit()
+
+      return this.uuid
     } catch (error) {
       throw error
     }
   }
 
+  public sanitize(): IAccountBase {
+    try {
+      const _sanitizedItems = {
+        name: this.name,
+        description: this.description,
+        contactEmail: this.contactEmail,
+        blocks: this.blocks,
+        maxNumberOfBlocks: this.maxNumberOfBlocks,
+      }
+      return _sanitizedItems
+    } catch (error) {
+      throw new Error(`failed to sanitize: ${error.message}`)
+    }
+  }
+
+  public async addBlock(blockName: string): Promise<void> {
+    try {
+      const _currentBlocks = this.blocks
+      const _updatedBlocks = [..._currentBlocks, blockName]
+
+      this.blocks = _updatedBlocks
+      await this.store()
+    } catch (error) {
+      throw new Error(`failed to add block: ${error.message}`)
+    }
+  }
+
+  public async removeBlock(blockName: string): Promise<void> {
+    try {
+      const _updatedBlocks = this.blocks.filter((name) => name !== blockName)
+
+      this.blocks = _updatedBlocks
+      await this.store()
+    } catch (error) {
+      throw new Error(`failed to remove block: ${error.message}`)
+    }
+  }
+
+  public checkIfFull(): boolean {
+    try {
+      const _isFull = this.blocks.length === this.maxNumberOfBlocks
+      return _isFull
+    } catch (error) {
+      throw new Error(`failed to remove block: ${error.message}`)
+    }
+  }
+
   private generateRedisPayload(): string {
-    const _accountDetails: IAccount = {
+    const _accountDetails: IAccountPrivate = {
       name: this.name,
       description: this.description,
       contactEmail: this.contactEmail,

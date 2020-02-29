@@ -4,29 +4,29 @@
 import Account = require('../models/account')
 
 // Interfaces
-import { IAccount } from '../interfaces/account'
+import { IAccountBase } from '../interfaces/account'
 
 class AccountController {
-  public static async create(params: IAccount): Promise<string> {
+  public static async create(params: IAccountBase): Promise<string> {
     try {
       const _account = new Account(params)
-      await _account.store()
+      const _accountUUID = await _account.store()
 
       console.log('Account - Created account!')
-      const { uuid } = _account
-      return uuid
+      return _accountUUID
     } catch (error) {
       console.log(`Account/create - ${error.message}`)
       throw error
     }
   }
 
-  public static async get(uuid: string): Promise<IAccount> {
+  public static async get(uuid: string): Promise<IAccountBase> {
     try {
       const _account = await Account.get(uuid)
+      const _accountDetails = _account.sanitize()
 
       console.log('Account - Fetched account!')
-      return _account
+      return _accountDetails
     } catch (error) {
       console.log(`Account/get - ${error.message}`)
       throw error

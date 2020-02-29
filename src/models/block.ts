@@ -37,8 +37,10 @@ class Block {
         throw new Error(`${name} does not exist`)
       }
 
-      const _block = Block.convertRedisPayload(_stringifiedBlock)
-      const _blockSanitized = Block.sanitize(_block)
+      const _blockParams = Block.convertRedisPayload(_stringifiedBlock)
+      const _blockObject = new Block(accountUUID,_blockParams)
+
+      const _blockSanitized = _blockObject.sanitize()
       return _blockSanitized
     } catch (error) {
       throw new Error(`failed to get block: ${error.message}`)
@@ -59,15 +61,6 @@ class Block {
       return `account:${accountUUID}::block:${name}`
     } catch (error) {
       throw new Error(`Block - failed to generate rkey: ${error.message}`)
-    }
-  }
-
-  private static sanitize(block: IBlock): any {
-    try {
-      const { payload } = block
-      return payload
-    } catch (error) {
-      throw new Error(`failed to sanitize block: ${error.message}`)
     }
   }
 
@@ -110,6 +103,14 @@ class Block {
       _client.quit()
     } catch (error) {
       throw new Error(`Block - failed to store block: ${error.message}`)
+    }
+  }
+
+  public sanitize(): any {
+    try {
+      return this.payload
+    } catch (error) {
+      throw new Error(`failed to sanitize block: ${error.message}`)
     }
   }
 
