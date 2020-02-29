@@ -8,11 +8,10 @@ import {
   IsUUID,
   validate,
 } from 'class-validator'
-import redis = require('redis')
-import { promisify } from 'util'
 import uuidv4 = require('uuid/v4')
 
 // External Files
+import DataStore = require('../services/dataStore')
 
 // Interfaces
 import { IAccountBase, IAccountPrivate } from '../interfaces/account'
@@ -29,20 +28,18 @@ class Account {
 
   public static async get(uuid: string): Promise<Account> {
     try {
-      const _client = redis.createClient()
-      const _getAsync = promisify(_client.get).bind(_client)
-
       const _accountKey = Account.generateRedisKey(uuid)
-      const _stringifiedAccount = await _getAsync(_accountKey)
-      _client.quit()
+
+      const _client = new DataStore()
+      const _stringifiedAccount = await _client.get(_accountKey)
 
       if (!_stringifiedAccount) {
         throw new Error(`nothing found for ${uuid}`)
       }
 
       const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
-
       const _accountObject = new Account(_accountParams)
+
       return _accountObject
     } catch (error) {
       throw error
@@ -139,13 +136,11 @@ class Account {
         throw new Error(`Validation failed: ${_errors}`)
       }
 
-      const _client = redis.createClient()
-      const _setAsync = promisify(_client.set).bind(_client)
-
       const _accountKey = Account.generateRedisKey(this.uuid)
       const _stringifiedAccount = this.generateRedisPayload()
-      await _setAsync(_accountKey, _stringifiedAccount, 'EX', this.lifeSpan)
-      _client.quit()
+
+      const _client = new DataStore()
+      await _client.set(_accountKey, _stringifiedAccount, this.lifeSpan)
 
       return this.uuid
     } catch (error) {
