@@ -44,7 +44,6 @@
     "ts-loader": "^6.2.1",
     "tslint": "^5.12.1",
     "typescript": "^3.2.4",
-    "uglifyjs-webpack-plugin": "^1.2.7",
     "vue-loader": "^15.2.4",
     "vue-resource": "^1.5.1",
     "vue-template-compiler": "^2.5.16",

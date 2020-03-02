@@ -2,7 +2,7 @@
 const axios = require('axios')
 
 // Configs
-const configs = require('../configs.ts')
+const configs = require('../config.ts')
 
 // Templates
 const landingRightTemplate = require('../templates/landingRight.html')
