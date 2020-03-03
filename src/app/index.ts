@@ -23,7 +23,7 @@ const pantry = new vue({
       this.view = IView[view]
     },
     goHome() {
-      this.changeView(IView.home) 
+      this.changeView(IView.home)
     },
   },
   components: {

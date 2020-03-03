@@ -46,7 +46,7 @@ const landingRight = {
     },
     goHome() {
       this.$emit('change-view', IView.home)
-    }
+    },
   },
 }
 
