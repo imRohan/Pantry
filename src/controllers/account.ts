@@ -2,9 +2,13 @@
 
 // External Files
 import Account = require('../models/account')
+import logService = require('../services/logger')
 
 // Interfaces
 import { IAccountBase } from '../interfaces/account'
+
+// Logger setup
+const logger = new logService('Account Controller')
 
 class AccountController {
   public static async create(params: IAccountBase): Promise<string> {
@@ -12,10 +16,10 @@ class AccountController {
       const _account = new Account(params)
       const _accountUUID = await _account.store()
 
-      console.log('Account - Created account!')
+      logger.info('Account created')
       return _accountUUID
     } catch (error) {
-      console.log(`Account/create - ${error.message}`)
+      logger.error(`Account creation failed: ${error.message}`)
       throw error
     }
   }
@@ -25,10 +29,10 @@ class AccountController {
       const _account = await Account.get(uuid)
       const _accountDetails = _account.sanitize()
 
-      console.log('Account - Fetched account!')
+      logger.info('Account retrieved')
       return _accountDetails
     } catch (error) {
-      console.log(`Account/get - ${error.message}`)
+      logger.error(`Account retrieval failed: ${error.message}`)
       throw error
     }
   }

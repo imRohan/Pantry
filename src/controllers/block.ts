@@ -3,9 +3,13 @@
 // External Files
 import Account = require('../models/account')
 import Block = require('../models/block')
+import logService = require('../services/logger')
 
 // Interfaces
 import { IBlock } from '../interfaces/block'
+
+// Logger setup
+const logger = new logService('Block Controller')
 
 class BlockController {
   public static async create(accountUUID: string, params: IBlock): Promise<string> {
@@ -22,14 +26,14 @@ class BlockController {
       const { name } = params
       const _block = new Block(accountUUID, params)
       await _block.store()
-      console.log(`Block - Created new block: ${name} for account: ${accountUUID}`)
+      logger.info('Created new block')
 
       // Store block name in account entity
       await _account.addBlock(name)
 
       return `Your Pantry was updated with basket: ${name}!`
     } catch (error) {
-      console.log(`Block/create - ${error.message}`)
+      logger.error(`Block creation failed: ${error.message}`)
       throw error
     }
   }
@@ -47,11 +51,11 @@ class BlockController {
       }
 
       const _block = await Block.get(accountUUID, name)
+      logger.info('Block retrieved')
 
-      console.log(`Block - Fetched block: ${name} for account: ${accountUUID}`)
       return _block
     } catch (error) {
-      console.log(`Block/get - ${error.message}`)
+      logger.error(`Block retrieval failed: ${error.message}`)
       throw error
     }
   }

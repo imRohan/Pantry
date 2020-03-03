@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 // TODO
-// - Add a Logo
-// - Figure out App lingo. Items vs. Jars vs. Baskets
-// - Deploy on AWS Litesail
+// - Add Blocks / Account lifespan to env vars
+// - Add navigation to frontend
+// - Add name/email to signup
 // - Write unit tests
-// - Setup Travis or something to run pipelines and run tests
 // - Begin workong on v.2?
+// - Setup Travis or something to run pipelines and run tests
 
 // Get External Deps
 import bodyParser = require('body-parser')
@@ -16,6 +16,12 @@ require('dotenv').config()
 
 // Routes
 import _routesV1 = require('./routes/apiV1')
+
+// External files
+import logService = require('./services/logger')
+
+// Logger setup
+const logger = new logService('API')
 
 // Express server setup and start
 const server = express()
@@ -27,16 +33,18 @@ server.use(express.static(__dirname))
 server.use('/apiv1/pantry', _routesV1)
 
 server.get('/', (request, response) => {
+  logger.info('Served Landing Page')
   response.sendFile('index.html', { root: process.env.PWD })
 })
 
 function startApplication() {
   // Start the Express Server & Init the application
   const _serverInstance = server.listen(process.env.API_SERVER_PORT, () => {
-    console.log(`Server running on port ${process.env.API_SERVER_PORT}`)
+    logger.info(`Pantry is now running on port ${process.env.API_SERVER_PORT}`)
   })
 
   process.on('SIGINT', () => {
+    logger.warn('Pantry shutting down...')
     _serverInstance.close()
   })
 }
