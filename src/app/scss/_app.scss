@@ -5,7 +5,7 @@ body, html {
 
 .app {
   display: grid;
-  grid-template-columns: $leftside-width auto;
+  grid-template-columns: auto $left-side-width $right-side-width auto;
   grid-template-rows: $topbar-height auto;
   font-family: Helvetica, Arial, sans-serif;
   background: $background;
@@ -15,14 +15,13 @@ body, html {
 }
 
 .logo {
-  grid-column-start: 1;
-  grid-row-start: 1;
   font-size: 2em;
   font-family: 'Playfair Display', 'serif';
   color: $background;
-  z-index: 2;
-  padding-left: 1em;
   position: fixed;
+  top: 1em;
+  left: 2em;
+  z-index: 2;
 }
 
 button {
@@ -31,7 +30,8 @@ button {
   border-radius: 50px;
   border: none;
   color: #ffffff;
-  font-size: 1.3em;
+  font-size: 1em;
+  cursor: pointer;
 }
 
 .button {
