@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
+    "@types/pino": "^5.15.5",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-preset-es2015": "^6.24.1",
