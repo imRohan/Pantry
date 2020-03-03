@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 // TODO
-// - Add Blocks / Account lifespan to env vars
 // - Add navigation to frontend
 // - Add name/email to signup
 // - Write unit tests

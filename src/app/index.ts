@@ -22,6 +22,9 @@ const pantry = new vue({
     changeView(view: string) {
       this.view = IView[view]
     },
+    goHome() {
+      this.changeView(IView.home) 
+    },
   },
   components: {
     landingLeft,

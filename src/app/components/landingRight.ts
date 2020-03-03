@@ -44,6 +44,9 @@ const landingRight = {
     showDocs() {
       this.$emit('change-view', IView.docs)
     },
+    goHome() {
+      this.$emit('change-view', IView.home)
+    }
   },
 }
 
