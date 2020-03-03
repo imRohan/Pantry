@@ -19,7 +19,7 @@ const landingRight = {
   data() {
     return {
       pantryId: 'Whoops! This was not supposed to happen.',
-      apiPath: 'http://getpantry.io/apiv1',
+      apiPath: API_PATH,
     }
   },
   template: landingRightTemplate,
