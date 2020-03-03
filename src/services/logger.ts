@@ -1,16 +1,16 @@
 // External Libs
 import pino = require('pino')
 
-class logger {
+class Logger {
   private logClient
 
   constructor(name: string) {
     this.logClient = pino({
       name,
-      prettyPrint: true
+      prettyPrint: true,
     })
   }
-  
+
   public info(message: string, object?: any) {
     this.sendToClient('info', message, object)
   }
@@ -32,4 +32,4 @@ class logger {
   }
 }
 
-export = logger
+export = Logger
