@@ -85,7 +85,8 @@ class Account {
   private uuid: string
 
   // Constants
-  private readonly lifeSpan = Number(86400 * 5)
+  private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
+  private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
   private readonly defaultMaxNumberOfBlocks = 50
 
   constructor(params: any) {

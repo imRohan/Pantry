@@ -75,7 +75,8 @@ class Block {
   public payload: any
 
   // Constants
-  private readonly lifeSpan = 10
+  private readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
+  private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
 
   constructor(accountUUID: string, params: IBlock) {
     const { name, payload } = params
