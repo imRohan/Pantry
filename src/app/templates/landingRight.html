@@ -9,9 +9,12 @@
       your users, Pantry speeds up development time letting you
       build awesome things - fast!
     </p>
-    <button @click="createNewPantry">
-      Create New Pantry
-    </button>
+    <div class="input__container">
+      <input v-model="params.name" placeholder="Project Name">
+      <button @click="createNewPantry">
+        Create New Pantry
+      </button>
+    </div>
     <button
       @click="showDocs"
       class="button--alt">

@@ -20,6 +20,11 @@ const landingRight = {
     return {
       pantryId: 'Whoops! This was not supposed to happen.',
       apiPath: API_PATH,
+      params: {
+        name: null,
+        description: null,
+        contactEmail: null,
+      }
     }
   },
   template: landingRightTemplate,
