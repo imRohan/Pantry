@@ -28,6 +28,9 @@ button, input {
   border: none;
   font-size: 1em;
   border-radius: 50px;
+  &:focus {
+    outline-width: 0;
+  }
 }
 
 button {
@@ -48,8 +51,7 @@ button {
 
 input {
   background: $white;
-  padding: 0.7em 2em 0.7em 1em;
-  color: $secondary-color;
+  padding: 0.8em 2em 0.8em 1em;
 }
 
 .input {
@@ -60,7 +62,8 @@ input {
     input {
       width: 60%;
       border-bottom-right-radius: 0px;
-      border-top-right-radius: 0px
+      border-top-right-radius: 0px;
+      color: $primary-color;
     }
     button {
       width: 40%;
