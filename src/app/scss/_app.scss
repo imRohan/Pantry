@@ -44,8 +44,7 @@ button {
 }
 
 input {
-  background: none;
-  border: 2px solid $secondary-color;
+  background: $white;
   padding: 0.7em 2em 0.7em 1em;
   color: $secondary-color;
 }
@@ -57,9 +56,13 @@ input {
     justify-content: space-between;
     input {
       width: 60%;
+      border-bottom-right-radius: 0px;
+      border-top-right-radius: 0px
     }
     button {
       width: 40%;
+      border-bottom-left-radius: 0px;
+      border-top-left-radius: 0px
     }
   }
 }
