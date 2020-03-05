@@ -1,0 +1,24 @@
+.topbar {
+  &__container {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    z-index: 2;
+    padding: 0em 2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__logo {
+    font-size: 2em;
+    font-family: 'Playfair Display', 'serif';
+    color: $background;
+    cursor: pointer;
+  }
+  &__link {
+    color: $secondary-color;
+    font-weight: bold;
+    cursor: pointer
+  }
+}

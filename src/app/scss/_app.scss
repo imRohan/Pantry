@@ -9,8 +9,8 @@ body, html {
   grid-template-rows: $topbar-height auto;
   font-family: Helvetica, Arial, sans-serif;
   background: $background;
-  min-height: 100vh;
-  height: auto;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .logo {
@@ -27,7 +27,7 @@ body, html {
 button, input {
   border: none;
   font-size: 1em;
-  border-radius: 3px;
+  border-radius: 50px;
 }
 
 button {
@@ -35,6 +35,9 @@ button {
   padding: 0.5em 2em;
   color: $white;
   cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
 .button {

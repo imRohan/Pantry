@@ -20,11 +20,7 @@ const landingRight = {
     return {
       pantryId: 'Whoops! This was not supposed to happen.',
       apiPath: API_PATH,
-      params: {
-        name: null,
-        description: null,
-        contactEmail: null,
-      }
+      signupEmail: null,
     }
   },
   template: landingRightTemplate,
@@ -33,9 +29,9 @@ const landingRight = {
       const { data } = await axios({
         method: 'POST',
         data: {
-          name: 'defaultAccountName',
+          name: 'defaultName',
           description: 'defaultDescription',
-          contactEmail: 'default@email.com',
+          contactEmail: this.signupEmail,
         },
         url: `${API_PATH}/apiv1/pantry/create`,
       })
@@ -43,11 +39,17 @@ const landingRight = {
       this.pantryId = data
       this.$emit('change-view', IView.created)
     },
+    signupValid() {
+      return this.email !== null || this.email !== ''
+    },
     getStarted() {
       this.$emit('change-view', IView.getStarted)
     },
     goHome() {
       this.$emit('change-view', IView.home)
+    },
+    showDocs() {
+      this.$emit('change-view', IView.docs)
     },
   },
 }

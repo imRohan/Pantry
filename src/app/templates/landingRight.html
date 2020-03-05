@@ -9,18 +9,21 @@
       your users, Pantry speeds up development time letting you
       build awesome things - fast!
     </p>
+    <p>
+      Simply enter your email below and let's get started!
+    </p>
     <div class="input__container">
-      <input v-model="params.name" placeholder="Project Name">
-      <button @click="createNewPantry">
+      <input v-model="signupEmail" placeholder="Your Email Please">
+      <button @click="createNewPantry" :disabled="signupValid ? false: true">
         Get a Pantry
       </button>
     </div>
   </template>
   <template v-if="view === 'created'">
     <h1>
-      Your Pantry's been created!
+      Your Pantry's Ready!
     </h1>
-    <h2> Save your PantryID</h2>
+    <h2>Save your PantryID</h2>
     <p>
       Here is your <b>pantryID</b>! Keep this safe as we won't be sharing it with you again.
       Once you've saved it somewhere, hit the button below and we'll show you how to add items to your pantry.
