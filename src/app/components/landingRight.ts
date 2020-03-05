@@ -40,7 +40,7 @@ const landingRight = {
       this.$emit('change-view', IView.created)
     },
     signupValid() {
-      return this.email !== null || this.email !== ''
+      return this.signupEmail
     },
     getStarted() {
       this.$emit('change-view', IView.getStarted)

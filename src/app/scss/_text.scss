@@ -33,6 +33,8 @@ p {
   &--key {
     font-weight: bold;
     text-align: center;
+  }
+  &--light {
     color: $secondary-color;
   }
 }

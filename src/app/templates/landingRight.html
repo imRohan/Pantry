@@ -1,23 +1,25 @@
 <div class="landing__right">
   <template v-if="view === 'home'">
-    <h1 class="text--dark">
+    <h1>
       Unburden yourself from data storage woes.
     </h1>
-    <p class="text--dark">
+    <p>
       Focus your efforts on building your next project and leave
       the data storage to us. With free NoSQL cloud storage for you and
       your users, Pantry speeds up development time letting you
       build awesome things - fast!
     </p>
-    <p>
-      Simply enter your email below and let's get started!
-    </p>
     <div class="input__container">
-      <input v-model="signupEmail" placeholder="Your Email Please">
-      <button @click="createNewPantry" :disabled="signupValid ? false: true">
+      <input v-model="signupEmail" placeholder="you@example.com">
+      <button @click="createNewPantry" :disabled="!signupValid()">
         Get a Pantry
       </button>
     </div>
+    <template v-if="signupValid()">
+      <p class="text--light">
+        Don't worry, we'll only contact you if its important.
+      </p>
+    </template>
   </template>
   <template v-if="view === 'created'">
     <h1>
@@ -28,7 +30,7 @@
       Here is your <b>pantryID</b>! Keep this safe as we won't be sharing it with you again.
       Once you've saved it somewhere, hit the button below and we'll show you how to add items to your pantry.
     </p>
-    <p class="text__container text--key">
+    <p class="text__container text--key text--light">
       {{ pantryId }}
     </p>
     <button @click="getStarted">
