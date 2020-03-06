@@ -3,12 +3,13 @@
     top: 0;
     position: fixed;
     z-index: 1;
+    overflow: visible;
   }
   &__character {
     position: fixed;
     width: 30em;
     height: 30em;
-    top: 20%;
+    left: 0;
     background-repeat: no-repeat;
     z-index: 2;
   }

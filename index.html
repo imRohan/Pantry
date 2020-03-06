@@ -10,9 +10,7 @@
   </head>
   <body>
     <div class="app">
-      <div class="logo">
-        Pantry.
-      </div>
+      <topbar @change-view="changeView"></topbar>
       <landing-left :view="view">
       </landing-left>
       <landing-right :view="view" @change-view="changeView">

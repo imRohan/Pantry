@@ -20,6 +20,7 @@ const landingRight = {
     return {
       pantryId: 'Whoops! This was not supposed to happen.',
       apiPath: API_PATH,
+      signupEmail: null,
     }
   },
   template: landingRightTemplate,
@@ -28,9 +29,9 @@ const landingRight = {
       const { data } = await axios({
         method: 'POST',
         data: {
-          name: 'defaultAccountName',
+          name: 'defaultName',
           description: 'defaultDescription',
-          contactEmail: 'default@email.com',
+          contactEmail: this.signupEmail,
         },
         url: `${API_PATH}/apiv1/pantry/create`,
       })
@@ -38,8 +39,15 @@ const landingRight = {
       this.pantryId = data
       this.$emit('change-view', IView.created)
     },
+    signupValid() {
+			const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		 return _emailRegix.test(String(this.signupEmail).toLowerCase());
+    },
     getStarted() {
       this.$emit('change-view', IView.getStarted)
+    },
+    goHome() {
+      this.$emit('change-view', IView.home)
     },
     showDocs() {
       this.$emit('change-view', IView.docs)

@@ -2,6 +2,7 @@
 import {
   IsArray,
   IsBoolean,
+  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -70,7 +71,7 @@ class Account {
   @IsString()
   private description: string
   @IsNotEmpty()
-  @IsString()
+  @IsEmail()
   private contactEmail: string
   @IsNotEmpty()
   @IsBoolean()
