@@ -41,7 +41,7 @@ const landingRight = {
     },
     signupValid() {
 			const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		  return _emailRegix.test(String(this.signupEmail).toLowerCase());
+		 return _emailRegix.test(String(this.signupEmail).toLowerCase());
     },
     getStarted() {
       this.$emit('change-view', IView.getStarted)

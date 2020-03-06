@@ -2,11 +2,11 @@
 import {
   IsArray,
   IsBoolean,
+  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsString,
   IsUUID,
-  IsEmail,
   validate,
 } from 'class-validator'
 import uuidv4 = require('uuid/v4')
