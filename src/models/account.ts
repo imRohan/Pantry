@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsString,
   IsUUID,
+  IsEmail,
   validate,
 } from 'class-validator'
 import uuidv4 = require('uuid/v4')
@@ -70,7 +71,7 @@ class Account {
   @IsString()
   private description: string
   @IsNotEmpty()
-  @IsString()
+  @IsEmail()
   private contactEmail: string
   @IsNotEmpty()
   @IsBoolean()
