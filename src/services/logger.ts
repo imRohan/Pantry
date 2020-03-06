@@ -39,13 +39,15 @@ class Logger {
 
   private async postToSlack(level: string, message: string) {
     try {
-      const _time = new Date().toLocaleTimeString()
-      const _message = `${_time} ${level.toUpperCase()} - ${message}`
-      await axios({
-        method: 'POST',
-        data: { text: _message },
-        url: this.slackWebhook,
-      })
+      if(this.slackWebhook) {
+        const _time = new Date().toLocaleTimeString()
+        const _message = `${_time} ${level.toUpperCase()} - ${message}`
+        await axios({
+          method: 'POST',
+          data: { text: _message },
+          url: this.slackWebhook,
+        })
+      }
     } catch (error) {
       this.logClient.error(`Could not post to Slack: ${error.message}`)
     }
