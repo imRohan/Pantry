@@ -1,6 +1,6 @@
 // External Libs
-import pino = require('pino')
 import axios from 'axios'
+import pino = require('pino')
 require('dotenv').config()
 
 class Logger {
@@ -39,7 +39,7 @@ class Logger {
 
   private async postToSlack(level: string, message: string) {
     try {
-      if(this.slackWebhook) {
+      if (this.slackWebhook) {
         const _time = new Date().toLocaleTimeString()
         const _message = `${_time} ${level.toUpperCase()} - ${message}`
         await axios({
