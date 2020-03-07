@@ -11,6 +11,7 @@
     grid-column-start: 3;
     grid-row-start: 2;
     padding: 1em 3em;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }

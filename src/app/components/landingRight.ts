@@ -33,7 +33,7 @@ const landingRight = {
           description: 'defaultDescription',
           contactEmail: this.signupEmail,
         },
-        url: `${API_PATH}/apiv1/pantry/create`,
+        url: `${API_PATH}/pantry/create`,
       })
 
       this.pantryId = data
