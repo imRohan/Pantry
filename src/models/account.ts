@@ -123,13 +123,12 @@ class Account {
 
   public sanitize(): IAccountBase {
     try {
-      const _sanitizedItems = {
+      const _sanitizedItems: IAccountBase = {
         name: this.name,
         description: this.description,
         contactEmail: this.contactEmail,
-        blocks: this.blocks,
-        maxNumberOfBlocks: this.maxNumberOfBlocks,
       }
+
       return _sanitizedItems
     } catch (error) {
       throw new Error(`failed to sanitize: ${error.message}`)
