@@ -10,7 +10,7 @@ describe('When creating an account', () => {
     const _params: IAccountBase = {
       name: 'New Account',
       description: 'Account made while testing',
-      contactEmail: 'derp@flerp.com'
+      contactEmail: 'derp@flerp.com',
     }
 
     const _uuid: string = await AccountController.create(_params)

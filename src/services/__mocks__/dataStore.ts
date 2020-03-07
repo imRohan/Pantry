@@ -6,10 +6,10 @@ const mock = jest.fn().mockImplementation(() => {
     blocks: ['derp', 'flerp'],
     maxNumberOfBlocks: 50,
     notifications: true,
-    uuid: '12345'
+    uuid: '12345',
   }
   return {
-    get: () => { return(JSON.stringify(_account)) },
+    get: () => (JSON.stringify(_account)),
     set: () => { return },
   }
 })
