@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
 // TODO
-// - Add navigation to frontend
-// - Add name/email to signup
 // - Write unit tests
 // - Begin workong on v.2?
 // - Setup Travis or something to run pipelines and run tests
