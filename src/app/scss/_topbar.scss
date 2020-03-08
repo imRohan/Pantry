@@ -15,6 +15,7 @@
     font-family: 'Playfair Display', 'serif';
     color: $background;
     cursor: pointer;
+    z-index: 2;
   }
   &__link {
     color: $secondary-color;
