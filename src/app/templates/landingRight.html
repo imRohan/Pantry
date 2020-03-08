@@ -15,11 +15,8 @@
         Get a Pantry
       </button>
     </div>
-    <template v-if="signupEmail">
+    <template v-if="signupEmail && !signupValid()">
       <p class="text--light">
-        <template v-if="signupValid()">
-          Don't worry, we'll only contact you if its important.
-        </template>
         <template v-else>
           Sorry, but that email is invalid.
         </template>
