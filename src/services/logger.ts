@@ -3,6 +3,9 @@ import axios from 'axios'
 import pino = require('pino')
 require('dotenv').config()
 
+// External Files
+import { ILogLevel } from '../interfaces/logger'
+
 class Logger {
   private logClient
   private slackWebhook = process.env.SLACK_LOG_WEBHOOK
@@ -15,29 +18,31 @@ class Logger {
   }
 
   public info(message: string, object?: any) {
-    this.sendToClient('info', message, object)
+    this.sendToClient(ILogLevel.info, message, object)
   }
 
   public warn(message: string, object?: any) {
-    this.sendToClient('warn', message, object)
+    this.sendToClient(ILogLevel.warn, message, object)
   }
 
   public error(message: string, object?: any) {
-    this.sendToClient('error', message, object)
+    this.sendToClient(ILogLevel.error, message, object)
   }
 
   // Send logs to not only the logging client, but also outbound to Slack.
-  private sendToClient(level: string, message: string, object?: any) {
+  private sendToClient(level: ILogLevel, message: string, object?: any) {
     if (object) {
       this.logClient[level](message, object)
     } else {
       this.logClient[level](message)
     }
-
-    this.postToSlack(level, message)
+    
+    if (level !== ILogLevel.info) {
+      this.postToSlack(level, message)
+    }
   }
 
-  private async postToSlack(level: string, message: string) {
+  private async postToSlack(level: ILogLevel, message: string) {
     try {
       if (this.slackWebhook) {
         const _time = new Date().toLocaleTimeString()
