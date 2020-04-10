@@ -5,14 +5,11 @@ import Account = require('../models/account')
 import Block = require('../models/block')
 import logService = require('../services/logger')
 
-// Interfaces
-import { IBlock } from '../interfaces/block'
-
 // Logger setup
 const logger = new logService('Block Controller')
 
 class BlockController {
-  public static async create(accountUUID: string, params: IBlock): Promise<string> {
+  public static async create(accountUUID: string, blockName: string, payload: any): Promise<string> {
     try {
       const _account = await Account.get(accountUUID)
 
@@ -23,15 +20,14 @@ class BlockController {
       }
 
       // Create/update block for given account
-      const { name } = params
-      const _block = new Block(accountUUID, params)
+      const _block = new Block(accountUUID, blockName, payload)
       await _block.store()
       logger.info('Created new block')
 
       // Store block name in account entity
-      await _account.addBlock(name)
+      await _account.addBlock(blockName)
 
-      return `Your Pantry was updated with basket: ${name}!`
+      return `Your Pantry was updated with basket: ${blockName}!`
     } catch (error) {
       logger.error(`Block creation failed: ${error.message}`)
       throw error
