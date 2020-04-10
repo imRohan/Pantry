@@ -10,9 +10,6 @@ module.exports = merge(common, {
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
   ],
-  output: {
-    filename: 'bundle.js',
-  },
   resolve: {
     alias: {
       vue: 'vue/dist/vue.min.js',
