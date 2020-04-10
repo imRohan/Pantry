@@ -38,6 +38,25 @@ describe('When creating a block', () => {
     const _response = await BlockController.create(_accountUUID, _block)
     expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
   })
+
+  it ('throws an error if account has reached max # of blocks', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+    const _maxedAccount: IAccountPrivate = {
+      name: 'Maxed Existing Account',
+      description: 'Account made while testing',
+      contactEmail: 'derp@flerp.com',
+      blocks: ['blockName'],
+      maxNumberOfBlocks: 1,
+      notifications: true,
+      uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
+    }
+
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_maxedAccount)))
+
+    await expect(BlockController.create(_accountUUID, _block))
+      .rejects
+      .toThrow('max number of blocks reached')
+  })
 })
 
 describe('When retrieving a block', () => {
@@ -46,10 +65,23 @@ describe('When retrieving a block', () => {
     const _blockName = 'NewBlock'
 
     mockedDataStore.get
-      .mockReturnValue(Promise.resolve(JSON.stringify(_existingAccount)))
-      .mockReturnValue(Promise.resolve(JSON.stringify(_block)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_block)))
 
     const _payload = await BlockController.get(_accountUUID, _blockName)
     expect(_payload).toEqual(_block.payload)
+  })
+
+  it ('throws an error if block does not exist', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+    const _blockName = 'NewBlock'
+
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(null))
+
+    await expect(BlockController.get(_accountUUID, _blockName))
+      .rejects
+      .toThrow(`${_blockName} does not exist`)
   })
 })

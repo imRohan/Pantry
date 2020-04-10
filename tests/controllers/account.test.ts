@@ -21,16 +21,14 @@ describe('When creating an account', () => {
   })
 
   it ('throws an error if validations fail', async () => {
-    try {
-      const _params: any = {
-        description: 'Account made while testing',
-        contactEmail: 'derp@flerp.com',
-      }
-
-      await AccountController.create(_params)
-    } catch (error) {
-      expect(error.message).toMatch(/Validation failed:/)
+    const _params: any = {
+      description: 'Account made while testing',
+      contactEmail: 'derp@flerp.com',
     }
+
+    await expect(AccountController.create(_params))
+      .rejects
+      .toThrow('Validation failed:')
   })
 })
 
@@ -53,12 +51,10 @@ describe('When retrieving an account', () => {
   })
 
   it ('throws an error if account does not exist', async () => {
-    try {
-      mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
 
-      await AccountController.get(_existingAccount.uuid)
-    } catch (error) {
-      expect(error.message).toMatch(`pantry with id: ${_existingAccount.uuid} not found`)
-    }
+    await expect(AccountController.get(_existingAccount.uuid))
+      .rejects
+      .toThrow(`pantry with id: ${_existingAccount.uuid} not found`)
   })
 })
