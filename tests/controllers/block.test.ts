@@ -22,19 +22,19 @@ const _existingAccount: IAccountPrivate = {
 const _block: IBlock = {
   accountUUID: _existingAccount.uuid,
   name: 'NewBlock',
-  payload: { derp: 'flerp' }
+  payload: { derp: 'flerp' },
 }
 
-afterEach(() => {    
+afterEach(() => {
   mockedDataStore.get.mockReset()
 })
 
 describe('When creating a block', () => {
   it ('returns successful create message', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
-    
+
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-    
+
     const _response = await BlockController.create(_accountUUID, _block)
     expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
   })
