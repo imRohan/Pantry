@@ -36,7 +36,7 @@ class Logger {
     } else {
       this.logClient[level](message)
     }
-    
+
     if (level !== ILogLevel.info) {
       this.postToSlack(level, message)
     }
