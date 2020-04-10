@@ -39,13 +39,13 @@ _apiV1Router.get('/:pantryID', async (req, res) => {
   }
 })
 
-_apiV1Router.post('/:pantryID/basket', async (req, res) => {
+_apiV1Router.post('/:pantryID/basket/:basketName', async (req, res) => {
   try {
     const { body, params } = req
-    const { pantryID } = params
+    const { pantryID, basketName } = params
 
     logger.info('[POST] Create Basket', params)
-    const _response = await BlockController.create(pantryID, body)
+    const _response = await BlockController.create(pantryID, basketName, body)
 
     res.send(_response)
   } catch (error) {

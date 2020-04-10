@@ -26,7 +26,7 @@ class Block {
       }
 
       const _blockParams = Block.convertRedisPayload(_stringifiedBlock)
-      const _blockObject = new Block(accountUUID, _blockParams)
+      const _blockObject = new Block(accountUUID, name, _blockParams)
 
       const _blockSanitized = _blockObject.sanitize()
       return _blockSanitized
@@ -68,8 +68,7 @@ class Block {
   private readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
   private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
 
-  constructor(accountUUID: string, params: IBlock) {
-    const { name, payload } = params
+  constructor(accountUUID: string, name, payload: any) {
     this.name = name
     this.payload = payload
     this.accountUUID = accountUUID
@@ -101,12 +100,7 @@ class Block {
   }
 
   private generateRedisPayload(): string {
-    const _blockDetails: IBlock = {
-      accountUUID: this.accountUUID,
-      name: this.name,
-      payload: this.payload,
-    }
-    return JSON.stringify(_blockDetails)
+    return JSON.stringify(this.payload)
   }
 }
 
