@@ -53,6 +53,9 @@ class Account {
       throw new Error(`failed to generate rkey: ${error.message}`)
     }
   }
+  @IsNotEmpty()
+  @IsArray()
+  public blocks: string[]
 
   @IsNotEmpty()
   @IsString()
@@ -69,9 +72,6 @@ class Account {
   @IsNotEmpty()
   @IsNumber()
   private maxNumberOfBlocks: number
-  @IsNotEmpty()
-  @IsArray()
-  private blocks: string[]
   @IsUUID('4')
   private uuid: string
 
@@ -126,7 +126,7 @@ class Account {
 
   public async addBlock(blockName: string): Promise<void> {
     try {
-      const _currentBlocks = this.blocks
+      const _currentBlocks = this.blocks.filter((name) => name !== blockName)
       const _updatedBlocks = [..._currentBlocks, blockName]
 
       this.blocks = _updatedBlocks
