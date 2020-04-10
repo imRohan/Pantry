@@ -12,7 +12,7 @@ import {
 import uuidv4 = require('uuid/v4')
 
 // External Files
-import DataStore = require('../services/dataStore')
+import dataStore = require('../services/dataStore')
 
 // Interfaces
 import { IAccountBase, IAccountPrivate } from '../interfaces/account'
@@ -31,8 +31,7 @@ class Account {
     try {
       const _accountKey = Account.generateRedisKey(uuid)
 
-      const _client = new DataStore()
-      const _stringifiedAccount = await _client.get(_accountKey)
+      const _stringifiedAccount = await dataStore.get(_accountKey)
 
       if (!_stringifiedAccount) {
         throw new Error(`pantry with id: ${uuid} not found`)
@@ -112,8 +111,7 @@ class Account {
       const _accountKey = Account.generateRedisKey(this.uuid)
       const _stringifiedAccount = this.generateRedisPayload()
 
-      const _client = new DataStore()
-      await _client.set(_accountKey, _stringifiedAccount, this.lifeSpan)
+      await dataStore.set(_accountKey, _stringifiedAccount, this.lifeSpan)
 
       return this.uuid
     } catch (error) {
