@@ -7,7 +7,6 @@ const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
 import { IAccountPrivate } from '../../src/interfaces/account'
-import { IBlock } from '../../src/interfaces/block'
 
 const _existingAccount: IAccountPrivate = {
   name: 'Existing Account',
@@ -17,12 +16,6 @@ const _existingAccount: IAccountPrivate = {
   maxNumberOfBlocks: 50,
   notifications: true,
   uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
-}
-
-const _block: IBlock = {
-  accountUUID: _existingAccount.uuid,
-  name: 'NewBlock',
-  payload: { derp: 'flerp' },
 }
 
 afterEach(() => {
@@ -35,7 +28,7 @@ describe('When creating a block', () => {
 
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
 
-    const _response = await BlockController.create(_accountUUID, _block)
+    const _response = await BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' })
     expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
   })
 
@@ -53,7 +46,7 @@ describe('When creating a block', () => {
 
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_maxedAccount)))
 
-    await expect(BlockController.create(_accountUUID, _block))
+    await expect(BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' }))
       .rejects
       .toThrow('max number of blocks reached')
   })
@@ -62,14 +55,13 @@ describe('When creating a block', () => {
 describe('When retrieving a block', () => {
   it ('successfully returns payload of block', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
-    const _blockName = 'NewBlock'
 
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_block)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify({ derp: 'flerp' })))
 
-    const _payload = await BlockController.get(_accountUUID, _blockName)
-    expect(_payload).toEqual(_block.payload)
+    const _payload = await BlockController.get(_accountUUID, 'NewBlock')
+    expect(_payload).toEqual({ derp: 'flerp' })
   })
 
   it ('throws an error if block does not exist', async () => {
