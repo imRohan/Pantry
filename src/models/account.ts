@@ -18,15 +18,6 @@ import dataStore = require('../services/dataStore')
 import { IAccountBase, IAccountPrivate } from '../interfaces/account'
 
 class Account {
-  public static async checkIfExists(uuid: string): Promise<boolean> {
-    try {
-      const _account = await Account.get(uuid)
-      return _account ? true : false
-    } catch (error) {
-      return false
-    }
-  }
-
   public static async get(uuid: string): Promise<Account> {
     try {
       const _accountKey = Account.generateRedisKey(uuid)
