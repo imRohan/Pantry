@@ -43,14 +43,14 @@ class BlockController {
       const _account = await Account.get(accountUUID)
 
       // Check if block exists
-      const _blockExists = await Block.checkIfExists(accountUUID, name)
-      if (!_blockExists) {
+      const _block = await Block.get(accountUUID, name)
+
+      if (!_block) {
         // Remove the block from the Account
         await _account.removeBlock(name)
         throw new Error(`${name} does not exist`)
       }
 
-      const _block = await Block.get(accountUUID, name)
       logger.info('Block retrieved')
 
       return _block

@@ -81,12 +81,12 @@ class Account {
   private readonly defaultMaxNumberOfBlocks = 50
 
   constructor(params: any) {
-    const { name, description, contactEmail, notifications, blocks, uuid } = params
+    const { name, description, contactEmail, notifications, blocks, uuid, maxNumberOfBlocks } = params
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
     this.notifications = notifications ?? false
-    this.maxNumberOfBlocks = this.defaultMaxNumberOfBlocks
+    this.maxNumberOfBlocks = maxNumberOfBlocks ?? this.defaultMaxNumberOfBlocks
     this.blocks = blocks ?? []
     this.uuid = uuid ?? uuidv4()
   }
@@ -152,7 +152,7 @@ class Account {
       const _isFull = this.blocks.length === this.maxNumberOfBlocks
       return _isFull
     } catch (error) {
-      throw new Error(`failed to remove block: ${error.message}`)
+      throw new Error(`failed to check if account full: ${error.message}`)
     }
   }
 
