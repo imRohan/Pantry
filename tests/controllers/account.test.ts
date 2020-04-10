@@ -30,11 +30,12 @@ describe('When retrieving an account', () => {
       blocks: [],
       maxNumberOfBlocks: 50,
       notifications: true,
-      uuid: '123',
+      uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
     }
 
-    mockedDataStore.get.mockImplementation(() => Promise.resolve(JSON.stringify(_existingAccount)))
-    const _accountBase: IAccountBase = await AccountController.get('123')
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+
+    const _accountBase: IAccountBase = await AccountController.get(_existingAccount.uuid)
     expect(_accountBase).toBeDefined()
   })
 })
