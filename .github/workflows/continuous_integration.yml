@@ -24,7 +24,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm 
+    - run: npm ci
     - run: npm run linter
     - run: npm run tests
       env:
