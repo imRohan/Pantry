@@ -49,18 +49,14 @@
     <h2>Add & Update Basket</h2>
     <p>
       To add or update a basket in your pantry, send a <b>POST</b> request
-      to our API with the <b>name</b> and the <b>payload</b> of the basket Your
+      to our API with the <b>name</b> of your basket in the path, and the
+      contents as the <b>payload</b> of the request. Your
       <b>pantryID</b> has already been added to the api path.
     </p>
     <p class="text__container text--code">
       curl -XPOST -H "Content-type: application/json" -d '{
-        "name": "myNewItem",
-        "payload": {
-            "key": "value"
-              
-            }
-
-            }' '{{apiPath}}/pantry/{{pantryId}}/basket'
+        "key": "value"
+      }' '{{apiPath}}/pantry/{{pantryId}}/basket/myNewBasket'
     </p>
     <h2>Get the contents of a Basket</h2>
     <p>
@@ -70,7 +66,7 @@
     </p>
     <p class="text__container text--code">
       curl -XGET -H "Content-type: application/json"
-      '{{apiPath}}/pantry/{{pantryId}}/basket/myNewItem'
+      '{{apiPath}}/pantry/{{pantryId}}/basket/myNewBasket'
     </p>
     <button @click="showDocs">
       Show Me The API Docs!
@@ -94,7 +90,7 @@
     </p>
     <h2>Add & Update a Basket</h2>
     <p class="text__container text--code">
-      POST {{apiPath}}/pantry/{pantryID}/basket
+      POST {{apiPath}}/pantry/{pantryID}/basket/{basketName}
     </p>
     <p>
       To add or update a basket in your pantry, simply send a <b>POST</b> request
@@ -104,13 +100,8 @@
     </p>
     <p class="text__container text--code">
       curl -XPOST -H "Content-type: application/json" -d '{
-        "name": "myNewItem",
-        "payload": {
-            "key": "value"
-              
-            }
-
-            }' '{{apiPath}}/pantry/{pantryID}/basket'
+        "key": "value"
+        }' '{{apiPath}}/pantry/{pantryID}/basket/{basketName}'
     </p>
     <h2>Get the contents of a Basket</h2>
     <p class="text__container text--code">
