@@ -5,7 +5,7 @@ name: Linting and Testing
 
 on:
   push:
-    branches: [ devops/githubActions ]
+    branches: [ '**' ]
   pull_request:
     branches: [ master, develop ]
 
