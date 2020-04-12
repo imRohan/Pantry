@@ -9,6 +9,7 @@
 import bodyParser = require('body-parser')
 import cors = require('cors')
 import express = require('express')
+import helmet = require('helmet')
 require('dotenv').config()
 
 // Routes
@@ -25,6 +26,7 @@ const server = express()
 server.use(cors())
 server.use(bodyParser.json())
 server.use(express.static(__dirname))
+server.use(helmet())
 
 // Routes
 server.use('/apiv1/pantry', _routesV1)
