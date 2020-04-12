@@ -47,8 +47,10 @@ class BlockController {
         throw new Error(`${name} does not exist`)
       }
 
-      logger.info('Block retrieved')
+      logger.info(`Refreshing TTL of account: ${accountUUID}`)
+      await _account.refreshTTL()
 
+      logger.info('Block retrieved')
       return _block
     } catch (error) {
       logger.error(`Block retrieval failed: ${error.message}`)

@@ -18,6 +18,7 @@ import dataStore = require('../services/dataStore')
 import { IAccountBase, IAccountPrivate } from '../interfaces/account'
 
 class Account {
+
   public static async get(uuid: string): Promise<Account> {
     try {
       const _accountKey = Account.generateRedisKey(uuid)
@@ -155,6 +156,15 @@ class Account {
       throw new Error(`failed to check if account full: ${error.message}`)
     }
   }
+
+  public async refreshTTL(): Promise<void> {
+    try {
+      await this.store()
+    } catch (error) {
+      throw new Error(`failed to refresh account ttl, ${error.message}`)
+    }
+  }
+
 
   private generateRedisPayload(): string {
     const _accountDetails: IAccountPrivate = {
