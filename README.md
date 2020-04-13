@@ -1,21 +1,4 @@
-#Typescript + Express + Vuejs Boilerplate
----
+# Pantry
+![build](https://github.com/imRohan/Pantry/workflows/build/badge.svg?branch=develop)
 
-To get started, clone this repo and run:
-- `yarn`
-
-A `.env` file is required for configuring the Express server, so run `cp env.sample .env` and edit the values as needed
-
-To Run a dev env for the front end, run:
-- `yarn run dev`
-
-To run a dev server env, run:
-- `yarn run dev-server`
-
-To build the frontend, run:
-- `yarn run build`
-
-To run the server, run:
-- `yarn run server`
-
-Enjoy! :)
+[Pantry](https://getpantry.cloud/) is a cloud data-storage service which provides free perishable data storage for small projects. It's a good resource when building small projects which don't rely on a complex backend. Great for hackathons, and prototypes alike.
