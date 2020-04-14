@@ -9,6 +9,9 @@ const tobpar = {
   template: topbarTemplate,
   props: [],
   methods: {
+    showAbout() {
+      this.$emit('change-view', IView.about)
+    },
     showDocs() {
       this.$emit('change-view', IView.docs)
     },

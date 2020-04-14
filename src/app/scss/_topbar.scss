@@ -20,6 +20,12 @@
   &__link {
     color: $secondary-color;
     font-weight: bold;
-    cursor: pointer
+    cursor: pointer;
+    padding: 0 0.5em;
+    &-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 }

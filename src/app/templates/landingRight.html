@@ -72,13 +72,52 @@
       Show Me The API Docs!
     </button>
   </template>
+  <template v-if="view === 'about'">
+    <h1>
+      About
+    </h1>
+    <p>
+      Pantry is a data-storage service that provides free perishable data storage
+      for small projects. Data is securely stored for as long as you and your users need
+      it and is deleted after a period of inactivity. Simply use the restful API to
+      post JSON objects and we'll take care of the rest.
+    </p>
+    <p>
+      It was built to provide a simple, re-usable storage solution for smaller sized projects.
+      It was created by developers for developers, to be there when you need it
+      and to help rapidly prototype your next project.
+    </p>
+    <h2>Contribute</h2>
+    <p>
+      If you have any issues, please visit the
+      <a href="https://github.com/imRohan/Pantry">GitHub repo</a> and
+      post a message.
+    </p>
+  </template>
   <template v-if="view === 'docs'">
     <h1>
       Api Documentation
     </h1>
+    <h2>Introduction</h2>
+    <p>
+      Below are high-level descriptions of the main API calls that
+      you will need in order to get up and running with Pantry. For a more
+      detailed overview, please download and use the Postman
+      Collection.
+    </p>
+    <a href="https://app.getpostman.com/run-collection/b32d3ed975b9800557d7#?env%5BPantry%20Prod%5D=W3sia2V5IjoicGFudHJ5X2FwaV9wYXRoIiwidmFsdWUiOiJodHRwczovL2dldHBhbnRyeS5jbG91ZC9hcGl2MSIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X3V1aWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X2FjY291bnRfbmFtZSIsInZhbHVlIjoiUG9zdG1hbl9BY2NvdW50IiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJwYW50cnlfYWNjb3VudF9kZXNjcmlwdGlvbiIsInZhbHVlIjoiUG9zdG1hbiBUZXN0IEFjY291bnQiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6InBhbnRyeV9hY2NvdW50X2NvbnRhY3RFbWFpbCIsInZhbHVlIjoidGVzdEBwb3N0bWFuLmNvbSIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X2Jhc2tldF9uYW1lIiwidmFsdWUiOiJQb3N0bWFuX0Jhc2tldCIsImVuYWJsZWQiOnRydWV9XQ==">
+      <img src="https://run.pstmn.io/button.svg">
+    </a>
+    <h2>Pantry API Root Path</h2>
+    <p class="text__container text--code">
+      {{apiPath}}
+    </p>
+    <p>
+      Every api call must be sent to the root api path. Following that path will be a specific route per call.
+    </p>
     <h2>Get Pantry Details</h2>
     <p class="text__container text--code">
-      GET {{apiPath}}/pantry/{pantryID}
+      GET /pantry/{pantryID}
     </p>
     <p>
       To retrieve details about your pantry, simply send a <b>GET</b> request to
@@ -90,7 +129,7 @@
     </p>
     <h2>Add & Update a Basket</h2>
     <p class="text__container text--code">
-      POST {{apiPath}}/pantry/{pantryID}/basket/{basketName}
+      POST /pantry/{pantryID}/basket/{basketName}
     </p>
     <p>
       To add or update a basket in your pantry, simply send a <b>POST</b> request
@@ -105,7 +144,7 @@
     </p>
     <h2>Get the contents of a Basket</h2>
     <p class="text__container text--code">
-      GET {{apiPath}}/pantry/{pantryID}/basket/{basketName}
+      GET /pantry/{pantryID}/basket/{basketName}
     </p>
     <p>
       To retrieve an basket, send a <b>GET</b> request to our API with the
