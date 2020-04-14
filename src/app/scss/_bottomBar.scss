@@ -1,0 +1,26 @@
+.bottomBar {
+  &__container {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    z-index: 2;
+    padding: 0em 2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    font-size: 0.8em;
+  }
+  &__link {
+    color: $secondary-color;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 0.5em;
+    &-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}

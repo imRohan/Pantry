@@ -4,8 +4,8 @@ const topbarTemplate = require('../templates/topbar.html')
 // Interfaces
 const { IView } = require('../../interfaces/view.ts')
 
-const tobpar = {
-  name: 'tobpar',
+const topbar = {
+  name: 'topbar',
   template: topbarTemplate,
   props: [],
   methods: {
@@ -21,4 +21,4 @@ const tobpar = {
   },
 }
 
-export = tobpar
+export = topbar

@@ -24,18 +24,33 @@ p {
   line-height: 1.5em;
 }
 
+a:any-link {
+  color: $secondary-color;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .text {
   &__container {
     padding: 1em;
     border-radius: 5px;
     background: rgba(255,255,255,0.5);
     color: $text-color;
+    overflow-wrap: anywhere;
   }
   &--key {
     font-weight: bold;
     text-align: center;
   }
+  &__button {
+    float: right;
+    color: $secondary-color;
+  }
   &--light {
     color: $secondary-color;
+  }
+  &--dark {
+    color: $primary-color !important;
   }
 }

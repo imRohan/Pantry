@@ -37,6 +37,9 @@
     </p>
     <p class="text__container text--key">
       {{ pantryId }}
+      <span class="text__button" @click="copyPantryId">
+        {{ copyPantryIdMessage }}
+      </span>
     </p>
     <button @click="getStarted">
       Let's Get Started!
@@ -77,7 +80,7 @@
       About
     </h1>
     <p>
-      Pantry is a data-storage service that provides free perishable data storage
+      Pantry is a free service that provides perishable data storage
       for small projects. Data is securely stored for as long as you and your users need
       it and is deleted after a period of inactivity. Simply use the restful API to
       post JSON objects and we'll take care of the rest.
@@ -85,12 +88,12 @@
     <p>
       It was built to provide a simple, re-usable storage solution for smaller sized projects.
       It was created by developers for developers, to be there when you need it
-      and to help rapidly prototype your next project.
+      and to help you rapidly prototype your next project.
     </p>
     <h2>Contribute</h2>
     <p>
       If you have any issues, please visit the
-      <a href="https://github.com/imRohan/Pantry">GitHub repo</a> and
+      <a href="https://github.com/imRohan/Pantry" class="text--dark">GitHub repo</a> and
       post a message.
     </p>
   </template>

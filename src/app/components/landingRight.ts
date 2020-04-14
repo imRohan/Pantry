@@ -21,6 +21,7 @@ const landingRight = {
       pantryId: 'Whoops! This was not supposed to happen.',
       apiPath: API_PATH,
       signupEmail: null,
+      copyPantryIdMessage: 'copy',
     }
   },
   template: landingRightTemplate,
@@ -51,6 +52,10 @@ const landingRight = {
     },
     showDocs() {
       this.$emit('change-view', IView.docs)
+    },
+    copyPantryId() {
+      this.$emit('copy-text', this.pantryId)
+      this.copyPantryIdMessage = 'copied!'
     },
   },
 }
