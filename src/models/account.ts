@@ -165,7 +165,6 @@ class Account {
     }
   }
 
-
   private generateRedisPayload(): string {
     const _accountDetails: IAccountPrivate = {
       name: this.name,

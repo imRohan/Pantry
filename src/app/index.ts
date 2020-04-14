@@ -36,7 +36,7 @@ const pantry = new vue({
     copyText(text: string) {
       const _container = this.$refs.container
       this.$copyText(text, _container)
-    }
+    },
   },
 })
 
