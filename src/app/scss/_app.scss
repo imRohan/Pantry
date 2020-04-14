@@ -6,7 +6,7 @@ body, html {
 .app {
   display: grid;
   grid-template-columns: auto $left-side-width $right-side-width auto;
-  grid-template-rows: $topbar-height auto;
+  grid-template-rows: $topbar-height auto $footer-height;
   font-family: Helvetica, Arial, sans-serif;
   background: $background;
   height: 100vh;
@@ -21,6 +21,17 @@ body, html {
   top: 1em;
   left: 2em;
   cursor: pointer;
+}
+
+a:any-link {
+  color: $secondary-color;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link--bold {
+  color: $primary-color !important;
 }
 
 button, input {
