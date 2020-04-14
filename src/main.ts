@@ -39,7 +39,7 @@ server.get('/', (request, response) => {
 function startApplication() {
   // Start the Express Server & Init the application
   const _serverInstance = server.listen(process.env.API_SERVER_PORT, () => {
-    logger.info(`Pantry is now running on port ${process.env.API_SERVER_PORT}`)
+    logger.warn(`Pantry is now running on port ${process.env.API_SERVER_PORT}`)
   })
 
   process.on('SIGINT', () => {
