@@ -23,17 +23,6 @@ body, html {
   cursor: pointer;
 }
 
-a:any-link {
-  color: $secondary-color;
-  font-weight: bold;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.link--bold {
-  color: $primary-color !important;
-}
-
 button, input {
   border: none;
   font-size: 1em;

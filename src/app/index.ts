@@ -1,5 +1,8 @@
 // External Files
 const vue = require('vue')
+const vueClipboard = require('vue-clipboard2')
+
+vue.use(vueClipboard)
 
 // CSS
 require('./scss/main.scss')
@@ -30,6 +33,10 @@ const pantry = new vue({
     changeView(view: string) {
       this.view = IView[view]
     },
+    copyText(text: string) {
+      const _container = this.$refs.container
+      this.$copyText(text, _container)
+    }
   },
 })
 

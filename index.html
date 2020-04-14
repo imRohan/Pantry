@@ -13,7 +13,7 @@
       <topbar @change-view="changeView"></topbar>
       <landing-left :view="view">
       </landing-left>
-      <landing-right :view="view" @change-view="changeView">
+      <landing-right :view="view" @change-view="changeView" @copy-text="copyText">
       </landing-right>
       <bottom-bar></bottom-bar>
     </div>

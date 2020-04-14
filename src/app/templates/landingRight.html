@@ -37,6 +37,9 @@
     </p>
     <p class="text__container text--key">
       {{ pantryId }}
+      <span class="text__button" @click="copyPantryId">
+        {{ copyPantryIdMessage }}
+      </span>
     </p>
     <button @click="getStarted">
       Let's Get Started!
@@ -90,7 +93,7 @@
     <h2>Contribute</h2>
     <p>
       If you have any issues, please visit the
-      <a href="https://github.com/imRohan/Pantry" class="link--bold">GitHub repo</a> and
+      <a href="https://github.com/imRohan/Pantry" class="text--dark">GitHub repo</a> and
       post a message.
     </p>
   </template>
