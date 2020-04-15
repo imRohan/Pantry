@@ -9,7 +9,7 @@ import logService = require('../services/logger')
 const logger = new logService('Block Controller')
 
 class BlockController {
-  public static async create(accountUUID: string, blockName: string, payload: any): Promise<string> {
+  public static async create(accountUUID: string, name: string, payload: any): Promise<string> {
     try {
       const _account = await Account.get(accountUUID)
 
@@ -19,15 +19,14 @@ class BlockController {
         throw new Error('max number of blocks reached')
       }
 
-      // Create/update block for given account
-      const _block = new Block(accountUUID, blockName, payload)
+      logger.info('Creating new block in account: ${accountUUID}')
+      const _block = new Block(accountUUID, name, payload)
       await _block.store()
-      logger.info('Created new block')
 
-      // Store block name in account entity
-      await _account.addBlock(blockName)
+      logger.info(`Adding block to account: ${accountUUID}`)
+      await _account.addBlock(name)
 
-      return `Your Pantry was updated with basket: ${blockName}!`
+      return `Your Pantry was updated with basket: ${name}!`
     } catch (error) {
       logger.error(`Block creation failed: ${error.message}`)
       throw error
@@ -38,20 +37,33 @@ class BlockController {
     try {
       const _account = await Account.get(accountUUID)
 
-      // Check if block exists
       const _block = await Block.get(accountUUID, name)
-
-      if (!_block) {
-        // Remove the block from the Account
-        await _account.removeBlock(name)
-        throw new Error(`${name} does not exist`)
-      }
+      const _blockDetails = _block.sanitize()
 
       logger.info(`Refreshing TTL of account: ${accountUUID}`)
       await _account.refreshTTL()
 
       logger.info('Block retrieved')
-      return _block
+      return _blockDetails
+    } catch (error) {
+      logger.error(`Block retrieval failed: ${error.message}`)
+      throw error
+    }
+  }
+
+  public static async delete(accountUUID: string, name: string): Promise<string> {
+    try {
+      const _account = await Account.get(accountUUID)
+
+      await Block.get(accountUUID, name)
+
+      logger.info(`Deleting block in account: ${accountUUID}`)
+      await Block.delete(accountUUID, name)
+
+      logger.info(`Removing block from account: ${accountUUID}`)
+      await _account.removeBlock(name)
+
+      return `${name} was removed from your Pantry!`
     } catch (error) {
       logger.error(`Block retrieval failed: ${error.message}`)
       throw error

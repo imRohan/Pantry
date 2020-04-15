@@ -6,11 +6,11 @@ jest.mock('../../src/services/dataStore')
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
-import { IAccountBase, IAccountPrivate } from '../../src/interfaces/account'
+import { IAccount, IAccountPrivate } from '../../src/interfaces/account'
 
 describe('When creating an account', () => {
   it ('returns the account uuid', async () => {
-    const _params: IAccountBase = {
+    const _params: IAccount = {
       name: 'New Account',
       description: 'Account made while testing',
       contactEmail: 'derp@flerp.com',
@@ -46,7 +46,7 @@ describe('When retrieving an account', () => {
   it ('returns the correct account attributes', async () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
 
-    const _accountBase: IAccountBase = await AccountController.get(_existingAccount.uuid)
+    const _accountBase: IAccount = await AccountController.get(_existingAccount.uuid)
     expect(_accountBase).toBeDefined()
   })
 

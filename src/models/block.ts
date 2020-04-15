@@ -15,7 +15,7 @@ import dataStore = require('../services/dataStore')
 import { IBlock } from '../interfaces/block'
 
 class Block {
-  public static async get(accountUUID: string, name: string): Promise<any> {
+  public static async get(accountUUID: string, name: string): Promise<Block> {
     try {
       const _blockKey = Block.generateRedisKey(accountUUID, name)
 
@@ -25,13 +25,24 @@ class Block {
         throw new Error(`${name} does not exist`)
       }
 
-      const _blockParams = Block.convertRedisPayload(_stringifiedBlock)
-      const _blockObject = new Block(accountUUID, name, _blockParams)
+      const _blockContents = Block.convertRedisPayload(_stringifiedBlock)
+      const { payload } = _blockContents
 
-      const _blockSanitized = _blockObject.sanitize()
-      return _blockSanitized
+      const _block = new Block(accountUUID, name, payload)
+
+      return _block
     } catch (error) {
       throw new Error(`failed to get block: ${error.message}`)
+    }
+  }
+
+  public static async delete(accountUUID: string, name: string): Promise<void> {
+    try {
+      const _blockKey = Block.generateRedisKey(accountUUID, this.name)
+
+      await dataStore.delete(_blockKey)
+    } catch (error) {
+      throw new Error(`Block - failed to delete block: ${error.message}`)
     }
   }
 
@@ -100,7 +111,12 @@ class Block {
   }
 
   private generateRedisPayload(): string {
-    return JSON.stringify(this.payload)
+    const _payload: IBlock = {
+      accountUUID: this.accountUUID,
+      name: this.name,
+      payload: this.payload
+    }
+    return JSON.stringify(_payload)
   }
 }
 

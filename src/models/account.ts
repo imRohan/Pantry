@@ -15,7 +15,7 @@ import uuidv4 = require('uuid/v4')
 import dataStore = require('../services/dataStore')
 
 // Interfaces
-import { IAccountBase, IAccountPrivate } from '../interfaces/account'
+import { IAccountPrivate, IAccountPublic } from '../interfaces/account'
 
 class Account {
 
@@ -111,12 +111,13 @@ class Account {
     }
   }
 
-  public sanitize(): IAccountBase {
+  public sanitize(): IAccountPublic {
     try {
-      const _sanitizedItems: IAccountBase = {
+      const _sanitizedItems: IAccountPublic = {
         name: this.name,
         description: this.description,
         contactEmail: this.contactEmail,
+        baskets: this.blocks,
       }
 
       return _sanitizedItems

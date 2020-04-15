@@ -67,4 +67,18 @@ _apiV1Router.get('/:pantryID/basket/:basketName', async (req, res) => {
   }
 })
 
+_apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
+  try {
+    const { params } = req
+    const { pantryID, basketName } = params
+
+    logger.info('[DELETE] Get Basket', params)
+    const _response = await BlockController.delete(pantryID, basketName)
+
+    res.send(_response)
+  } catch (error) {
+    res.status(400).send(`Could not get basket: ${error.message}`)
+  }
+})
+
 module.exports = _apiV1Router

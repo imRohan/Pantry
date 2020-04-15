@@ -2,6 +2,12 @@
 import redis = require('redis')
 import { promisify } from 'util'
 
+// External Files
+import logService = require('./logger')
+
+// Logger setup
+const logger = new logService('Redis')
+
 const dataStore = {
   async get(uuid: string): Promise<any> {
     try {
@@ -12,7 +18,7 @@ const dataStore = {
 
       return _payload
     } catch (error) {
-      console.log(`Redis error: ${error.message}`)
+      logger.error(`Error when getting key: ${error.message}`)
       throw new Error('Pantry is having critical issues')
     }
   },
@@ -24,7 +30,19 @@ const dataStore = {
       await _set(uuid, payload, 'EX', lifespan)
       _redisClient.quit()
     } catch (error) {
-      console.log(`Redis error: ${error.message}`)
+      logger.error(`Error when setting key: ${error.message}`)
+      throw new Error('Pantry is having critical issues')
+    }
+  },
+
+  async delete(uuid: string): Promise<void> {
+    try {
+      const _redisClient = redis.createClient()
+      const _delete = promisify(_redisClient.del).bind(_redisClient)
+      await _delete(uuid)
+      _redisClient.quit()
+    } catch (error) {
+      logger.error(`Error when deleting a key: ${error.message}`)
       throw new Error('Pantry is having critical issues')
     }
   },
