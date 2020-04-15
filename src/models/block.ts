@@ -114,7 +114,7 @@ class Block {
     const _payload: IBlock = {
       accountUUID: this.accountUUID,
       name: this.name,
-      payload: this.payload
+      payload: this.payload,
     }
     return JSON.stringify(_payload)
   }

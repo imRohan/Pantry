@@ -37,7 +37,6 @@ class Account {
     }
   }
 
-
   private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
     try {
       const _account = JSON.parse(stringifiedAccount)
