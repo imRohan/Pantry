@@ -36,16 +36,6 @@ class Block {
     }
   }
 
-  public static async delete(accountUUID: string, name: string): Promise<void> {
-    try {
-      const _blockKey = Block.generateRedisKey(accountUUID, this.name)
-
-      await dataStore.delete(_blockKey)
-    } catch (error) {
-      throw new Error(`Block - failed to delete block: ${error.message}`)
-    }
-  }
-
   private static convertRedisPayload(stringifiedBlock: string): IBlock {
     try {
       const _block = JSON.parse(stringifiedBlock)
@@ -99,6 +89,16 @@ class Block {
       await dataStore.set(_blockKey, _stringifiedBlock, this.lifeSpan)
     } catch (error) {
       throw new Error(`Block - failed to store block: ${error.message}`)
+    }
+  }
+
+  public async delete(): Promise<void> {
+    try {
+      const _blockKey = Block.generateRedisKey(this.accountUUID, this.name)
+
+      await dataStore.delete(_blockKey)
+    } catch (error) {
+      throw new Error(`Block - failed to delete block: ${error.message}`)
     }
   }
 

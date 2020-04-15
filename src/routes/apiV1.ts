@@ -39,6 +39,20 @@ _apiV1Router.get('/:pantryID', async (req, res) => {
   }
 })
 
+_apiV1Router.delete('/:pantryID', async (req, res) => {
+  try {
+    const { params } = req
+    const { pantryID } = params
+
+    logger.info('[DELETE] Account', params)
+    const _response = await AccountController.delete(pantryID)
+
+    res.send(_response)
+  } catch (error) {
+    res.status(400).send(`Could not get basket: ${error.message}`)
+  }
+})
+
 _apiV1Router.post('/:pantryID/basket/:basketName', async (req, res) => {
   try {
     const { body, params } = req
@@ -72,7 +86,7 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
     const { params } = req
     const { pantryID, basketName } = params
 
-    logger.info('[DELETE] Get Basket', params)
+    logger.info('[DELETE] Basket', params)
     const _response = await BlockController.delete(pantryID, basketName)
 
     res.send(_response)

@@ -55,17 +55,15 @@ class BlockController {
     try {
       const _account = await Account.get(accountUUID)
 
-      await Block.get(accountUUID, name)
-
-      logger.info(`Deleting block in account: ${accountUUID}`)
-      await Block.delete(accountUUID, name)
+      const _block = await Block.get(accountUUID, name)
 
       logger.info(`Removing block from account: ${accountUUID}`)
+      await _block.delete()
       await _account.removeBlock(name)
 
       return `${name} was removed from your Pantry!`
     } catch (error) {
-      logger.error(`Block retrieval failed: ${error.message}`)
+      logger.error(`Block deletion failed: ${error.message}`)
       throw error
     }
   }

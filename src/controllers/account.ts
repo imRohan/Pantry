@@ -2,6 +2,7 @@
 
 // External Files
 import Account = require('../models/account')
+import Block = require('../models/block')
 import logService = require('../services/logger')
 
 // Interfaces
@@ -33,6 +34,27 @@ class AccountController {
       return _accountDetails
     } catch (error) {
       logger.error(`Account retrieval failed: ${error.message}`)
+      throw error
+    }
+  }
+
+  public static async delete(uuid: string): Promise<string> {
+    try {
+      const _account = await Account.get(uuid)
+      const { blocks } = _account
+
+      logger.info(`Deleting account: ${uuid}`)
+      for(const _blockName of blocks) {
+        logger.info(`Deleting block in account: ${uuid}`)
+        const _block = await Block.get(uuid, _blockName)
+        await _block.delete()
+      }
+      await _account.delete()
+
+      logger.info(`Account: ${uuid} deleted`)
+      return `Your Pantry has been deleted!`
+    } catch (error) {
+      logger.error(`Account deletion failed: ${error.message}`)
       throw error
     }
   }

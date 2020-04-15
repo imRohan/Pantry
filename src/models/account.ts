@@ -18,7 +18,6 @@ import dataStore = require('../services/dataStore')
 import { IAccountPrivate, IAccountPublic } from '../interfaces/account'
 
 class Account {
-
   public static async get(uuid: string): Promise<Account> {
     try {
       const _accountKey = Account.generateRedisKey(uuid)
@@ -34,9 +33,10 @@ class Account {
 
       return _accountObject
     } catch (error) {
-      throw error
+      throw new Error(`failed to get account: ${error.message}`)
     }
   }
+
 
   private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
     try {
@@ -155,6 +155,15 @@ class Account {
       return _isFull
     } catch (error) {
       throw new Error(`failed to check if account full: ${error.message}`)
+    }
+  }
+
+  public async delete(): Promise<void> {
+    try {
+      const _accountKey = Account.generateRedisKey(this.uuid)
+      await dataStore.delete(_accountKey)
+    } catch (error) {
+      throw new Error(`failed to delete account: ${error.message}`)
     }
   }
 

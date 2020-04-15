@@ -83,7 +83,7 @@ describe('When retrieving a block', () => {
 })
 
 describe('When deleting a block', () => {
-  it ('successfully deletes an existing block', async () => {
+  it ('returns confirmation message', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
 
     mockedDataStore.get
