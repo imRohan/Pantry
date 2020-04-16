@@ -6,11 +6,11 @@ jest.mock('../../src/services/dataStore')
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
-import { IAccountBase, IAccountPrivate } from '../../src/interfaces/account'
+import { IAccount, IAccountPrivate } from '../../src/interfaces/account'
 
 describe('When creating an account', () => {
   it ('returns the account uuid', async () => {
-    const _params: IAccountBase = {
+    const _params: IAccount = {
       name: 'New Account',
       description: 'Account made while testing',
       contactEmail: 'derp@flerp.com',
@@ -46,7 +46,7 @@ describe('When retrieving an account', () => {
   it ('returns the correct account attributes', async () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
 
-    const _accountBase: IAccountBase = await AccountController.get(_existingAccount.uuid)
+    const _accountBase: IAccount = await AccountController.get(_existingAccount.uuid)
     expect(_accountBase).toBeDefined()
   })
 
@@ -54,6 +54,33 @@ describe('When retrieving an account', () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
 
     await expect(AccountController.get(_existingAccount.uuid))
+      .rejects
+      .toThrow(`pantry with id: ${_existingAccount.uuid} not found`)
+  })
+})
+
+describe('When deleting an account', () => {
+  const _existingAccount: IAccountPrivate = {
+    name: 'Existing Account',
+    description: 'Account made while testing',
+    contactEmail: 'derp@flerp.com',
+    blocks: [],
+    maxNumberOfBlocks: 50,
+    notifications: true,
+    uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
+  }
+
+  it ('returns confirmation message', async () => {
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+
+    const _response = await AccountController.delete(_existingAccount.uuid)
+    expect(_response).toMatch(/Your Pantry has been deleted/)
+  })
+
+  it ('throws an error if account does not exist', async () => {
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
+
+    await expect(AccountController.delete(_existingAccount.uuid))
       .rejects
       .toThrow(`pantry with id: ${_existingAccount.uuid} not found`)
   })

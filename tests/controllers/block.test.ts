@@ -58,7 +58,11 @@ describe('When retrieving a block', () => {
 
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-      .mockReturnValueOnce(Promise.resolve(JSON.stringify({ derp: 'flerp' })))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify({
+        accountUUID: _accountUUID,
+        name: 'NewBlock',
+        payload: { derp: 'flerp' },
+      })))
 
     const _payload = await BlockController.get(_accountUUID, 'NewBlock')
     expect(_payload).toEqual({ derp: 'flerp' })
@@ -73,6 +77,32 @@ describe('When retrieving a block', () => {
       .mockReturnValueOnce(Promise.resolve(null))
 
     await expect(BlockController.get(_accountUUID, _blockName))
+      .rejects
+      .toThrow(`${_blockName} does not exist`)
+  })
+})
+
+describe('When deleting a block', () => {
+  it ('returns confirmation message', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify({ derp: 'flerp' })))
+
+    const _payload = await BlockController.delete(_accountUUID, 'NewBlock')
+    expect(_payload).toMatch(/NewBlock was removed from your Pantry/)
+  })
+
+  it ('throws an error if block does not exist', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+    const _blockName = 'NewBlock'
+
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(null))
+
+    await expect(BlockController.delete(_accountUUID, _blockName))
       .rejects
       .toThrow(`${_blockName} does not exist`)
   })

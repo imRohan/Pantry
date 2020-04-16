@@ -15,45 +15,33 @@ import uuidv4 = require('uuid/v4')
 import dataStore = require('../services/dataStore')
 
 // Interfaces
-import { IAccountBase, IAccountPrivate } from '../interfaces/account'
+import { IAccountPrivate, IAccountPublic } from '../interfaces/account'
 
 class Account {
-
   public static async get(uuid: string): Promise<Account> {
-    try {
-      const _accountKey = Account.generateRedisKey(uuid)
+    const _accountKey = Account.generateRedisKey(uuid)
 
-      const _stringifiedAccount = await dataStore.get(_accountKey)
+    const _stringifiedAccount = await dataStore.get(_accountKey)
 
-      if (!_stringifiedAccount) {
-        throw new Error(`pantry with id: ${uuid} not found`)
-      }
-
-      const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
-      const _accountObject = new Account(_accountParams)
-
-      return _accountObject
-    } catch (error) {
-      throw error
+    if (!_stringifiedAccount) {
+      throw new Error(`pantry with id: ${uuid} not found`)
     }
+
+    const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
+    const _accountObject = new Account(_accountParams)
+
+    return _accountObject
   }
 
   private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
-    try {
-      const _account = JSON.parse(stringifiedAccount)
-      return _account
-    } catch (error) {
-      throw new Error(`failed to convert payload: ${error.message}`)
-    }
+    const _account = JSON.parse(stringifiedAccount)
+    return _account
   }
 
   private static generateRedisKey(uuid: string): string {
-    try {
-      return `account:${uuid}`
-    } catch (error) {
-      throw new Error(`failed to generate rkey: ${error.message}`)
-    }
+    return `account:${uuid}`
   }
+
   @IsNotEmpty()
   @IsArray()
   public blocks: string[]
@@ -93,76 +81,57 @@ class Account {
   }
 
   public async store(): Promise<string> {
-    try {
-      // Validate the account object
-      const _errors = await validate(this)
-      if (_errors.length > 0) {
-        throw new Error(`Validation failed: ${_errors}`)
-      }
-
-      const _accountKey = Account.generateRedisKey(this.uuid)
-      const _stringifiedAccount = this.generateRedisPayload()
-
-      await dataStore.set(_accountKey, _stringifiedAccount, this.lifeSpan)
-
-      return this.uuid
-    } catch (error) {
-      throw error
+    const _errors = await validate(this)
+    if (_errors.length > 0) {
+      throw new Error(`Validation failed: ${_errors}`)
     }
+
+    const _accountKey = Account.generateRedisKey(this.uuid)
+    const _stringifiedAccount = this.generateRedisPayload()
+
+    await dataStore.set(_accountKey, _stringifiedAccount, this.lifeSpan)
+
+    return this.uuid
   }
 
-  public sanitize(): IAccountBase {
-    try {
-      const _sanitizedItems: IAccountBase = {
-        name: this.name,
-        description: this.description,
-        contactEmail: this.contactEmail,
-      }
-
-      return _sanitizedItems
-    } catch (error) {
-      throw new Error(`failed to sanitize: ${error.message}`)
+  public sanitize(): IAccountPublic {
+    const _sanitizedItems: IAccountPublic = {
+      name: this.name,
+      description: this.description,
+      contactEmail: this.contactEmail,
+      baskets: this.blocks,
     }
+
+    return _sanitizedItems
   }
 
   public async addBlock(blockName: string): Promise<void> {
-    try {
-      const _currentBlocks = this.blocks.filter((name) => name !== blockName)
-      const _updatedBlocks = [..._currentBlocks, blockName]
+    const _currentBlocks = this.blocks.filter((name) => name !== blockName)
+    const _updatedBlocks = [..._currentBlocks, blockName]
 
-      this.blocks = _updatedBlocks
-      await this.store()
-    } catch (error) {
-      throw new Error(`failed to add block: ${error.message}`)
-    }
+    this.blocks = _updatedBlocks
+    await this.store()
   }
 
   public async removeBlock(blockName: string): Promise<void> {
-    try {
-      const _updatedBlocks = this.blocks.filter((name) => name !== blockName)
+    const _updatedBlocks = this.blocks.filter((name) => name !== blockName)
 
-      this.blocks = _updatedBlocks
-      await this.store()
-    } catch (error) {
-      throw new Error(`failed to remove block: ${error.message}`)
-    }
+    this.blocks = _updatedBlocks
+    await this.store()
   }
 
   public checkIfFull(): boolean {
-    try {
-      const _isFull = this.blocks.length === this.maxNumberOfBlocks
-      return _isFull
-    } catch (error) {
-      throw new Error(`failed to check if account full: ${error.message}`)
-    }
+    const _isFull = this.blocks.length === this.maxNumberOfBlocks
+    return _isFull
+  }
+
+  public async delete(): Promise<void> {
+    const _accountKey = Account.generateRedisKey(this.uuid)
+    await dataStore.delete(_accountKey)
   }
 
   public async refreshTTL(): Promise<void> {
-    try {
-      await this.store()
-    } catch (error) {
-      throw new Error(`failed to refresh account ttl, ${error.message}`)
-    }
+    await this.store()
   }
 
   private generateRedisPayload(): string {
