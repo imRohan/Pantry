@@ -3,8 +3,8 @@
 // External Files
 import Account = require('../models/account')
 import Block = require('../models/block')
-import mailer = require('../services/mailer')
 import logService = require('../services/logger')
+import mailer = require('../services/mailer')
 
 // Interfaces
 import { IAccount, IAccountPublic } from '../interfaces/account'

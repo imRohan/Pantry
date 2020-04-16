@@ -15,7 +15,7 @@ const mailer = {
         to: email,
         from: 'noreply@getpantry.cloud',
         templateId: process.env.WELCOME_EMAIL_ID,
-        dynamic_template_data: { pantryID }
+        dynamic_template_data: { pantryID },
       }
 
       logger.info(`Sending welcome email to ${email}`)
@@ -23,7 +23,7 @@ const mailer = {
     } catch (error) {
       logger.error(`Sending welcome email failed: ${error.message}`)
     }
-  }
+  },
 }
 
 export = mailer
