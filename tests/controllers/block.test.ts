@@ -19,7 +19,7 @@ const _existingAccount: IAccountPrivate = {
 }
 
 afterEach(() => {
-  mockedDataStore.get.mockReset()
+  jest.clearAllMocks()
 })
 
 describe('When creating a block', () => {
