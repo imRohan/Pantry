@@ -35,10 +35,17 @@ class BlockController {
 
   public static async get(accountUUID: string, name: string): Promise<any> {
     try {
+      let _block
+      let _blockDetails
       const _account = await Account.get(accountUUID)
 
-      const _block = await Block.get(accountUUID, name)
-      const _blockDetails = _block.sanitize()
+      try {
+        _block = await Block.get(accountUUID, name)
+        _blockDetails = _block.sanitize()
+      } catch (error) {
+        await _account.removeBlock(name)
+        throw error
+      }
 
       logger.info(`Refreshing TTL of account: ${accountUUID}`)
       await _account.refreshTTL()
