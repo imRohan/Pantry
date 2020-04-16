@@ -3,6 +3,7 @@
 // External Files
 import Account = require('../models/account')
 import Block = require('../models/block')
+import mailer = require('../services/mailer')
 import logService = require('../services/logger')
 
 // Interfaces
@@ -16,6 +17,9 @@ class AccountController {
     try {
       const _account = new Account(params)
       const _accountUUID = await _account.store()
+
+      const { contactEmail } = params
+      await mailer.sendWelcomeEmail(contactEmail, _accountUUID)
 
       logger.info('Account created')
       return _accountUUID
