@@ -2,6 +2,7 @@
 const vue = require('vue')
 const vueClipboard = require('vue-clipboard2')
 
+// Vue Setup
 vue.use(vueClipboard)
 
 // CSS
@@ -37,6 +38,17 @@ const pantry = new vue({
       const _container = this.$refs.container
       this.$copyText(text, _container)
     },
+    checkIfInView() {
+      if (window.location.search) {
+        const _view = decodeURIComponent(window.location.search.match(/(\?|&)show\=([^&]*)/)[2])
+        if (IView[_view]) {
+          this.view = IView[_view]
+        }
+      }
+    },
+  },
+  created() {
+    this.checkIfInView()
   },
 })
 
