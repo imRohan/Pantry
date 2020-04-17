@@ -1,12 +1,20 @@
 // External Files
 import AccountController = require('../../src/controllers/account')
 import dataStore = require('../../src/services/dataStore')
+import mailer = require('../../src/services/mailer')
 
 jest.mock('../../src/services/dataStore')
+jest.mock('../../src/services/mailer')
+
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
 import { IAccount, IAccountPrivate } from '../../src/interfaces/account'
+
+afterEach(() => {
+  mockedDataStore.get.mockReset()
+  jest.clearAllMocks()
+})
 
 describe('When creating an account', () => {
   it ('returns the account uuid', async () => {
@@ -18,6 +26,21 @@ describe('When creating an account', () => {
 
     const _uuid: string = await AccountController.create(_params)
     expect(_uuid).toBeDefined()
+  })
+
+  it ('sends a welcome email', async () => {
+    const _params: IAccount = {
+      name: 'New Account',
+      description: 'Account made while testing',
+      contactEmail: 'derp@flerp.com',
+    }
+
+    const _spy = jest.spyOn(mailer, 'sendWelcomeEmail')
+    const _uuid: string = await AccountController.create(_params)
+    expect(_spy).toHaveBeenCalled()
+    expect(_spy).toHaveBeenCalledWith(_params.contactEmail, _uuid)
+
+    _spy.mockRestore()
   })
 
   it ('throws an error if validations fail', async () => {
