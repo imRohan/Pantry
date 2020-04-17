@@ -1,0 +1,31 @@
+.images {
+  &--blob {
+    top: 0;
+    position: fixed;
+    z-index: 1;
+    overflow: visible;
+  }
+  &__character {
+    position: fixed;
+    width: 30vw;
+    height: 30vw;
+    left: 0;
+    background-repeat: no-repeat;
+    z-index: 2;
+  }
+  &--hero {
+    background-image: url('../assets/MeditatingDoodle.svg'), none;
+  }
+  &--created {
+    background-image: url('../assets/SprintingDoodle.svg'), none;
+  }
+  &--getStarted {
+    background-image: url('../assets/ReadingSideDoodle.svg'), none;
+  }
+  &--docs {
+    background-image: url('../assets/ReadingDoodle.svg'), none;
+  }
+  &--about {
+    background-image: url('../assets/ZombieingDoodle.svg'), none;
+  }
+}

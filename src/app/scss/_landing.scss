@@ -1,0 +1,18 @@
+.landing {
+  &__left {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    display: flex;
+    align-items: center;
+  }
+  &__right {
+    grid-column-start: 3;
+    grid-row-start: 2;
+    padding: 1em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 3;
+  }
+}

@@ -1,37 +1,55 @@
+// External Files
 const vue = require('vue')
-const axios = require('axios')
+const vueClipboard = require('vue-clipboard2')
 
-// Configs
-const configs = require('./configs.ts')
-
-// Components
+// Vue Setup
+vue.use(vueClipboard)
 
 // CSS
 require('./scss/main.scss')
 
-// Constants
-const API_PATH = configs.apiPath
+// Components
+const landingLeft = require('./components/landingLeft.ts')
+const landingRight = require('./components/landingRight.ts')
+const topbar = require('./components/topbar.ts')
+const bottomBar = require('./components/bottomBar.ts')
 
-const boilerplate = new vue({
+// Interfaces
+const { IView } = require('../interfaces/view.ts')
+
+const pantry = new vue({
   el: '.app',
-  data: {
-    name: 'Node-Express-VueJS-Typescript Boilerplate',
-    response: null,
-  },
   components: {
-
+    landingLeft,
+    landingRight,
+    topbar,
+    bottomBar,
+  },
+  data() {
+    return {
+      view: IView.home,
+    }
   },
   methods: {
-    getDataFromExpressServer() {
-      axios({
-        method: 'GET',
-        url: `${API_PATH}/api/sample/hello`,
-      }).then((res) => {
-        console.log(res)
-        this.response = res.data
-      })
+    changeView(view: string) {
+      this.view = IView[view]
     },
+    copyText(text: string) {
+      const _container = this.$refs.container
+      this.$copyText(text, _container)
+    },
+    checkIfInView() {
+      if (window.location.search) {
+        const _view = decodeURIComponent(window.location.search.match(/(\?|&)show\=([^&]*)/)[2])
+        if (IView[_view]) {
+          this.view = IView[_view]
+        }
+      }
+    },
+  },
+  created() {
+    this.checkIfInView()
   },
 })
 
-export = boilerplate
+export = pantry

@@ -2,7 +2,8 @@
 	"compilerOptions": {
     "lib": [
       "es6",
-      "es2017"
+      "es2017",
+      "dom",
     ],
     "allowJs": true,
     "checkJs": true,
@@ -14,7 +15,8 @@
     "sourceMap": false,
     "target": "es6",
     "outDir": "dist",
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "experimentalDecorators": true,
   },
   "include": [
     "**/*.ts"

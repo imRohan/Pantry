@@ -62,3 +62,9 @@ typings/
 
 #dist
 /dist/*
+
+#front-end config
+config.ts
+
+#.DS_STORE
+.DS_STORE

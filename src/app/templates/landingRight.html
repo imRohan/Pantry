@@ -1,0 +1,172 @@
+<div class="landing__right">
+  <template v-if="view === 'home'">
+    <h1>
+      Unburden yourself from data storage woes.
+    </h1>
+    <p>
+      Focus your efforts on building your next project and leave
+      the data storage to us. With free NoSQL cloud storage for you and
+      your users, Pantry speeds up development time letting you
+      build awesome things - fast!
+    </p>
+    <div class="input__container">
+      <input v-model="signupEmail" placeholder="you@example.com">
+      <button @click="createNewPantry" :disabled="!signupValid()">
+        Get a Pantry
+      </button>
+    </div>
+    <template v-if="signupEmail && !signupValid()">
+      <p class="text--light">
+        Sorry, but that email is invalid.
+      </p>
+    </template>
+    <template v-else>
+      <p class="text--light">
+        Don't worry, we'll only contact you if its important.
+      </p>
+    </template>
+  </template>
+  <template v-if="view === 'created'">
+    <h1>
+      Your Pantry's Ready!
+    </h1>
+    <h2>Save your PantryID</h2>
+    <p>
+      Here is your <b>pantryID</b>! Keep this safe as we won't be sharing it with you again.
+      Once you've saved it somewhere, hit the button below and we'll show you how to add items to your pantry.
+    </p>
+    <p class="text__container text--key">
+      {{ pantryId }}
+      <span class="text__button" @click="copyPantryId">
+        {{ copyPantryIdMessage }}
+      </span>
+    </p>
+    <button @click="getStarted">
+      Let's Get Started!
+    </button>
+  </template>
+  <template v-if="view === 'getStarted'">
+    <h1>
+      How to use your Pantry.
+    </h1>
+    <h2>Add & Update Basket</h2>
+    <p>
+      To add or update a basket in your pantry, send a <b>POST</b> request
+      to our API with the <b>name</b> of your basket in the path, and the
+      contents as the <b>payload</b> of the request. Your
+      <b>pantryID</b> has already been added to the api path.
+    </p>
+    <p class="text__container text--code">
+      curl -XPOST -H "Content-type: application/json" -d '{
+        "key": "value"
+      }' '{{apiPath}}/pantry/{{pantryId}}/basket/myNewBasket'
+    </p>
+    <h2>Get the contents of a Basket</h2>
+    <p>
+      To retrieve an basket, send a <b>GET</b> request to our API with the
+      <b>name</b> of the basket in the url.Your <b>pantryID</b> has already
+      been added to the api path.
+    </p>
+    <p class="text__container text--code">
+      curl -XGET -H "Content-type: application/json"
+      '{{apiPath}}/pantry/{{pantryId}}/basket/myNewBasket'
+    </p>
+    <button @click="showDocs">
+      Show Me The API Docs!
+    </button>
+  </template>
+  <template v-if="view === 'about'">
+    <h1>
+      About
+    </h1>
+    <p>
+      Pantry is a free service that provides perishable data storage
+      for small projects. Data is securely stored for as long as you and your users need
+      it and is deleted after a period of inactivity. Simply use the restful API to
+      post JSON objects and we'll take care of the rest.
+    </p>
+    <p>
+      It was built to provide a simple, re-usable storage solution for smaller sized projects.
+      It was created by developers for developers, to be there when you need it
+      and to help you rapidly prototype your next project.
+    </p>
+    <h2>Contribute</h2>
+    <p>
+      If you'd like to help develop Pantry, or have an issue to report, please visit the
+      <a href="https://github.com/imRohan/Pantry" class="text--dark">
+        GitHub repo
+      </a>.
+    </p>
+    <a href="https://www.buymeacoffee.com/imRohan" target="_blank">
+      <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me
+      A Coffee" style="height: 30px !important;width: 140px !important;
+      border-radius: 5px;" >
+    </a>
+  </template>
+  <template v-if="view === 'docs'">
+    <h1>
+      Api Documentation
+    </h1>
+    <h2>Introduction</h2>
+    <p>
+      Below are high-level descriptions of the main API calls that
+      you will need in order to get up and running with Pantry. For a more
+      detailed overview, please download and use the Postman
+      Collection.
+    </p>
+    <a href="https://app.getpostman.com/run-collection/b32d3ed975b9800557d7#?env%5BPantry%20Prod%5D=W3sia2V5IjoicGFudHJ5X2FwaV9wYXRoIiwidmFsdWUiOiJodHRwczovL2dldHBhbnRyeS5jbG91ZC9hcGl2MSIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X3V1aWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X2FjY291bnRfbmFtZSIsInZhbHVlIjoiUG9zdG1hbl9BY2NvdW50IiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJwYW50cnlfYWNjb3VudF9kZXNjcmlwdGlvbiIsInZhbHVlIjoiUG9zdG1hbiBUZXN0IEFjY291bnQiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6InBhbnRyeV9hY2NvdW50X2NvbnRhY3RFbWFpbCIsInZhbHVlIjoidGVzdEBwb3N0bWFuLmNvbSIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X2Jhc2tldF9uYW1lIiwidmFsdWUiOiJQb3N0bWFuX0Jhc2tldCIsImVuYWJsZWQiOnRydWV9XQ==">
+      <img src="https://run.pstmn.io/button.svg">
+    </a>
+    <h2>Pantry API Root Path</h2>
+    <p class="text__container text--code">
+      {{apiPath}}
+    </p>
+    <p>
+      Every api call must be sent to the root api path. Following that path will be a specific route per call.
+    </p>
+    <h2>Get Pantry Details</h2>
+    <p class="text__container text--code">
+      GET /pantry/{pantryID}
+    </p>
+    <p>
+      To retrieve details about your pantry, simply send a <b>GET</b> request to
+      our API with the <b>pantryID</b> of your pantry
+    </p>
+    <p class="text__container text--code">
+      curl -XGET -H "Content-type: application/json"
+      '{{apiPath}}/pantry/{pantryID}'
+    </p>
+    <h2>Add & Update a Basket</h2>
+    <p class="text__container text--code">
+      POST /pantry/{pantryID}/basket/{basketName}
+    </p>
+    <p>
+      To add or update a basket in your pantry, simply send a <b>POST</b> request
+      to our API with the <b>name</b> and the <b>payload</b> of the basket. If the
+      name matches an existing basket in your pantry, that basket will be updated
+      with the new payload.
+    </p>
+    <p class="text__container text--code">
+      curl -XPOST -H "Content-type: application/json" -d '{
+        "key": "value"
+        }' '{{apiPath}}/pantry/{pantryID}/basket/{basketName}'
+    </p>
+    <h2>Get the contents of a Basket</h2>
+    <p class="text__container text--code">
+      GET /pantry/{pantryID}/basket/{basketName}
+    </p>
+    <p>
+      To retrieve an basket, send a <b>GET</b> request to our API with the
+      <b>name</b> of the basket in the url.
+    </p>
+    <p class="text__container text--code">
+      curl -XGET -H "Content-type: application/json"
+      '{{apiPath}}/pantry/{pantryID}/basket/{basketName}'
+    </p>
+    <button
+      @click="goHome"
+      class="button--alt">
+      Go Back
+    </button>
+  </template>
+</div>

@@ -5,6 +5,10 @@ module.exports = {
   entry: {
     app: './src/app/index.ts'
   },
+  output: {
+    path: path.resolve('dist/src'),
+    filename: 'bundle.js',
+  },
   module: {
     rules: [
       {
@@ -40,9 +44,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|svg)$/,
-        loaders: [
-          'file-loader?name=/app/images/[name].[ext]'
-        ]
+        loaders: ['url-loader'],
       },
       {
         test: /\.vue$/,
