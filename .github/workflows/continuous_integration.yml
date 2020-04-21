@@ -3,7 +3,7 @@
 
 name: build
 
-on: [push]
+on: ["push", "pull-request"]
 
 jobs:
   build:
@@ -25,3 +25,9 @@ jobs:
     - run: npm run tests
       env:
         CI: true
+
+    - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN  }}
+
