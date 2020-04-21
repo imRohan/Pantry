@@ -15,13 +15,22 @@ jobs:
         node-version: [12.x]
 
     steps:
+
     - uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
     - run: npm ci
     - run: npm run linter
     - run: npm run tests
       env:
         CI: true
+
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.0.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN  }}
+

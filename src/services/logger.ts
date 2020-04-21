@@ -17,6 +17,10 @@ class Logger {
     })
   }
 
+  public logAndSlack(message: string, object?: any) {
+    this.sendToClient(ILogLevel.info, message, object, true)
+  }
+
   public info(message: string, object?: any) {
     this.sendToClient(ILogLevel.info, message, object)
   }
@@ -30,14 +34,19 @@ class Logger {
   }
 
   // Send logs to not only the logging client, but also outbound to Slack.
-  private sendToClient(level: ILogLevel, message: string, object?: any) {
-    if (object) {
+  private sendToClient(
+    level: ILogLevel,
+    message: string,
+    object?: any,
+    postToSlack: boolean = false,
+  ) {
+    if (object && Object.keys(object).length !== 0) {
       this.logClient[level](message, object)
     } else {
       this.logClient[level](message)
     }
 
-    if (level !== ILogLevel.info) {
+    if (level !== ILogLevel.info || postToSlack) {
       this.postToSlack(level, message)
     }
   }
