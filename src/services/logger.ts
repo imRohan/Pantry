@@ -38,7 +38,7 @@ class Logger {
     level: ILogLevel,
     message: string,
     object?: any,
-    postToSlack: boolean = false
+    postToSlack: boolean = false,
   ) {
     if (object && Object.keys(object).length !== 0) {
       this.logClient[level](message, object)
