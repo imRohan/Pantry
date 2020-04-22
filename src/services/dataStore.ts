@@ -95,7 +95,7 @@ const dataStore = {
       logger.error(`Error when scanning keys: ${error.message}`)
       throw new Error('Pantry is having critical issues')
     }
-  }
+  },
 }
 
 export = dataStore

@@ -32,7 +32,6 @@ class Account {
     return _accountObject
   }
 
-
   private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
     const _account = JSON.parse(stringifiedAccount)
     return _account
@@ -91,7 +90,7 @@ class Account {
 
   public async sanitize(): Promise<IAccountPublic> {
     const _baskets = await this.getBlocks()
-    
+
     const _sanitizedItems: IAccountPublic = {
       name: this.name,
       description: this.description,
@@ -120,7 +119,7 @@ class Account {
   public async getBlocks(): Promise<string[]> {
     const _accountKey = Account.generateRedisKey(this.uuid)
     const _blocks = await dataStore.scan(`${_accountKey}::block:*`)
-    
+
     const _blocksSanitized = _blocks.map((block) => {
       return block.split(':')[4]
     })
