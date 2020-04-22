@@ -45,10 +45,10 @@ class AccountController {
   public static async delete(uuid: string): Promise<string> {
     try {
       const _account = await Account.get(uuid)
-      const { blocks } = _account
+      const _blocks = await _account.getBlocks()
 
       logger.info(`Deleting account: ${uuid}`)
-      for (const _blockName of blocks) {
+      for (const _blockName of _blocks) {
         logger.info(`Deleting block in account: ${uuid}`)
         const _block = await Block.get(uuid, _blockName)
         await _block.delete()

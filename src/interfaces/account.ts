@@ -5,7 +5,6 @@ export interface IAccount {
 }
 
 export interface IAccountPrivate extends IAccount {
-  blocks: string[],
   maxNumberOfBlocks: number,
   notifications: boolean,
   uuid?: string,

@@ -17,7 +17,6 @@ import { IBlock } from '../interfaces/block'
 class Block {
   public static async get(accountUUID: string, name: string): Promise<Block> {
     const _blockKey = Block.generateRedisKey(accountUUID, name)
-
     const _stringifiedBlock = await dataStore.get(_blockKey)
 
     if (!_stringifiedBlock) {
