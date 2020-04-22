@@ -12,13 +12,13 @@ const _existingAccount: IAccountPrivate = {
   name: 'Existing Account',
   description: 'Account made while testing',
   contactEmail: 'derp@flerp.com',
-  blocks: [],
   maxNumberOfBlocks: 50,
   notifications: true,
   uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
 }
 
 afterEach(() => {
+  mockedDataStore.get.mockReset()
   jest.clearAllMocks()
 })
 
@@ -27,9 +27,21 @@ describe('When creating a block', () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
 
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve([]))
 
     const _response = await BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' })
     expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
+  })
+
+  it ('throws an error if validation fails', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve([]))
+
+    await expect(BlockController.create(_accountUUID, 'NewBlock', {}))
+      .rejects
+      .toThrow('Validation failed:')
   })
 
   it ('throws an error if account has reached max # of blocks', async () => {
@@ -38,13 +50,13 @@ describe('When creating a block', () => {
       name: 'Maxed Existing Account',
       description: 'Account made while testing',
       contactEmail: 'derp@flerp.com',
-      blocks: ['blockName'],
       maxNumberOfBlocks: 1,
       notifications: true,
       uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
     }
 
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_maxedAccount)))
+    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve(['oldBlock']))
 
     await expect(BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' }))
       .rejects
@@ -98,9 +110,7 @@ describe('When deleting a block', () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     const _blockName = 'NewBlock'
 
-    mockedDataStore.get
-      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-      .mockReturnValueOnce(Promise.resolve(null))
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
 
     await expect(BlockController.delete(_accountUUID, _blockName))
       .rejects
