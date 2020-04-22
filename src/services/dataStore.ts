@@ -17,11 +17,11 @@ const _crypto = {
 }
 
 const dataStore = {
-  async get(uuid: string): Promise<any> {
+  async get(key: string): Promise<any> {
     try {
       const _redisClient = redis.createClient()
       const _get = promisify(_redisClient.get).bind(_redisClient)
-      const _storedPayloadString = await _get(uuid)
+      const _storedPayloadString = await _get(key)
       _redisClient.quit()
 
       if (_storedPayloadString) {
@@ -45,7 +45,7 @@ const dataStore = {
     }
   },
 
-  async set(uuid: string, payload: string, lifespan: number): Promise<void> {
+  async set(key: string, payload: string, lifespan: number): Promise<void> {
     try {
       const _cipher = crypto.createCipheriv(
         _crypto.algorithm,
@@ -59,7 +59,7 @@ const dataStore = {
 
       const _redisClient = redis.createClient()
       const _set = promisify(_redisClient.set).bind(_redisClient)
-      await _set(uuid, _encryptedPayloadString, 'EX', lifespan)
+      await _set(key, _encryptedPayloadString, 'EX', lifespan)
       _redisClient.quit()
     } catch (error) {
       logger.error(`Error when setting key: ${error.message}`)
@@ -67,14 +67,32 @@ const dataStore = {
     }
   },
 
-  async delete(uuid: string): Promise<void> {
+  async delete(key: string): Promise<void> {
     try {
       const _redisClient = redis.createClient()
       const _delete = promisify(_redisClient.del).bind(_redisClient)
-      await _delete(uuid)
+      await _delete(key)
       _redisClient.quit()
     } catch (error) {
       logger.error(`Error when deleting a key: ${error.message}`)
+      throw new Error('Pantry is having critical issues')
+    }
+  },
+
+  async scan(pattern: string): Promise<string[]> {
+    try {
+      const _redisClient = redis.createClient()
+      const _scan = promisify(_redisClient.scan).bind(_redisClient)
+      const [ _cursor, _storedKeys ] = await _scan(0, 'MATCH', pattern)
+      _redisClient.quit()
+
+      if (Number(_cursor) !== 0) {
+        throw new Error(`cursor returned invalid value: ${_cursor}`)
+      }
+
+      return _storedKeys
+    } catch (error) {
+      logger.error(`Error when scanning keys: ${error.message}`)
       throw new Error('Pantry is having critical issues')
     }
   },

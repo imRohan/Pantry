@@ -23,9 +23,6 @@ class BlockController {
       const _block = new Block(accountUUID, name, payload)
       await _block.store()
 
-      logger.info(`Adding block to account: ${accountUUID}`)
-      await _account.addBlock(name)
-
       return `Your Pantry was updated with basket: ${name}!`
     } catch (error) {
       logger.error(`Block creation failed: ${error.message}`)
@@ -43,7 +40,6 @@ class BlockController {
         _block = await Block.get(accountUUID, name)
         _blockDetails = _block.sanitize()
       } catch (error) {
-        await _account.removeBlock(name)
         throw error
       }
 
@@ -60,13 +56,10 @@ class BlockController {
 
   public static async delete(accountUUID: string, name: string): Promise<string> {
     try {
-      const _account = await Account.get(accountUUID)
-
       const _block = await Block.get(accountUUID, name)
 
       logger.info(`Removing block from account: ${accountUUID}`)
       await _block.delete()
-      await _account.removeBlock(name)
 
       return `${name} was removed from your Pantry!`
     } catch (error) {

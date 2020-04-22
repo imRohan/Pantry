@@ -1,6 +1,5 @@
 // Extarnal Libs
 import {
-  IsArray,
   IsBoolean,
   IsEmail,
   IsNotEmpty,
@@ -43,10 +42,6 @@ class Account {
   }
 
   @IsNotEmpty()
-  @IsArray()
-  public blocks: string[]
-
-  @IsNotEmpty()
   @IsString()
   private name: string
   @IsNotEmpty()
@@ -70,13 +65,12 @@ class Account {
   private readonly defaultMaxNumberOfBlocks = 50
 
   constructor(params: any) {
-    const { name, description, contactEmail, notifications, blocks, uuid, maxNumberOfBlocks } = params
+    const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks } = params
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
     this.notifications = notifications ?? false
     this.maxNumberOfBlocks = maxNumberOfBlocks ?? this.defaultMaxNumberOfBlocks
-    this.blocks = blocks ?? []
     this.uuid = uuid ?? uuidv4()
   }
 
@@ -94,34 +88,22 @@ class Account {
     return this.uuid
   }
 
-  public sanitize(): IAccountPublic {
+  public async sanitize(): Promise<IAccountPublic> {
+    const _baskets = await this.getBlocks()
+
     const _sanitizedItems: IAccountPublic = {
       name: this.name,
       description: this.description,
       contactEmail: this.contactEmail,
-      baskets: this.blocks,
+      baskets: _baskets,
     }
 
     return _sanitizedItems
   }
 
-  public async addBlock(blockName: string): Promise<void> {
-    const _currentBlocks = this.blocks.filter((name) => name !== blockName)
-    const _updatedBlocks = [..._currentBlocks, blockName]
-
-    this.blocks = _updatedBlocks
-    await this.store()
-  }
-
-  public async removeBlock(blockName: string): Promise<void> {
-    const _updatedBlocks = this.blocks.filter((name) => name !== blockName)
-
-    this.blocks = _updatedBlocks
-    await this.store()
-  }
-
-  public checkIfFull(): boolean {
-    const _isFull = this.blocks.length === this.maxNumberOfBlocks
+  public async checkIfFull(): Promise<boolean> {
+    const _blocks = await this.getBlocks()
+    const _isFull = _blocks.length === this.maxNumberOfBlocks
     return _isFull
   }
 
@@ -134,6 +116,17 @@ class Account {
     await this.store()
   }
 
+  public async getBlocks(): Promise<string[]> {
+    const _accountKey = Account.generateRedisKey(this.uuid)
+    const _blocks = await dataStore.scan(`${_accountKey}::block:*`)
+
+    const _blocksSanitized = _blocks.map((block) => {
+      return block.split(':')[4]
+    })
+
+    return _blocksSanitized
+  }
+
   private generateRedisPayload(): string {
     const _accountDetails: IAccountPrivate = {
       name: this.name,
@@ -141,7 +134,6 @@ class Account {
       contactEmail: this.contactEmail,
       notifications: this.notifications,
       maxNumberOfBlocks: this.maxNumberOfBlocks,
-      blocks: this.blocks,
       uuid: this.uuid,
     }
     return JSON.stringify(_accountDetails)

@@ -60,7 +60,6 @@ describe('When retrieving an account', () => {
     name: 'Existing Account',
     description: 'Account made while testing',
     contactEmail: 'derp@flerp.com',
-    blocks: [],
     maxNumberOfBlocks: 50,
     notifications: true,
     uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
@@ -68,6 +67,7 @@ describe('When retrieving an account', () => {
 
   it ('returns the correct account attributes', async () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve([]))
 
     const _accountBase: IAccount = await AccountController.get(_existingAccount.uuid)
     expect(_accountBase).toBeDefined()
@@ -87,7 +87,6 @@ describe('When deleting an account', () => {
     name: 'Existing Account',
     description: 'Account made while testing',
     contactEmail: 'derp@flerp.com',
-    blocks: [],
     maxNumberOfBlocks: 50,
     notifications: true,
     uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
@@ -95,6 +94,18 @@ describe('When deleting an account', () => {
 
   it ('returns confirmation message', async () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve([]))
+
+    const _response = await AccountController.delete(_existingAccount.uuid)
+    expect(_response).toMatch(/Your Pantry has been deleted/)
+  })
+
+  it ('deletes all existing blocks', async () => {
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify({ derp: 'flerp' })))
+
+    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve(['existingBlock']))
 
     const _response = await AccountController.delete(_existingAccount.uuid)
     expect(_response).toMatch(/Your Pantry has been deleted/)
