@@ -46,6 +46,7 @@ a:any-link {
   &__button {
     float: right;
     color: $secondary-color;
+    cursor: pointer;
   }
   &--light {
     color: $secondary-color;
