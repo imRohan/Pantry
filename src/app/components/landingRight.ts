@@ -1,5 +1,6 @@
-// External Libs
+// External Files
 const axios = require('axios')
+const jsonView = require('vue-json-pretty').default
 
 // Configs
 const configs = require('../config.ts')
@@ -16,15 +17,22 @@ const API_PATH = configs.apiPath
 const landingRight = {
   props: ['view'],
   name: 'landingRight',
-  data() {
-    return {
-      pantryId: 'Whoops! This was not supposed to happen.',
-      apiPath: API_PATH,
-      signupEmail: null,
-      copyPantryIdMessage: 'copy',
-    }
+  components: {
+    'json-view': jsonView,
   },
   template: landingRightTemplate,
+  data() {
+    return {
+      apiPath: API_PATH,
+      signupEmail: null,
+      pantryId: 'Whoops! This was not supposed to happen.',
+      pantryName: null,
+      copyPantryIdMessage: 'copy',
+      pantry: null,
+      basketContents: null,
+      activeBasket: null,
+    }
+  },
   methods: {
     async createNewPantry() {
       const { data } = await axios({
@@ -39,6 +47,27 @@ const landingRight = {
 
       this.pantryId = data
       this.$emit('change-view', IView.created)
+    },
+    async fetchPantry(pantryId: string) {
+      const { data } = await axios({
+        method: 'GET',
+        url: `${API_PATH}/pantry/${pantryId}`,
+      })
+      this.pantryId = pantryId
+      this.pantry = data
+    },
+    async toggleBasket(name: string) {
+      if (this.activeBasket === name) {
+        this.basketContents = null
+        this.activeBasket = null
+      } else {
+        const { data } = await axios({
+          method: 'GET',
+          url: `${API_PATH}/pantry/${this.pantryId}/basket/${name}`,
+        })
+        this.basketContents = data
+        this.activeBasket = name
+      }
     },
     signupValid() {
       const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -57,6 +86,15 @@ const landingRight = {
       this.$emit('copy-text', this.pantryId)
       this.copyPantryIdMessage = 'copied!'
     },
+    fetchURLParams() {
+      if (this.view === IView.dashboard) {
+        const _pantryId = decodeURIComponent(window.location.search.match(/(\?|&)pantryid\=([^&]*)/)[2])
+        this.fetchPantry(_pantryId)
+      }
+    },
+  },
+  mounted() {
+    this.fetchURLParams()
   },
 }
 

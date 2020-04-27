@@ -169,4 +169,60 @@
       Go Back
     </button>
   </template>
+  <template v-if="view === 'dashboard'">
+    <template v-if="pantry">
+      <h1>
+        Dashboard
+      </h1>
+      <template v-if="pantry.baskets && pantry.baskets.length !== 0">
+        <h2>
+          {{pantry.baskets.length}}
+          {{pantry.baskets.length > 1 ? 'Baskets' : 'Basket' }}
+          in this Pantry
+        </h2>
+        <div class="basket__container">
+          <ul>
+            <template v-for="basket in pantry.baskets">
+              <li class="text__container">
+                {{ basket }}
+              <span class="text__button" @click="toggleBasket(basket)">
+                {{ activeBasket === basket ? 'hide' : 'show' }}
+              </span>
+              <template v-if="activeBasket === basket">
+                <div class="basket__payload-container">
+                  <json-view
+                    :deep="1"
+                    :showLength="true"
+                    :data="basketContents"/>
+                </div>
+              </template>
+              </li> 
+            </template>
+          </ul>
+        </div>
+      </template>
+      <template v-else>
+        <p>
+          Looks like your pantry is empty and currently has no baskets. 
+        </p>
+        <p>
+          To add a basket to your pantry, simply send a <b>POST</b> request
+          to our API with the <b>name</b> and the <b>payload</b> of the basket
+        </p>
+        <p class="text__container text--code">
+          curl -XPOST -H "Content-type: application/json" -d '{
+            "key": "value"
+            }' '{{apiPath}}/pantry/{{this.pantryId}}/basket/testBasket'
+        </p>
+      </template>
+    </template>
+    <template v-else>
+      <h1>Uhoh, looks like something broke.</h1>
+      <button
+        @click="goHome"
+        class="button--alt">
+        Go Back
+      </button>
+    </template>
+  </template>
 </div>
