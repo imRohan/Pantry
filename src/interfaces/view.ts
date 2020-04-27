@@ -4,4 +4,5 @@ export enum IView {
   getStarted = 'getStarted',
   docs = 'docs',
   about = 'about',
+  dashboard = 'dashboard',
 }
