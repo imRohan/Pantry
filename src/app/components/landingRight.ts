@@ -71,7 +71,7 @@ const landingRight = {
           method: 'GET',
           url: `${API_PATH}/pantry/${this.pantry.id}/basket/${name}`,
         })
-        this.basket= data
+        this.basket = data
         this.activeBasket = name
       }
     },
