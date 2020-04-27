@@ -70,4 +70,24 @@ input {
       border-top-left-radius: 0px
     }
   }
+  &--h1 {
+    font-family: 'Playfair Display', 'serif';
+    color: $text-color;
+    font-size: 5vw;
+    background:none;
+    padding: 0;
+    border-radius: 0;
+  }
 }
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+}
+
+li {
+  margin-bottom: 1em;
+}
+
+
