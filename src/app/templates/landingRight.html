@@ -12,12 +12,12 @@
     <transition name="slide-fade" mode="out-in">
       <div v-if="!showNameField" key="enterEmail">
         <div class="input__container">
-          <input v-model="signupEmail" placeholder="you@example.com">
+          <input v-model="signup.email" placeholder="you@example.com">
           <button @click="enterPantryName" :disabled="!signupValid()">
             Create a Pantry
           </button>
         </div>
-        <p v-if="signupEmail && !signupValid()" class="text--light">
+        <p v-if="signup.email && !signupValid()" class="text--light">
           Sorry, but that email is invalid.
         </p>
         <p v-else class="text--light">
@@ -26,7 +26,7 @@
       </div>
       <div v-else key="enterPantryName">
         <div class="input__container">
-          <input v-model="signupName" placeholder="">
+          <input v-model="signup.accountName" placeholder="">
           <button @click="createNewPantry" :disabled="!signupNameValid()">
             Name your Pantry
           </button>
@@ -48,7 +48,7 @@
       Once you've saved it somewhere, hit the button below and we'll show you how to add items to your pantry.
     </p>
     <p class="text__container text--key">
-      {{ pantryId }}
+      {{ pantry.id }}
       <span class="text__button" @click="copyPantryId">
         {{ copyPantryIdMessage }}
       </span>
@@ -155,30 +155,30 @@
   </template>
 
   <template v-if="view === 'dashboard'">
-    <template v-if="pantry">
+    <template v-if="pantry.data">
       <h1>
-        {{ pantry.name }}
+        {{ pantry.data.name }}
       </h1>
-      <template v-if="pantry.baskets && pantry.baskets.length !== 0">
+      <template v-if="pantry.data.baskets && pantry.data.baskets.length !== 0">
         <h2>
-          {{pantry.baskets.length}}
-          {{pantry.baskets.length > 1 ? 'Baskets' : 'Basket' }}
+          {{pantry.data.baskets.length}}
+          {{pantry.data.baskets.length > 1 ? 'Baskets' : 'Basket' }}
           in this Pantry
         </h2>
         <div class="basket__container">
           <ul>
-            <template v-for="basket in pantry.baskets">
+            <template v-for="basketName in pantry.data.baskets">
               <li class="text__container">
-                {{ basket }}
-              <span class="text__button" @click="toggleBasket(basket)">
-                {{ activeBasket === basket ? 'hide' : 'show' }}
+                {{ basketName }}
+              <span class="text__button" @click="toggleBasket(basketName)">
+                {{ activeBasket === basketName ? 'hide' : 'show' }}
               </span>
-              <template v-if="activeBasket === basket">
+              <template v-if="activeBasket === basketName">
                 <div class="basket__payload-container">
                   <json-view
                     :deep="1"
                     :showLength="true"
-                    :data="basketContents"/>
+                    :data="basket"/>
                 </div>
               </template>
               </li> 
@@ -197,7 +197,7 @@
         <p class="text__container text--code">
           curl -XPOST -H "Content-type: application/json" -d '{
             "key": "value"
-            }' '{{apiPath}}/pantry/{{this.pantryId}}/basket/testBasket'
+            }' '{{apiPath}}/pantry/{{this.pantry.id}}/basket/testBasket'
         </p>
         <button @click="showDocs">
           Show Me The API Docs!

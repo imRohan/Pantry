@@ -24,30 +24,34 @@ const landingRight = {
   data() {
     return {
       apiPath: API_PATH,
-      signupEmail: null,
-      signupName: null,
-      showNameField: false,
-      pantryId: null,
-      pantryName: null,
-      copyPantryIdMessage: 'copy',
-      pantry: null,
-      basketContents: null,
+      signup: {
+        email: null,
+        accountName: null,
+      },
+      pantry: {
+        id: null,
+        data: null,
+      },
+      basket: null,
       activeBasket: null,
+      showNameField: false,
+      copyPantryIdMessage: 'copy',
     }
   },
   methods: {
     async createNewPantry() {
+      const { accountName, email } = this.signup
       const { data } = await axios({
         method: 'POST',
         data: {
-          name: this.signupName,
+          name: accountName,
           description: 'defaultDescription',
-          contactEmail: this.signupEmail,
+          contactEmail: email,
         },
         url: `${API_PATH}/pantry/create`,
       })
 
-      this.pantryId = data
+      this.pantry.id = data
       this.$emit('change-view', IView.created)
     },
     async fetchPantry(pantryId: string) {
@@ -55,31 +59,31 @@ const landingRight = {
         method: 'GET',
         url: `${API_PATH}/pantry/${pantryId}`,
       })
-      this.pantryId = pantryId
-      this.pantry = data
+      this.pantry.id = pantryId
+      this.pantry.data = data
     },
     async toggleBasket(name: string) {
       if (this.activeBasket === name) {
-        this.basketContents = null
+        this.basket = null
         this.activeBasket = null
       } else {
         const { data } = await axios({
           method: 'GET',
-          url: `${API_PATH}/pantry/${this.pantryId}/basket/${name}`,
+          url: `${API_PATH}/pantry/${this.pantry.id}/basket/${name}`,
         })
-        this.basketContents = data
+        this.basket = data
         this.activeBasket = name
       }
     },
     signupValid() {
       const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return _emailRegix.test(String(this.signupEmail).toLowerCase());
+      return _emailRegix.test(String(this.signup.email).toLowerCase());
     },
     signupNameValid() {
-      return this.signupName !== null
+      return this.signup.accountName !== null
     },
     getStarted() {
-      this.fetchPantry(this.pantryId)
+      this.fetchPantry(this.pantry.id)
       this.$emit('change-view', IView.dashboard)
     },
     goHome() {
@@ -89,7 +93,7 @@ const landingRight = {
       this.$emit('change-view', IView.docs)
     },
     copyPantryId() {
-      this.$emit('copy-text', this.pantryId)
+      this.$emit('copy-text', this.pantry.id)
       this.copyPantryIdMessage = 'copied!'
     },
     enterPantryName() {
