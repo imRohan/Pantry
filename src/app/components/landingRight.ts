@@ -1,5 +1,6 @@
-// External Libs
+// External Files
 const axios = require('axios')
+const jsonView = require('vue-json-pretty').default
 
 // Configs
 const configs = require('../config.ts')
@@ -16,36 +17,74 @@ const API_PATH = configs.apiPath
 const landingRight = {
   props: ['view'],
   name: 'landingRight',
+  components: {
+    'json-view': jsonView,
+  },
+  template: landingRightTemplate,
   data() {
     return {
-      pantryId: 'Whoops! This was not supposed to happen.',
       apiPath: API_PATH,
-      signupEmail: null,
+      signup: {
+        email: null,
+        accountName: null,
+      },
+      pantry: {
+        id: null,
+        data: null,
+      },
+      basket: null,
+      activeBasket: null,
+      showNameField: false,
       copyPantryIdMessage: 'copy',
     }
   },
-  template: landingRightTemplate,
   methods: {
     async createNewPantry() {
+      const { accountName, email } = this.signup
       const { data } = await axios({
         method: 'POST',
         data: {
-          name: 'defaultName',
+          name: accountName,
           description: 'defaultDescription',
-          contactEmail: this.signupEmail,
+          contactEmail: email,
         },
         url: `${API_PATH}/pantry/create`,
       })
 
-      this.pantryId = data
+      this.pantry.id = data
       this.$emit('change-view', IView.created)
+    },
+    async fetchPantry(pantryId: string) {
+      const { data } = await axios({
+        method: 'GET',
+        url: `${API_PATH}/pantry/${pantryId}`,
+      })
+      this.pantry.id = pantryId
+      this.pantry.data = data
+    },
+    async toggleBasket(name: string) {
+      if (this.activeBasket === name) {
+        this.basket = null
+        this.activeBasket = null
+      } else {
+        const { data } = await axios({
+          method: 'GET',
+          url: `${API_PATH}/pantry/${this.pantry.id}/basket/${name}`,
+        })
+        this.basket = data
+        this.activeBasket = name
+      }
     },
     signupValid() {
       const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return _emailRegix.test(String(this.signupEmail).toLowerCase());
+      return _emailRegix.test(String(this.signup.email).toLowerCase());
+    },
+    signupNameValid() {
+      return this.signup.accountName !== null
     },
     getStarted() {
-      this.$emit('change-view', IView.getStarted)
+      this.fetchPantry(this.pantry.id)
+      this.$emit('change-view', IView.dashboard)
     },
     goHome() {
       this.$emit('change-view', IView.home)
@@ -54,9 +93,23 @@ const landingRight = {
       this.$emit('change-view', IView.docs)
     },
     copyPantryId() {
-      this.$emit('copy-text', this.pantryId)
+      this.$emit('copy-text', this.pantry.id)
       this.copyPantryIdMessage = 'copied!'
     },
+    enterPantryName() {
+      if (this.signupValid()) {
+        this.showNameField = true
+      }
+    },
+    fetchURLParams() {
+      if (this.view === IView.dashboard) {
+        const _pantryId = decodeURIComponent(window.location.search.match(/(\?|&)pantryid\=([^&]*)/)[2])
+        this.fetchPantry(_pantryId)
+      }
+    },
+  },
+  mounted() {
+    this.fetchURLParams()
   },
 }
 

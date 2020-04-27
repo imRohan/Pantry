@@ -51,7 +51,7 @@
     "ts-loader": "^6.2.1",
     "tslint": "^5.12.1",
     "typescript": "^3.2.4",
-    "vue-loader": "^15.2.4",
+    "vue-loader": "^15.9.1",
     "vue-resource": "^1.5.1",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.16.1",
@@ -74,6 +74,7 @@
     "url-loader": "^1.0.1",
     "uuid": "^3.4.0",
     "vue": "^2.5.16",
-    "vue-clipboard2": "^0.3.1"
+    "vue-clipboard2": "^0.3.1",
+    "vue-json-pretty": "^1.6.3"
   }
 }
