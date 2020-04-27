@@ -25,7 +25,9 @@ const landingRight = {
     return {
       apiPath: API_PATH,
       signupEmail: null,
-      pantryId: 'Whoops! This was not supposed to happen.',
+      signupName: null,
+      showNameField: false,
+      pantryId: null,
       pantryName: null,
       copyPantryIdMessage: 'copy',
       pantry: null,
@@ -38,7 +40,7 @@ const landingRight = {
       const { data } = await axios({
         method: 'POST',
         data: {
-          name: 'defaultName',
+          name: this.signupName,
           description: 'defaultDescription',
           contactEmail: this.signupEmail,
         },
@@ -73,8 +75,12 @@ const landingRight = {
       const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return _emailRegix.test(String(this.signupEmail).toLowerCase());
     },
+    signupNameValid() {
+      return this.signupName !== null
+    },
     getStarted() {
-      this.$emit('change-view', IView.getStarted)
+      this.fetchPantry(this.pantryId)
+      this.$emit('change-view', IView.dashboard)
     },
     goHome() {
       this.$emit('change-view', IView.home)
@@ -85,6 +91,11 @@ const landingRight = {
     copyPantryId() {
       this.$emit('copy-text', this.pantryId)
       this.copyPantryIdMessage = 'copied!'
+    },
+    enterPantryName() {
+      if (this.signupValid()) {
+        this.showNameField = true
+      }
     },
     fetchURLParams() {
       if (this.view === IView.dashboard) {

@@ -9,22 +9,33 @@
       your users, Pantry speeds up development time letting you
       build awesome things - fast!
     </p>
-    <div class="input__container">
-      <input v-model="signupEmail" placeholder="you@example.com">
-      <button @click="createNewPantry" :disabled="!signupValid()">
-        Get a Pantry
-      </button>
-    </div>
-    <template v-if="signupEmail && !signupValid()">
-      <p class="text--light">
-        Sorry, but that email is invalid.
-      </p>
-    </template>
-    <template v-else>
-      <p class="text--light">
-        Don't worry, we'll only contact you if its important.
-      </p>
-    </template>
+    <transition name="slide-fade" mode="out-in">
+      <div v-if="!showNameField" key="enterEmail">
+        <div class="input__container">
+          <input v-model="signupEmail" placeholder="you@example.com">
+          <button @click="enterPantryName" :disabled="!signupValid()">
+            Create a Pantry
+          </button>
+        </div>
+        <p v-if="signupEmail && !signupValid()" class="text--light">
+          Sorry, but that email is invalid.
+        </p>
+        <p v-else class="text--light">
+          Don't worry, we'll only contact you if its important.
+        </p>
+      </div>
+      <div v-else key="enterPantryName">
+        <div class="input__container">
+          <input v-model="signupName" placeholder="">
+          <button @click="createNewPantry" :disabled="!signupNameValid()">
+            Name your Pantry
+          </button>
+        </div>
+        <p class="text--light">
+          Give your Pantry a creative name
+        </p>
+      </div>
+    </transition>
   </template>
   <template v-if="view === 'created'">
     <h1>
@@ -172,7 +183,7 @@
   <template v-if="view === 'dashboard'">
     <template v-if="pantry">
       <h1>
-        Dashboard
+        {{ pantry.name }}
       </h1>
       <template v-if="pantry.baskets && pantry.baskets.length !== 0">
         <h2>
@@ -214,6 +225,9 @@
             "key": "value"
             }' '{{apiPath}}/pantry/{{this.pantryId}}/basket/testBasket'
         </p>
+        <button @click="showDocs">
+          Show Me The API Docs!
+        </button>
       </template>
     </template>
     <template v-else>
