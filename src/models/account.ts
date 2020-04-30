@@ -118,7 +118,7 @@ class Account {
 
   public async getBlocks(): Promise<string[]> {
     const _accountKey = Account.generateRedisKey(this.uuid)
-    const _blocks = await dataStore.scan(`${_accountKey}::block:*`)
+    const _blocks = await dataStore.scan(`${_accountKey}::block:*`, this.maxNumberOfBlocks)
 
     const _blocksSanitized = _blocks.map((block) => {
       return block.split(':')[4]

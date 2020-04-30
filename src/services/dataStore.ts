@@ -79,16 +79,12 @@ const dataStore = {
     }
   },
 
-  async scan(pattern: string): Promise<string[]> {
+  async scan(pattern: string, count: number): Promise<string[]> {
     try {
       const _redisClient = redis.createClient()
       const _scan = promisify(_redisClient.scan).bind(_redisClient)
-      const [ _cursor, _storedKeys ] = await _scan(0, 'MATCH', pattern)
+      const [ , _storedKeys ] = await _scan(0, 'MATCH', pattern, 'COUNT', count)
       _redisClient.quit()
-
-      if (Number(_cursor) !== 0) {
-        throw new Error(`cursor returned invalid value: ${_cursor}`)
-      }
 
       return _storedKeys
     } catch (error) {
