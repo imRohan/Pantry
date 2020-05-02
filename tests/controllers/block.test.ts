@@ -27,7 +27,7 @@ describe('When creating a block', () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
 
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve([]))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
 
     const _response = await BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' })
     expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
@@ -37,7 +37,7 @@ describe('When creating a block', () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
 
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve([]))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
 
     await expect(BlockController.create(_accountUUID, 'NewBlock', {}))
       .rejects
@@ -56,7 +56,7 @@ describe('When creating a block', () => {
     }
 
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_maxedAccount)))
-    mockedDataStore.scan.mockReturnValueOnce(Promise.resolve(['oldBlock']))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve(['oldBlock']))
 
     await expect(BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' }))
       .rejects

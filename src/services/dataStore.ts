@@ -79,16 +79,16 @@ const dataStore = {
     }
   },
 
-  async scan(pattern: string, count: number): Promise<string[]> {
+  async find(pattern: string): Promise<string[]> {
     try {
       const _redisClient = redis.createClient()
-      const _scan = promisify(_redisClient.scan).bind(_redisClient)
-      const [ , _storedKeys ] = await _scan(0, 'MATCH', pattern, 'COUNT', count)
+      const _keys = promisify(_redisClient.keys).bind(_redisClient)
+      const _storedKeys = await _keys(pattern)
       _redisClient.quit()
 
       return _storedKeys
     } catch (error) {
-      logger.error(`Error when scanning keys: ${error.message}`)
+      logger.error(`Error when finding keys: ${error.message}`)
       throw new Error('Pantry is having critical issues')
     }
   },
