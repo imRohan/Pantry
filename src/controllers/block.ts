@@ -19,7 +19,7 @@ class BlockController {
         throw new Error('max number of blocks reached')
       }
 
-      logger.info('Creating new block in account: ${accountUUID}')
+      logger.info(`Creating new block in account: ${accountUUID}`)
       const _block = new Block(accountUUID, name, payload)
       await _block.store()
 

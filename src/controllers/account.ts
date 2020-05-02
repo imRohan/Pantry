@@ -21,7 +21,7 @@ class AccountController {
       const { contactEmail } = params
       await mailer.sendWelcomeEmail(contactEmail, _accountUUID)
 
-      logger.logAndSlack(`Account created for ${contactEmail}`)
+      logger.logAndSlack(`Account created for ${contactEmail}: ${_accountUUID}`)
       return _accountUUID
     } catch (error) {
       logger.error(`Account creation failed: ${error.message}`)
