@@ -87,73 +87,6 @@
     </a>
   </template>
 
-  <template v-if="view === 'docs'">
-    <h1>
-      Api Documentation
-    </h1>
-    <h2>Introduction</h2>
-    <p>
-      Below are high-level descriptions of the main API calls that
-      you will need in order to get up and running with Pantry. For a more
-      detailed overview, please download and use the Postman
-      Collection.
-    </p>
-    <a href="https://app.getpostman.com/run-collection/b32d3ed975b9800557d7#?env%5BPantry%20Prod%5D=W3sia2V5IjoicGFudHJ5X2FwaV9wYXRoIiwidmFsdWUiOiJodHRwczovL2dldHBhbnRyeS5jbG91ZC9hcGl2MSIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X3V1aWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X2FjY291bnRfbmFtZSIsInZhbHVlIjoiUG9zdG1hbl9BY2NvdW50IiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJwYW50cnlfYWNjb3VudF9kZXNjcmlwdGlvbiIsInZhbHVlIjoiUG9zdG1hbiBUZXN0IEFjY291bnQiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6InBhbnRyeV9hY2NvdW50X2NvbnRhY3RFbWFpbCIsInZhbHVlIjoidGVzdEBwb3N0bWFuLmNvbSIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGFudHJ5X2Jhc2tldF9uYW1lIiwidmFsdWUiOiJQb3N0bWFuX0Jhc2tldCIsImVuYWJsZWQiOnRydWV9XQ==">
-      <img src="https://run.pstmn.io/button.svg">
-    </a>
-    <h2>Pantry API Root Path</h2>
-    <p class="text__container text--code">
-      {{apiPath}}
-    </p>
-    <p>
-      Every api call must be sent to the root api path. Following that path will be a specific route per call.
-    </p>
-    <h2>Get Pantry Details</h2>
-    <p class="text__container text--code">
-      GET /pantry/{pantryID}
-    </p>
-    <p>
-      To retrieve details about your pantry, simply send a <b>GET</b> request to
-      our API with the <b>pantryID</b> of your pantry
-    </p>
-    <p class="text__container text--code">
-      curl -XGET -H "Content-type: application/json"
-      '{{apiPath}}/pantry/{pantryID}'
-    </p>
-    <h2>Add & Update a Basket</h2>
-    <p class="text__container text--code">
-      POST /pantry/{pantryID}/basket/{basketName}
-    </p>
-    <p>
-      To add or update a basket in your pantry, simply send a <b>POST</b> request
-      to our API with the <b>name</b> and the <b>payload</b> of the basket. If the
-      name matches an existing basket in your pantry, that basket will be updated
-      with the new payload.
-    </p>
-    <p class="text__container text--code">
-      curl -XPOST -H "Content-type: application/json" -d '{
-        "key": "value"
-        }' '{{apiPath}}/pantry/{pantryID}/basket/{basketName}'
-    </p>
-    <h2>Get the contents of a Basket</h2>
-    <p class="text__container text--code">
-      GET /pantry/{pantryID}/basket/{basketName}
-    </p>
-    <p>
-      To retrieve an basket, send a <b>GET</b> request to our API with the
-      <b>name</b> of the basket in the url.
-    </p>
-    <p class="text__container text--code">
-      curl -XGET -H "Content-type: application/json"
-      '{{apiPath}}/pantry/{pantryID}/basket/{basketName}'
-    </p>
-    <button
-      @click="goHome"
-      class="button--alt">
-      Go Back
-    </button>
-  </template>
-
   <template v-if="view === 'dashboard'">
     <template v-if="pantry.data">
       <h1>
@@ -205,7 +138,17 @@
       </template>
     </template>
     <template v-else>
-      <h1>Uhoh, looks like something broke.</h1>
+      <h1>View Your Pantry</h1>
+      <p>
+        Don't want to use our API? It's ok, we've all been there.
+        Enter your PantryID below and we'll show you what's inside it! 
+      </p>
+      <div class="input__container">
+        <input v-model="pantry.id" placeholder="Please paste your PantryID">
+        <button @click="loadPantry" :disabled="!pantryIDValid()">
+          Explore
+        </button>
+      </div>
       <button
         @click="goHome"
         class="button--alt">
