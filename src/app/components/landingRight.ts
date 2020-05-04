@@ -106,7 +106,7 @@ const landingRight = {
       }
     },
     loadPantry() {
-      if(this.pantry.id) {
+      if (this.pantry.id) {
         this.fetchPantry(this.pantry.id)
       }
     },
