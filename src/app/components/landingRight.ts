@@ -13,6 +13,7 @@ const { IView } = require('../../interfaces/view.ts')
 
 // Constants
 const API_PATH = configs.apiPath
+const DOCS_PATH = configs.docsPath
 
 const landingRight = {
   props: ['view'],
@@ -82,6 +83,9 @@ const landingRight = {
     signupNameValid() {
       return this.signup.accountName !== null
     },
+    pantryIDValid() {
+      return this.pantry.id !== null
+    },
     getStarted() {
       this.fetchPantry(this.pantry.id)
       this.$emit('change-view', IView.dashboard)
@@ -90,7 +94,7 @@ const landingRight = {
       this.$emit('change-view', IView.home)
     },
     showDocs() {
-      this.$emit('change-view', IView.docs)
+      window.location.href = DOCS_PATH
     },
     copyPantryId() {
       this.$emit('copy-text', this.pantry.id)
@@ -99,6 +103,11 @@ const landingRight = {
     enterPantryName() {
       if (this.signupValid()) {
         this.showNameField = true
+      }
+    },
+    loadPantry() {
+      if (this.pantry.id) {
+        this.fetchPantry(this.pantry.id)
       }
     },
     fetchURLParams() {
