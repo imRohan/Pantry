@@ -25,7 +25,7 @@ class BlockController {
 
       return `Your Pantry was updated with basket: ${name}!`
     } catch (error) {
-      logger.error(`Block creation failed: ${error.message}`)
+      logger.error(`Block creation failed: ${error.message}, account: ${accountUUID}`)
       throw error
     }
   }
@@ -49,7 +49,7 @@ class BlockController {
       logger.info('Block retrieved')
       return _blockDetails
     } catch (error) {
-      logger.error(`Block retrieval failed: ${error.message}`)
+      logger.error(`Block retrieval failed: ${error.message}, account: ${accountUUID}`)
       throw error
     }
   }
@@ -63,7 +63,7 @@ class BlockController {
 
       return `${name} was removed from your Pantry!`
     } catch (error) {
-      logger.error(`Block deletion failed: ${error.message}`)
+      logger.error(`Block deletion failed: ${error.message}, account: ${accountUUID}`)
       throw error
     }
   }
