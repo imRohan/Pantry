@@ -22,7 +22,7 @@ const crm = {
     } catch (error) {
       logger.error(`Error when adding new user: ${error.message}`)
     }
-  }
+  },
 }
 
 export = crm

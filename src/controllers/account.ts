@@ -3,9 +3,9 @@
 // External Files
 import Account = require('../models/account')
 import Block = require('../models/block')
+import crm = require('../services/crm')
 import logService = require('../services/logger')
 import mailer = require('../services/mailer')
-import crm = require('../services/crm')
 
 // Interfaces
 import { IAccount, IAccountPublic } from '../interfaces/account'
