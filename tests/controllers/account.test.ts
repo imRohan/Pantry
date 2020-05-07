@@ -2,9 +2,11 @@
 import AccountController = require('../../src/controllers/account')
 import dataStore = require('../../src/services/dataStore')
 import mailer = require('../../src/services/mailer')
+import crm = require('../../src/services/crm')
 
 jest.mock('../../src/services/dataStore')
 jest.mock('../../src/services/mailer')
+jest.mock('../../src/services/crm')
 
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
@@ -36,6 +38,21 @@ describe('When creating an account', () => {
     }
 
     const _spy = jest.spyOn(mailer, 'sendWelcomeEmail')
+    const _uuid: string = await AccountController.create(_params)
+    expect(_spy).toHaveBeenCalled()
+    expect(_spy).toHaveBeenCalledWith(_params.contactEmail, _uuid)
+
+    _spy.mockRestore()
+  })
+
+  it ('stores user details in crm platform', async () => {
+    const _params: IAccount = {
+      name: 'New Account',
+      description: 'Account made while testing',
+      contactEmail: 'derp@flerp.com',
+    }
+
+    const _spy = jest.spyOn(crm, 'addNewUser')
     const _uuid: string = await AccountController.create(_params)
     expect(_spy).toHaveBeenCalled()
     expect(_spy).toHaveBeenCalledWith(_params.contactEmail, _uuid)
