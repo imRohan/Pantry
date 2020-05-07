@@ -5,6 +5,7 @@ import Account = require('../models/account')
 import Block = require('../models/block')
 import logService = require('../services/logger')
 import mailer = require('../services/mailer')
+import crm = require('../services/crm')
 
 // Interfaces
 import { IAccount, IAccountPublic } from '../interfaces/account'
@@ -20,6 +21,7 @@ class AccountController {
 
       const { contactEmail } = params
       await mailer.sendWelcomeEmail(contactEmail, _accountUUID)
+      crm.addNewUser(contactEmail, _accountUUID)
 
       logger.logAndSlack(`Account created for ${contactEmail}: ${_accountUUID}`)
       return _accountUUID
