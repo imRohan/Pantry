@@ -3,6 +3,7 @@
 // External Files
 import Account = require('../models/account')
 import Block = require('../models/block')
+import crm = require('../services/crm')
 import logService = require('../services/logger')
 import mailer = require('../services/mailer')
 
@@ -20,6 +21,7 @@ class AccountController {
 
       const { contactEmail } = params
       await mailer.sendWelcomeEmail(contactEmail, _accountUUID)
+      crm.addNewUser(contactEmail, _accountUUID)
 
       logger.logAndSlack(`Account created for ${contactEmail}: ${_accountUUID}`)
       return _accountUUID
