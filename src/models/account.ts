@@ -29,6 +29,8 @@ class Account {
     const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
     const _accountObject = new Account(_accountParams)
 
+    await _accountObject.refreshTTL()
+
     return _accountObject
   }
 

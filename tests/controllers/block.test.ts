@@ -8,6 +8,7 @@ const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 // Interfaces
 import { IAccountPrivate } from '../../src/interfaces/account'
 
+// Constants
 const _existingAccount: IAccountPrivate = {
   name: 'Existing Account',
   description: 'Account made while testing',
@@ -15,6 +16,12 @@ const _existingAccount: IAccountPrivate = {
   maxNumberOfBlocks: 50,
   notifications: true,
   uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
+}
+
+const _existingBlock = {
+  accountUUID: _existingAccount.uuid,
+  name: 'ExistingBlock',
+  payload: { derp: 'flerp' },
 }
 
 afterEach(() => {
@@ -70,11 +77,7 @@ describe('When retrieving a block', () => {
 
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-      .mockReturnValueOnce(Promise.resolve(JSON.stringify({
-        accountUUID: _accountUUID,
-        name: 'NewBlock',
-        payload: { derp: 'flerp' },
-      })))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
     const _payload = await BlockController.get(_accountUUID, 'NewBlock')
     expect(_payload).toEqual({ derp: 'flerp' })
@@ -100,7 +103,7 @@ describe('When deleting a block', () => {
 
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-      .mockReturnValueOnce(Promise.resolve(JSON.stringify({ derp: 'flerp' })))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
     const _payload = await BlockController.delete(_accountUUID, 'NewBlock')
     expect(_payload).toMatch(/NewBlock was removed from your Pantry/)
@@ -110,7 +113,9 @@ describe('When deleting a block', () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     const _blockName = 'NewBlock'
 
-    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(null))
 
     await expect(BlockController.delete(_accountUUID, _blockName))
       .rejects

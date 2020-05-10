@@ -51,7 +51,7 @@ class AccountController {
 
       logger.info(`Deleting account: ${uuid}`)
       for (const _blockName of _blocks) {
-        logger.info(`Deleting block in account: ${uuid}`)
+        logger.info(`Deleting block ${_blockName} in account: ${uuid}`)
         const _block = await Block.get(uuid, _blockName)
         await _block.delete()
       }

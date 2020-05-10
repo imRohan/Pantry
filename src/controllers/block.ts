@@ -34,7 +34,7 @@ class BlockController {
     try {
       let _block
       let _blockDetails
-      const _account = await Account.get(accountUUID)
+      await Account.get(accountUUID)
 
       try {
         _block = await Block.get(accountUUID, name)
@@ -42,9 +42,6 @@ class BlockController {
       } catch (error) {
         throw error
       }
-
-      logger.info(`Refreshing TTL of account: ${accountUUID}`)
-      await _account.refreshTTL()
 
       logger.info('Block retrieved')
       return _blockDetails
@@ -56,6 +53,8 @@ class BlockController {
 
   public static async delete(accountUUID: string, name: string): Promise<string> {
     try {
+      await Account.get(accountUUID)
+
       const _block = await Block.get(accountUUID, name)
 
       logger.info(`Removing block from account: ${accountUUID}`)
