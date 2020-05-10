@@ -27,7 +27,7 @@ class Block {
     const { payload } = _blockContents
 
     const _block = new Block(accountUUID, name, payload)
-    
+
     await _block.refreshTTL()
 
     return _block
