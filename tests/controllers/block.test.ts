@@ -110,7 +110,9 @@ describe('When deleting a block', () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     const _blockName = 'NewBlock'
 
-    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(null))
 
     await expect(BlockController.delete(_accountUUID, _blockName))
       .rejects
