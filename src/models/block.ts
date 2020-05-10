@@ -27,6 +27,8 @@ class Block {
     const { payload } = _blockContents
 
     const _block = new Block(accountUUID, name, payload)
+    
+    await _block.refreshTTL()
 
     return _block
   }
@@ -77,6 +79,10 @@ class Block {
   public async delete(): Promise<void> {
     const _blockKey = Block.generateRedisKey(this.accountUUID, this.name)
     await dataStore.delete(_blockKey)
+  }
+
+  public async refreshTTL(): Promise<void> {
+    await this.store()
   }
 
   public sanitize(): any {
