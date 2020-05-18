@@ -83,6 +83,19 @@ describe('When updating a block', () => {
     const _response = await BlockController.update(_accountUUID, 'ExistingBlock', _newBlockData)
     expect(_response).toEqual({ derp: 'flerp', newKey: 'newValue' })
   })
+
+  it ('throws an error if block does not exist', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+    const _blockName = 'NewBlock'
+
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(null))
+
+    await expect(BlockController.get(_accountUUID, _blockName))
+      .rejects
+      .toThrow(`${_blockName} does not exist`)
+  })
 })
 
 describe('When retrieving a block', () => {
