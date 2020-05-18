@@ -68,7 +68,6 @@ class BlockController {
     }
   }
 
-
   public static async delete(accountUUID: string, name: string): Promise<string> {
     try {
       await Account.get(accountUUID)
