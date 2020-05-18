@@ -6,6 +6,7 @@ import {
   IsString,
   validate,
 } from 'class-validator'
+import merge = require('deepmerge')
 
 // External Files
 import { IsValidPayloadSize } from '../decorators/block'
@@ -74,6 +75,14 @@ class Block {
     const _stringifiedBlock = this.generateRedisPayload()
 
     await dataStore.set(_blockKey, _stringifiedBlock, this.lifeSpan)
+  }
+
+  public async update(newData: any): Promise<any> {
+    const _updatedPayload = merge(this.payload, newData)
+    this.payload = _updatedPayload
+    await this.store()
+
+    return(_updatedPayload)
   }
 
   public async delete(): Promise<void> {
