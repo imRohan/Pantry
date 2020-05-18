@@ -67,6 +67,20 @@ _apiV1Router.post('/:pantryID/basket/:basketName', async (req, res) => {
   }
 })
 
+_apiV1Router.put('/:pantryID/basket/:basketName', async (req, res) => {
+  try {
+    const { body, params } = req
+    const { pantryID, basketName } = params
+
+    logger.info('[PUT] Update Basket', params)
+    const _response = await BlockController.update(pantryID, basketName, body)
+
+    res.send(_response)
+  } catch (error) {
+    res.status(400).send(`Could not create basket: ${error.message}`)
+  }
+})
+
 _apiV1Router.get('/:pantryID/basket/:basketName', async (req, res) => {
   try {
     const { params } = req

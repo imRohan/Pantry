@@ -51,6 +51,24 @@ class BlockController {
     }
   }
 
+  public static async update(accountUUID: string, name: string, data: any): Promise<any> {
+    try {
+      await Account.get(accountUUID)
+
+      const _block = await Block.get(accountUUID, name)
+
+      logger.info(`Updating block ${name} in account: ${accountUUID}`)
+      await _block.update(data)
+
+      const _blockDetails = _block.sanitize()
+      return _blockDetails
+    } catch (error) {
+      logger.error(`Block retrieval failed: ${error.message}, account: ${accountUUID}`)
+      throw error
+    }
+  }
+
+
   public static async delete(accountUUID: string, name: string): Promise<string> {
     try {
       await Account.get(accountUUID)
