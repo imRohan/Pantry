@@ -63,7 +63,7 @@ class BlockController {
       const _blockDetails = _block.sanitize()
       return _blockDetails
     } catch (error) {
-      logger.error(`Block retrieval failed: ${error.message}, account: ${accountUUID}`)
+      logger.error(`Block update failed: ${error.message}, account: ${accountUUID}`)
       throw error
     }
   }
