@@ -71,6 +71,20 @@ describe('When creating a block', () => {
   })
 })
 
+describe('When updating a block', () => {
+  it('successfully updates payload of block', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+    const _newBlockData = { newKey: 'newValue' }
+
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const _response = await BlockController.update(_accountUUID, 'ExistingBlock', _newBlockData)
+    expect(_response).toEqual({ derp: 'flerp', newKey: 'newValue' })
+  })
+})
+
 describe('When retrieving a block', () => {
   it ('successfully returns payload of block', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
