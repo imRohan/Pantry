@@ -1,7 +1,6 @@
 // Extarnal Libs
 import {
   IsNotEmpty,
-  IsNotEmptyObject,
   IsObject,
   IsString,
   validate,
@@ -51,7 +50,6 @@ class Block {
   public name: string
   @IsNotEmpty()
   @IsObject()
-  @IsNotEmptyObject()
   @IsValidPayloadSize()
   public payload: any
 
