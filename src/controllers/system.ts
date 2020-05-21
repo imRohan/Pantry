@@ -18,7 +18,7 @@ class SystemController {
       const _status = {
         website: true,
         api: true,
-        dataStore: _dataStoreStatus
+        dataStore: _dataStoreStatus,
       }
 
       logger.info('System status retrieved')
@@ -29,7 +29,7 @@ class SystemController {
       const _errorStatus = {
         website: true,
         api: true,
-        dataStore: false
+        dataStore: false,
       }
       return _errorStatus
     }

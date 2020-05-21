@@ -23,7 +23,7 @@ describe('When fetching system status', () => {
     expect(_status).toMatchObject({
       api: true,
       website: true,
-      dataStore: true
+      dataStore: true,
     })
   })
 
@@ -31,9 +31,9 @@ describe('When fetching system status', () => {
     mockedDataStore.ping.mockReturnValueOnce(Promise.resolve(false))
 
     const _status: ISystemStatus = await SystemController.getStatus()
-    const { dataStore } = _status
+    const { dataStore: redis } = _status
 
-    expect(dataStore).toBe(false)
+    expect(redis).toBe(false)
   })
 
   it ('returns a negative status if error is thrown', async () => {

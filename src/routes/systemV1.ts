@@ -11,7 +11,7 @@ const logger = new logService('API')
 // Router setup
 const _systemV1Router = express.Router()
 
-_systemV1Router.get('/status', async(req, res) => {
+_systemV1Router.get('/status', async (req, res) => {
   try {
     logger.info('[GET] Service Status')
     const _status = await SystemController.getStatus()

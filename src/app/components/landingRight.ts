@@ -40,17 +40,17 @@ const landingRight = {
       copyPantryIdMessage: 'copy',
     }
   },
-	filters: {
-    capitalizeKey: function(key) {
-			if (!key) return ''
-      
+  filters: {
+    capitalizeKey(key) {
+      if (!key) { return '' }
+
       const _key = key.toString()
       return(`${_key.charAt(0).toUpperCase()}${_key.slice(1)}`)
-		}
-	},
+    },
+  },
   computed: {
-    isStatusPositive: function() {
-      if (!this.systemStatus) return false
+    isStatusPositive() {
+      if (!this.systemStatus) { return false }
 
       const _statusArray = Object.values(this.systemStatus)
       const _operational = _statusArray.filter((status) => {
@@ -58,7 +58,7 @@ const landingRight = {
       })
 
       return _operational.length === _statusArray.length
-    }
+    },
   },
   methods: {
     async createNewPantry() {
@@ -151,7 +151,7 @@ const landingRight = {
       const _positiveStatus = this.isStatusPositive
 
       return _positiveStatus ? _positiveMessage : _negativeMessage
-    }
+    },
   },
   mounted() {
     this.fetchURLParams()
