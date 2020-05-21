@@ -11,7 +11,7 @@ jest.mock('../../src/services/crm')
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
-import { IAccountParams, IAccountPublic, IAccountPrivate } from '../../src/interfaces/account'
+import { IAccountParams, IAccountPrivate, IAccountPublic } from '../../src/interfaces/account'
 import { IBlock } from '../../src/interfaces/block'
 
 // Constants
