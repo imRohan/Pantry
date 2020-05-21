@@ -1,41 +1,51 @@
 <div class="landing__right">
   <template v-if="view === 'home'">
     <h1>
-      Unburden yourself from data storage woes.
+      <template v-if="!showNameField">
+        Unburden yourself from data storage woes.
+      </template>
+      <template v-else>
+        Almost there, just one more step!
+      </template>
     </h1>
     <p>
-      Focus your efforts on building your next project and leave
-      the data storage to us. With free NoSQL cloud storage for you and
-      your users, Pantry speeds up development time letting you
-      build awesome things - fast!
+      <template v-if="!showNameField">
+        Focus your efforts on building your next project and leave
+        the data storage to us. With free NoSQL cloud storage for you and
+        your users, Pantry speeds up development time letting you
+        build awesome things - fast!
+      </template>
+      <template v-else>
+        Let's give your pantry a name! This could be the name of your project
+        or something else that means something to you. Please keep in mind that
+        inactive pantries will be deleted automatically.
+      </template>
     </p>
-    <transition name="slide-fade" mode="out-in">
-      <div v-if="!showNameField" key="enterEmail">
-        <div class="input__container">
-          <input v-model="signup.email" placeholder="you@example.com">
-          <button @click="enterPantryName" :disabled="!signupValid()">
-            Create a Pantry
-          </button>
-        </div>
-        <p v-if="signup.email && !signupValid()" class="text--light">
-          Sorry, but that email is invalid.
-        </p>
-        <p v-else class="text--light">
-          Don't worry, we'll only contact you if its important.
-        </p>
+    <div v-if="!showNameField">
+      <div class="input__container">
+        <input v-model="signup.email" placeholder="you@example.com">
+        <button @click="enterPantryName" :disabled="!signupValid()">
+          Create a Pantry
+        </button>
       </div>
-      <div v-else key="enterPantryName">
-        <div class="input__container">
-          <input v-model="signup.accountName" placeholder="">
-          <button @click="createNewPantry" :disabled="!signupNameValid()">
-            Name your Pantry
-          </button>
-        </div>
-        <p class="text--light">
-          Give your Pantry a creative name
-        </p>
+      <p v-if="signup.email && !signupValid()" class="text--light">
+        Sorry, but that email is invalid.
+      </p>
+      <p v-else class="text--light">
+        Don't worry, we'll only contact you if its important.
+      </p>
+    </div>
+    <div v-else>
+      <div class="input__container">
+        <input v-model="signup.accountName" placeholder="">
+        <button @click="createNewPantry" :disabled="!signupNameValid()">
+          Name your Pantry
+        </button>
       </div>
-    </transition>
+      <p class="text--light">
+        Give your Pantry a creative name
+      </p>
+    </div>
   </template>
 
   <template v-if="view === 'created'">
