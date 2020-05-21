@@ -97,23 +97,24 @@
           {{pantry.data.baskets.length}}
           {{pantry.data.baskets.length > 1 ? 'Baskets' : 'Basket' }}
           in this Pantry
+          - {{pantry.data.percentFull}}% Full
         </h2>
         <div class="basket__container">
           <ul>
             <template v-for="basketName in pantry.data.baskets">
               <li class="text__container">
                 {{ basketName }}
-              <span class="text__button" @click="toggleBasket(basketName)">
-                {{ activeBasket === basketName ? 'hide' : 'show' }}
-              </span>
-              <template v-if="activeBasket === basketName">
-                <div class="basket__payload-container">
-                  <json-view
-                    :deep="1"
-                    :showLength="true"
-                    :data="basket"/>
-                </div>
-              </template>
+                <span class="text__button" @click="toggleBasket(basketName)">
+                  {{ activeBasket === basketName ? 'hide' : 'show' }}
+                </span>
+                <template v-if="activeBasket === basketName">
+                  <div class="basket__payload-container">
+                    <json-view
+                      :deep="1"
+                      :showLength="true"
+                      :data="basket"/>
+                  </div>
+                </template>
               </li> 
             </template>
           </ul>
