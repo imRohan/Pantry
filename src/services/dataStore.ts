@@ -92,6 +92,20 @@ const dataStore = {
       throw new Error('Pantry is having critical issues')
     }
   },
+
+  async ping(): Promise<boolean> {
+    try {
+      const _redisClient = redis.createClient()
+      const _ping = promisify(_redisClient.ping).bind(_redisClient)
+      const _response = await _ping()
+      _redisClient.quit()
+
+      return _response === 'PONG'
+    } catch (error) {
+      logger.error(`Error when pinging redis: ${error.message}`)
+      return false
+    }
+  },
 }
 
 export = dataStore
