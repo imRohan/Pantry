@@ -97,6 +97,27 @@
     </a>
   </template>
 
+  <template v-if="view === 'status'">
+    <h1>
+      System Status
+    </h1>
+    <div :class="isStatusPositive ? 'banner--green' : 'banner--red'"
+      class="banner__container">
+      {{ getStatusString() }}
+    </div>
+
+    <template v-for="(status, entity) in systemStatus">
+      <div class="banner__container banner--transparent">
+        <span class="text--bold">
+          {{ entity | capitalizeKey }}
+        </span>
+        <span :class="status ? 'text--green' : 'text--red'" class="text--right">
+          {{ status ? 'Operational' : 'Down' }}
+        </span>
+      </div>
+    </template>
+  </template>
+
   <template v-if="view === 'dashboard'">
     <template v-if="pantry.data">
       <h1>

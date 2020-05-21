@@ -25,6 +25,7 @@ const landingRight = {
   data() {
     return {
       apiPath: API_PATH,
+      systemStatus: null,
       signup: {
         email: null,
         accountName: null,
@@ -37,6 +38,26 @@ const landingRight = {
       activeBasket: null,
       showNameField: false,
       copyPantryIdMessage: 'copy',
+    }
+  },
+	filters: {
+    capitalizeKey: function(key) {
+			if (!key) return ''
+      
+      const _key = key.toString()
+      return(`${_key.charAt(0).toUpperCase()}${_key.slice(1)}`)
+		}
+	},
+  computed: {
+    isStatusPositive: function() {
+      if (!this.systemStatus) return false
+
+      const _statusArray = Object.values(this.systemStatus)
+      const _operational = _statusArray.filter((status) => {
+        return status
+      })
+
+      return _operational.length === _statusArray.length
     }
   },
   methods: {
@@ -116,9 +137,25 @@ const landingRight = {
         this.fetchPantry(_pantryId)
       }
     },
+    async fetchStatus() {
+      const { data } = await axios({
+        method: 'GET',
+        url: `${API_PATH}/system/status`,
+      })
+      this.systemStatus = data
+    },
+    getStatusString() {
+      const _positiveMessage = 'All Services Operational'
+      const _negativeMessage = 'Pantry is Experiencing Issues'
+
+      const _positiveStatus = this.isStatusPositive
+
+      return _positiveStatus ? _positiveMessage : _negativeMessage
+    }
   },
   mounted() {
     this.fetchURLParams()
+    this.fetchStatus()
   },
 }
 

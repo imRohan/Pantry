@@ -3,4 +3,5 @@ export enum IView {
   created = 'created',
   about = 'about',
   dashboard = 'dashboard',
+  status = 'status',
 }
