@@ -64,7 +64,7 @@ class Account {
   // Constants
   private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
   private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
-  private readonly defaultMaxNumberOfBlocks = 50
+  private readonly defaultMaxNumberOfBlocks = 100
 
   constructor(params: any) {
     const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks } = params
@@ -92,11 +92,12 @@ class Account {
 
   public async sanitize(): Promise<IAccountPublic> {
     const _baskets = await this.getBlocks()
+    const _percentFull = Math.round((_baskets.length / this.maxNumberOfBlocks) * 100)
 
     const _sanitizedItems: IAccountPublic = {
       name: this.name,
       description: this.description,
-      contactEmail: this.contactEmail,
+      percentFull: _percentFull,
       baskets: _baskets,
     }
 

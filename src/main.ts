@@ -14,6 +14,7 @@ require('dotenv').config()
 
 // Routes
 import _routesV1 = require('./routes/apiV1')
+import _systemRoutesV1 = require('./routes/systemV1')
 
 // External files
 import logService = require('./services/logger')
@@ -29,6 +30,7 @@ server.use(express.static(__dirname))
 server.use(helmet())
 
 // Routes
+server.use('/apiv1/system', _systemRoutesV1)
 server.use('/apiv1/pantry', _routesV1)
 
 server.get('/', (request, response) => {

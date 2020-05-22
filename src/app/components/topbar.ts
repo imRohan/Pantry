@@ -15,6 +15,9 @@ const topbar = {
   template: topbarTemplate,
   props: [],
   methods: {
+    showStatus() {
+      this.$emit('change-view', IView.status)
+    },
     showAbout() {
       this.$emit('change-view', IView.about)
     },
