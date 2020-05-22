@@ -54,4 +54,17 @@ a:any-link {
   &--dark {
     color: $primary-color !important;
   }
+  &--green {
+    color: $green !important;
+  }
+  &--red {
+    color: $red !important;
+  }
+  &--bold {
+    font-weight: 700
+  }
+  &--right {
+    text-align: right;
+    float: right;
+  }
 }

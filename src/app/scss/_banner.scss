@@ -1,0 +1,18 @@
+.banner {
+  &__container {
+    background: $green;
+    padding: 1em;
+    max-width: 100%;    
+    color: $white;
+    margin-bottom: 1em;
+  }
+  &--red {
+    background: $red,
+  }
+
+  &--transparent {
+    background: none;
+    color: $secondary-color;
+    border: 1px solid $secondary-color;
+  }
+}

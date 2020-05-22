@@ -1,9 +1,15 @@
 // Colors
 $white: #FFFFFF;
-$background: #FFE2C9;
-$primary-color: #8CA994;
-$secondary-color: #E0AC95;
-$text-color: #08004B;
+$green: #8CA994;
+$orange: #FFE2C9;
+$darkOrange: #E0AC95;
+$purple: #08004B;
+$red: #F56969;
+
+$background: $orange;
+$primary-color: $green;
+$secondary-color: $darkOrange;
+$text-color: $purple;
 
 // Dimensions
 $topbar-height: 3em;
