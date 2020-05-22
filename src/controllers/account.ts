@@ -8,13 +8,13 @@ import logService = require('../services/logger')
 import mailer = require('../services/mailer')
 
 // Interfaces
-import { IAccount, IAccountPublic } from '../interfaces/account'
+import { IAccountParams, IAccountPublic } from '../interfaces/account'
 
 // Logger setup
 const logger = new logService('Account Controller')
 
 class AccountController {
-  public static async create(params: IAccount): Promise<string> {
+  public static async create(params: IAccountParams): Promise<string> {
     try {
       const _account = new Account(params)
       const _accountUUID = await _account.store()
