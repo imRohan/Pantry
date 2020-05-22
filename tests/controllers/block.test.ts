@@ -40,13 +40,23 @@ describe('When creating a block', () => {
     expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
   })
 
+  it ('allows for empty payload', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
+
+    const _response = await BlockController.create(_accountUUID, 'NewBlock', {})
+    expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
+  })
+
   it ('throws an error if validation fails', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
 
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
 
-    await expect(BlockController.create(_accountUUID, 'NewBlock', {}))
+    await expect(BlockController.create(_accountUUID, 'NewBlock', 'string'))
       .rejects
       .toThrow('Validation failed:')
   })

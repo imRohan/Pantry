@@ -11,10 +11,11 @@ jest.mock('../../src/services/crm')
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
-import { IAccount, IAccountPrivate } from '../../src/interfaces/account'
+import { IAccountParams, IAccountPrivate, IAccountPublic } from '../../src/interfaces/account'
+import { IBlock } from '../../src/interfaces/block'
 
 // Constants
-const _newAccountParams: IAccount = {
+const _newAccountParams: IAccountParams = {
   name: 'New Account',
   description: 'Account made while testing',
   contactEmail: 'derp@flerp.com',
@@ -29,7 +30,7 @@ const _existingAccount: IAccountPrivate = {
   uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
 }
 
-const _existingBlock = {
+const _existingBlock: IBlock = {
   accountUUID: _existingAccount.uuid,
   name: 'ExistingBlock',
   payload: { derp: 'flerp' },
@@ -85,7 +86,7 @@ describe('When retrieving an account', () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
 
-    const _accountBase: IAccount = await AccountController.get(_existingAccount.uuid)
+    const _accountBase: IAccountPublic = await AccountController.get(_existingAccount.uuid)
 
     expect(_accountBase).toBeDefined()
   })
