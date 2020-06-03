@@ -7,13 +7,13 @@ export interface IAccountParams {
 export interface IAccountBase {
   name: string,
   description: string,
+  errors: string[],
 }
 
 export interface IAccountPrivate extends IAccountBase {
   contactEmail: string,
   maxNumberOfBlocks: number,
   notifications: boolean,
-  numberOfErrors: number,
   uuid: string,
 }
 
