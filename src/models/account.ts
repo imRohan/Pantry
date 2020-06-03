@@ -1,12 +1,12 @@
 // Extarnal Libs
 import {
+  IsArray,
   IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsNumber,
   IsString,
   IsUUID,
-  IsArray,
   validate,
 } from 'class-validator'
 import uuidv4 = require('uuid/v4')
