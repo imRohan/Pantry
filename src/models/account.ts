@@ -6,12 +6,14 @@ import {
   IsNumber,
   IsString,
   IsUUID,
+  IsArray,
   validate,
 } from 'class-validator'
 import uuidv4 = require('uuid/v4')
 
 // External Files
 import dataStore = require('../services/dataStore')
+import mailer = require('../services/mailer')
 
 // Interfaces
 import { IAccountPrivate, IAccountPublic } from '../interfaces/account'
@@ -59,8 +61,8 @@ class Account {
   @IsNumber()
   private maxNumberOfBlocks: number
   @IsNotEmpty()
-  @IsNumber()
-  private numberOfErrors: number
+  @IsArray()
+  private errors: string[]
   @IsUUID('4')
   private uuid: string
 
@@ -68,15 +70,16 @@ class Account {
   private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
   private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
   private readonly defaultMaxNumberOfBlocks = 100
+  private readonly errorsBeforeEmailSent = 2
 
   constructor(params: any) {
-    const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks, numberOfErrors } = params
+    const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks, errors } = params
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
     this.notifications = notifications ?? false
     this.maxNumberOfBlocks = maxNumberOfBlocks ?? this.defaultMaxNumberOfBlocks
-    this.numberOfErrors = numberOfErrors ?? 0
+    this.errors = errors ?? []
     this.uuid = uuid ?? uuidv4()
   }
 
@@ -101,6 +104,7 @@ class Account {
     const _sanitizedItems: IAccountPublic = {
       name: this.name,
       description: this.description,
+      errors: this.errors,
       percentFull: _percentFull,
       baskets: _baskets,
     }
@@ -134,6 +138,18 @@ class Account {
     return _blocksSanitized
   }
 
+  public async saveError(message: string): Promise<void> {
+    const _date = new Date().toLocaleDateString()
+    const _errorString = `${_date} - ${message}`
+
+    this.errors = [...this.errors, _errorString]
+    await this.store()
+
+    if (this.errors.length % this.errorsBeforeEmailSent  === 0) {
+      mailer.notifyUserOfErrors(message, this.contactEmail, this.uuid)
+    }
+  }
+
   private generateRedisPayload(): string {
     const _accountDetails: IAccountPrivate = {
       name: this.name,
@@ -141,7 +157,7 @@ class Account {
       contactEmail: this.contactEmail,
       notifications: this.notifications,
       maxNumberOfBlocks: this.maxNumberOfBlocks,
-      numberOfErrors: this.numberOfErrors,
+      errors: this.errors,
       uuid: this.uuid,
     }
     return JSON.stringify(_accountDetails)

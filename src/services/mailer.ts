@@ -24,6 +24,22 @@ const mailer = {
       logger.error(`Sending welcome email failed: ${error.message}`)
     }
   },
+
+  async notifyUserOfErrors(errorMessage: string, email: string, pantryID: string): Promise<void> {
+    try {
+      const _email = {
+        to: email,
+        from: 'noreply@getpantry.cloud',
+        templateId: process.env.ACCOUNT_ERRORS_EMAIL_ID,
+        dynamic_template_data: { pantryID, errorMessage },
+      }
+
+      logger.info(`Sending account errors email to ${email}`)
+      await sgMail.send(_email)
+    } catch (error) {
+      logger.error(`Sending account errors email  failed: ${error.message}`)
+    }
+  },
 }
 
 export = mailer
