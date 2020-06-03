@@ -15,6 +15,7 @@ const _existingAccount: IAccountPrivate = {
   contactEmail: 'derp@flerp.com',
   maxNumberOfBlocks: 50,
   notifications: true,
+  numberOfErrors: 0,
   uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
 }
 
@@ -69,6 +70,7 @@ describe('When creating a block', () => {
       contactEmail: 'derp@flerp.com',
       maxNumberOfBlocks: 1,
       notifications: true,
+      numberOfErrors: 0,
       uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
     }
 

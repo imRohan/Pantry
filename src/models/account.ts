@@ -58,6 +58,9 @@ class Account {
   @IsNotEmpty()
   @IsNumber()
   private maxNumberOfBlocks: number
+  @IsNotEmpty()
+  @IsNumber()
+  private numberOfErrors: number
   @IsUUID('4')
   private uuid: string
 
@@ -67,12 +70,13 @@ class Account {
   private readonly defaultMaxNumberOfBlocks = 100
 
   constructor(params: any) {
-    const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks } = params
+    const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks, numberOfErrors } = params
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
     this.notifications = notifications ?? false
     this.maxNumberOfBlocks = maxNumberOfBlocks ?? this.defaultMaxNumberOfBlocks
+    this.numberOfErrors = numberOfErrors ?? 0
     this.uuid = uuid ?? uuidv4()
   }
 
@@ -137,6 +141,7 @@ class Account {
       contactEmail: this.contactEmail,
       notifications: this.notifications,
       maxNumberOfBlocks: this.maxNumberOfBlocks,
+      numberOfErrors: this.numberOfErrors,
       uuid: this.uuid,
     }
     return JSON.stringify(_accountDetails)

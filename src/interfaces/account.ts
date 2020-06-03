@@ -13,7 +13,8 @@ export interface IAccountPrivate extends IAccountBase {
   contactEmail: string,
   maxNumberOfBlocks: number,
   notifications: boolean,
-  uuid?: string,
+  numberOfErrors: number,
+  uuid: string,
 }
 
 export interface IAccountPublic extends IAccountBase {

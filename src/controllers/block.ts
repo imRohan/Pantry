@@ -32,16 +32,10 @@ class BlockController {
 
   public static async get(accountUUID: string, name: string): Promise<any> {
     try {
-      let _block
-      let _blockDetails
       await Account.get(accountUUID)
 
-      try {
-        _block = await Block.get(accountUUID, name)
-        _blockDetails = _block.sanitize()
-      } catch (error) {
-        throw error
-      }
+      const _block = await Block.get(accountUUID, name)
+      const _blockDetails = _block.sanitize()
 
       logger.info('Block retrieved')
       return _blockDetails
@@ -56,11 +50,10 @@ class BlockController {
       await Account.get(accountUUID)
 
       const _block = await Block.get(accountUUID, name)
+      await _block.update(data)
+      const _blockDetails = _block.sanitize()
 
       logger.info(`Updating block ${name} in account: ${accountUUID}`)
-      await _block.update(data)
-
-      const _blockDetails = _block.sanitize()
       return _blockDetails
     } catch (error) {
       logger.error(`Block update failed: ${error.message}, account: ${accountUUID}`)
