@@ -16,7 +16,7 @@ class BlockController {
       // Check if account has reached max number of blocks
       const _accountFull = await _account.checkIfFull()
       if (_accountFull) {
-        const _errorMessage = 'max number of baskets reahed'
+        const _errorMessage = 'max number of baskets reached'
         await _account.saveError(_errorMessage)
         throw new Error(_errorMessage)
       }
