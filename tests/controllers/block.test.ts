@@ -1,8 +1,11 @@
 // External Files
 import BlockController = require('../../src/controllers/block')
 import dataStore = require('../../src/services/dataStore')
+import mailer = require('../../src/services/mailer')
 
 jest.mock('../../src/services/dataStore')
+jest.mock('../../src/services/mailer')
+
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
@@ -79,7 +82,7 @@ describe('When creating a block', () => {
 
     await expect(BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' }))
       .rejects
-      .toThrow('max number of blocks reached')
+      .toThrow('max number of baskets reached')
   })
 })
 
@@ -160,5 +163,55 @@ describe('When deleting a block', () => {
     await expect(BlockController.delete(_accountUUID, _blockName))
       .rejects
       .toThrow(`${_blockName} does not exist`)
+  })
+})
+
+describe('When throwing a block error', () => {
+  it ('does not email the user if error count is not divisable by 5', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+    const _blockName = 'ExistingBlock'
+    const _existingErrors = [ 'error #1' ]
+    const _existingAccountWithErrors = { ..._existingAccount, errors: _existingErrors }
+
+    const _spy = jest.spyOn(mailer, 'sendAccountErrorsEmail')
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccountWithErrors)))
+      .mockReturnValueOnce(Promise.resolve(null))
+
+    try {
+      await BlockController.get(_accountUUID, _blockName)
+    } catch {
+      expect(_spy).not.toHaveBeenCalled()
+    }
+
+    _spy.mockRestore()
+  })
+
+  it('emails the user if error count is divisable by 5', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+    const _blockName = 'ExistingBlock'
+    const _newError = `${_blockName} does not exist`
+    const _existingErrors = [
+      'error #1',
+      'error #2',
+      'error #3',
+      'error #4',
+    ]
+    const _existingAccountWithErrors = { ..._existingAccount, errors: _existingErrors }
+
+    const _spy = jest.spyOn(mailer, 'sendAccountErrorsEmail')
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccountWithErrors)))
+      .mockReturnValueOnce(Promise.resolve(null))
+
+    try {
+      await BlockController.get(_accountUUID, _blockName)
+    } catch {
+      expect(_spy).toHaveBeenCalledTimes(1)
+      expect(_spy)
+        .toHaveBeenCalledWith(_newError, _existingAccount.contactEmail, _accountUUID)
+    }
+
+    _spy.mockRestore()
   })
 })

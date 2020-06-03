@@ -25,7 +25,7 @@ const mailer = {
     }
   },
 
-  async notifyUserOfErrors(errorMessage: string, email: string, pantryID: string): Promise<void> {
+  async sendAccountErrorsEmail(errorMessage: string, email: string, pantryID: string): Promise<void> {
     try {
       const _email = {
         to: email,
