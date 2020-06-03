@@ -70,7 +70,7 @@ class Account {
   private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
   private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
   private readonly defaultMaxNumberOfBlocks = 100
-  private readonly errorsBeforeEmailSent = 2
+  private readonly errorsBeforeEmailSent = 5
 
   constructor(params: any) {
     const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks, errors } = params
@@ -146,7 +146,7 @@ class Account {
     await this.store()
 
     if (this.errors.length % this.errorsBeforeEmailSent  === 0) {
-      mailer.notifyUserOfErrors(message, this.contactEmail, this.uuid)
+      await mailer.sendAccountErrorsEmail(message, this.contactEmail, this.uuid)
     }
   }
 
