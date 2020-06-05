@@ -16,7 +16,7 @@ import dataStore = require('../services/dataStore')
 import mailer = require('../services/mailer')
 
 // Interfaces
-import { IAccountPrivate, IAccountPublic } from '../interfaces/account'
+import { IAccountUpdateParams, IAccountPrivate, IAccountPublic } from '../interfaces/account'
 
 class Account {
   public static async get(uuid: string): Promise<Account> {
@@ -77,10 +77,20 @@ class Account {
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
-    this.notifications = notifications ?? false
+    this.notifications = notifications ?? true
     this.maxNumberOfBlocks = maxNumberOfBlocks ?? this.defaultMaxNumberOfBlocks
     this.errors = errors ?? []
     this.uuid = uuid ?? uuidv4()
+  }
+
+  public async update(newData: Partial<IAccountUpdateParams>): Promise<void> {
+    const { name, description, notifications } = newData
+    
+    this.name = name ?? this.name
+    this.description = description ?? this.description
+    this.notifications = notifications ?? this.notifications
+
+    await this.store()
   }
 
   public async store(): Promise<string> {
@@ -105,6 +115,7 @@ class Account {
       name: this.name,
       description: this.description,
       errors: this.errors,
+      notifications: this.notifications,
       percentFull: _percentFull,
       baskets: _baskets,
     }

@@ -8,7 +8,7 @@ import logService = require('../services/logger')
 import mailer = require('../services/mailer')
 
 // Interfaces
-import { IAccountParams, IAccountPublic } from '../interfaces/account'
+import { IAccountParams, IAccountUpdateParams, IAccountPublic } from '../interfaces/account'
 
 // Logger setup
 const logger = new logService('Account Controller')
@@ -27,6 +27,22 @@ class AccountController {
       return _accountUUID
     } catch (error) {
       logger.error(`Account creation failed: ${error.message}`)
+      throw error
+    }
+  }
+
+  public static async update(uuid: string, data: Partial<IAccountUpdateParams>): Promise<IAccountPublic> {
+    try {
+      const _account = await Account.get(uuid)
+
+      await _account.update(data)
+
+      const _accountDetails = _account.sanitize()
+
+      logger.info('Account updated')
+      return _accountDetails
+    } catch (error) {
+      logger.error(`Account update failed: ${error.message}`)
       throw error
     }
   }
