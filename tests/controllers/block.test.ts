@@ -214,4 +214,33 @@ describe('When throwing a block error', () => {
 
     _spy.mockRestore()
   })
+
+  it('does not email the user if error count is divisable by 5 and account has notifications set to false', async () => {
+    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
+    const _blockName = 'ExistingBlock'
+    const _existingErrors = [
+      'error #1',
+      'error #2',
+      'error #3',
+      'error #4',
+    ]
+    const _existingAccountWithErrorsAndNotificationsFalse = {
+      ..._existingAccount,
+      errors: _existingErrors,
+      notifications: false,
+    }
+
+    const _spy = jest.spyOn(mailer, 'sendAccountErrorsEmail')
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccountWithErrorsAndNotificationsFalse)))
+      .mockReturnValueOnce(Promise.resolve(null))
+
+    try {
+      await BlockController.get(_accountUUID, _blockName)
+    } catch {
+      expect(_spy).not.toHaveBeenCalled()
+    }
+
+    _spy.mockRestore()
+  })
 })

@@ -156,9 +156,13 @@ class Account {
     this.errors = [...this.errors, _errorString]
     await this.store()
 
-    if (this.errors.length % this.errorsBeforeEmailSent  === 0) {
+    if (this.errorsThresholdReached() && this.notifications) {
       await mailer.sendAccountErrorsEmail(message, this.contactEmail, this.uuid)
     }
+  }
+
+  private errorsThresholdReached(): boolean {
+    return this.errors.length % this.errorsBeforeEmailSent === 0
   }
 
   private generateRedisPayload(): string {
