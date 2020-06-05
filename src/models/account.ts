@@ -16,7 +16,7 @@ import dataStore = require('../services/dataStore')
 import mailer = require('../services/mailer')
 
 // Interfaces
-import { IAccountUpdateParams, IAccountPrivate, IAccountPublic } from '../interfaces/account'
+import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
 
 class Account {
   public static async get(uuid: string): Promise<Account> {
@@ -85,7 +85,7 @@ class Account {
 
   public async update(newData: Partial<IAccountUpdateParams>): Promise<void> {
     const { name, description, notifications } = newData
-    
+
     this.name = name ?? this.name
     this.description = description ?? this.description
     this.notifications = notifications ?? this.notifications

@@ -11,7 +11,7 @@ jest.mock('../../src/services/crm')
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
-import { IAccountParams, IAccountUpdateParams, IAccountPrivate, IAccountPublic } from '../../src/interfaces/account'
+import { IAccountParams, IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../../src/interfaces/account'
 import { IBlock } from '../../src/interfaces/block'
 
 // Constants
@@ -104,7 +104,7 @@ describe('When updating an account', () => {
 
   it ('throws an error if validations fail', async () => {
     const _invalidAccountUpdateParams: any = {
-      notifications: 'not a boolean'
+      notifications: 'not a boolean',
     }
 
     await expect(AccountController.create(_invalidAccountUpdateParams))

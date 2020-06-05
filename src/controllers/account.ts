@@ -8,7 +8,7 @@ import logService = require('../services/logger')
 import mailer = require('../services/mailer')
 
 // Interfaces
-import { IAccountParams, IAccountUpdateParams, IAccountPublic } from '../interfaces/account'
+import { IAccountParams, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
 
 // Logger setup
 const logger = new logService('Account Controller')
