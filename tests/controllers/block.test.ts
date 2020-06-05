@@ -187,7 +187,7 @@ describe('When throwing a block error', () => {
     _spy.mockRestore()
   })
 
-  it('emails the user if error count is divisable by 5', async () => {
+  it('emails the user if error count reaches threshold', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     const _blockName = 'ExistingBlock'
     const _newError = `${_blockName} does not exist`
@@ -215,7 +215,7 @@ describe('When throwing a block error', () => {
     _spy.mockRestore()
   })
 
-  it('does not email the user if error count is divisable by 5 and account has notifications set to false', async () => {
+  it('does not email the user if error count reaches threshold and notifications is false', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     const _blockName = 'ExistingBlock'
     const _existingErrors = [
