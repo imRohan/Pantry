@@ -11,7 +11,7 @@ jest.mock('../../src/services/crm')
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
 // Interfaces
-import { IAccountParams, IAccountPrivate, IAccountPublic } from '../../src/interfaces/account'
+import { IAccountParams, IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../../src/interfaces/account'
 import { IBlock } from '../../src/interfaces/block'
 
 // Constants
@@ -21,12 +21,19 @@ const _newAccountParams: IAccountParams = {
   contactEmail: 'derp@flerp.com',
 }
 
+const _updatedAccountParams: IAccountUpdateParams = {
+  name: 'Updated Account',
+  description: 'Account update made while testing',
+  notifications: false,
+}
+
 const _existingAccount: IAccountPrivate = {
   name: 'Existing Account',
   description: 'Account made while testing',
   contactEmail: 'derp@flerp.com',
   maxNumberOfBlocks: 50,
   notifications: true,
+  errors: [],
   uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
 }
 
@@ -76,6 +83,33 @@ describe('When creating an account', () => {
     }
 
     await expect(AccountController.create(_invalidAccountParams))
+      .rejects
+      .toThrow('Validation failed:')
+  })
+})
+
+describe('When updating an account', () => {
+  it ('returns the updated account attributes', async () => {
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
+
+    const _accountBase: IAccountPublic = await AccountController.update(_existingAccount.uuid, _updatedAccountParams)
+    const { name, description, notifications } = _accountBase
+
+    expect(_accountBase).toBeDefined()
+    expect(name).toBe('Updated Account')
+    expect(description).toBe('Account update made while testing')
+    expect(notifications).toBe(false)
+  })
+
+  it ('throws an error if validations fail', async () => {
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+
+    const _invalidAccountUpdateParams: any = {
+      notifications: 'not a boolean',
+    }
+
+    await expect(AccountController.update(_existingAccount.uuid, _invalidAccountUpdateParams))
       .rejects
       .toThrow('Validation failed:')
   })

@@ -25,6 +25,20 @@ _apiV1Router.post('/create', async (req, res) => {
   }
 })
 
+_apiV1Router.put('/:pantryID', async (req, res) => {
+  try {
+    const { body, params } = req
+    const { pantryID } = params
+
+    logger.info('[PUT] Update Pantry', params)
+    const _response = await AccountController.update(pantryID, body)
+
+    res.send(_response)
+  } catch (error) {
+    res.status(400).send(`Could not update pantry: ${error.message}`)
+  }
+})
+
 _apiV1Router.get('/:pantryID', async (req, res) => {
   try {
     const { params } = req
@@ -44,12 +58,12 @@ _apiV1Router.delete('/:pantryID', async (req, res) => {
     const { params } = req
     const { pantryID } = params
 
-    logger.info('[DELETE] Account', params)
+    logger.info('[DELETE] Delete Account', params)
     const _response = await AccountController.delete(pantryID)
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(`Could not get basket: ${error.message}`)
+    res.status(400).send(`Could not delete pantry: ${error.message}`)
   }
 })
 
@@ -77,7 +91,7 @@ _apiV1Router.put('/:pantryID/basket/:basketName', async (req, res) => {
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(`Could not create basket: ${error.message}`)
+    res.status(400).send(`Could not update basket: ${error.message}`)
   }
 })
 
@@ -105,7 +119,7 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(`Could not get basket: ${error.message}`)
+    res.status(400).send(`Could not delete basket: ${error.message}`)
   }
 })
 
