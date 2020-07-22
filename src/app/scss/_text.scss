@@ -39,6 +39,9 @@ a:any-link {
     color: $text-color;
     overflow-wrap: anywhere;
   }
+  &--code {
+    font-family: 'courier', 'sans-serif';
+  }
   &--key {
     font-weight: bold;
     text-align: center;

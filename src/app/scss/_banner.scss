@@ -9,7 +9,9 @@
   &--red {
     background: $red,
   }
-
+  &--button {
+    cursor: pointer
+  }
   &--transparent {
     background: none;
     color: $secondary-color;

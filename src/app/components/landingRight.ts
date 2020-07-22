@@ -36,6 +36,7 @@ const landingRight = {
       },
       basket: null,
       activeBasket: null,
+      showErrors: false,
       showNameField: false,
       copyPantryIdMessage: 'copy',
     }
@@ -46,6 +47,9 @@ const landingRight = {
 
       const _key = key.toString()
       return(`${_key.charAt(0).toUpperCase()}${_key.slice(1)}`)
+    },
+    trim(text) {
+      return String(text).trim()
     },
   },
   computed: {
@@ -96,6 +100,9 @@ const landingRight = {
         this.basket = data
         this.activeBasket = name
       }
+    },
+    toggleErrors() {
+      this.showErrors = !this.showErrors
     },
     signupValid() {
       const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

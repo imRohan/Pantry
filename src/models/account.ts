@@ -1,5 +1,6 @@
 // Extarnal Libs
 import {
+  IsArray,
   IsBoolean,
   IsEmail,
   IsNotEmpty,
@@ -12,9 +13,10 @@ import uuidv4 = require('uuid/v4')
 
 // External Files
 import dataStore = require('../services/dataStore')
+import mailer = require('../services/mailer')
 
 // Interfaces
-import { IAccountPrivate, IAccountPublic } from '../interfaces/account'
+import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
 
 class Account {
   public static async get(uuid: string): Promise<Account> {
@@ -58,6 +60,9 @@ class Account {
   @IsNotEmpty()
   @IsNumber()
   private maxNumberOfBlocks: number
+  @IsNotEmpty()
+  @IsArray()
+  private errors: string[]
   @IsUUID('4')
   private uuid: string
 
@@ -65,15 +70,27 @@ class Account {
   private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
   private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
   private readonly defaultMaxNumberOfBlocks = 100
+  private readonly errorsBeforeEmailSent = 5
 
   constructor(params: any) {
-    const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks } = params
+    const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks, errors } = params
     this.name = name
     this.description = description
     this.contactEmail = contactEmail
-    this.notifications = notifications ?? false
+    this.notifications = notifications ?? true
     this.maxNumberOfBlocks = maxNumberOfBlocks ?? this.defaultMaxNumberOfBlocks
+    this.errors = errors ?? []
     this.uuid = uuid ?? uuidv4()
+  }
+
+  public async update(newData: Partial<IAccountUpdateParams>): Promise<void> {
+    const { name, description, notifications } = newData
+
+    this.name = name ?? this.name
+    this.description = description ?? this.description
+    this.notifications = notifications ?? this.notifications
+
+    await this.store()
   }
 
   public async store(): Promise<string> {
@@ -97,6 +114,8 @@ class Account {
     const _sanitizedItems: IAccountPublic = {
       name: this.name,
       description: this.description,
+      errors: this.errors,
+      notifications: this.notifications,
       percentFull: _percentFull,
       baskets: _baskets,
     }
@@ -130,6 +149,22 @@ class Account {
     return _blocksSanitized
   }
 
+  public async saveError(message: string): Promise<void> {
+    const _date = new Date().toLocaleDateString()
+    const _errorString = `${_date} - ${message}`
+
+    this.errors = [...this.errors, _errorString]
+    await this.store()
+
+    if (this.errorsThresholdReached() && this.notifications) {
+      await mailer.sendAccountErrorsEmail(message, this.contactEmail, this.uuid)
+    }
+  }
+
+  private errorsThresholdReached(): boolean {
+    return this.errors.length % this.errorsBeforeEmailSent === 0
+  }
+
   private generateRedisPayload(): string {
     const _accountDetails: IAccountPrivate = {
       name: this.name,
@@ -137,6 +172,7 @@ class Account {
       contactEmail: this.contactEmail,
       notifications: this.notifications,
       maxNumberOfBlocks: this.maxNumberOfBlocks,
+      errors: this.errors,
       uuid: this.uuid,
     }
     return JSON.stringify(_accountDetails)

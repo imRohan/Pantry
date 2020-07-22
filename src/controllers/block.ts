@@ -16,7 +16,9 @@ class BlockController {
       // Check if account has reached max number of blocks
       const _accountFull = await _account.checkIfFull()
       if (_accountFull) {
-        throw new Error('max number of blocks reached')
+        const _errorMessage = 'max number of baskets reached'
+        await _account.saveError(_errorMessage)
+        throw new Error(_errorMessage)
       }
 
       logger.info(`Creating new block in account: ${accountUUID}`)
@@ -34,12 +36,14 @@ class BlockController {
     try {
       let _block
       let _blockDetails
-      await Account.get(accountUUID)
+
+      const _account = await Account.get(accountUUID)
 
       try {
         _block = await Block.get(accountUUID, name)
         _blockDetails = _block.sanitize()
       } catch (error) {
+        await _account.saveError(error.message)
         throw error
       }
 
@@ -53,14 +57,20 @@ class BlockController {
 
   public static async update(accountUUID: string, name: string, data: any): Promise<any> {
     try {
-      await Account.get(accountUUID)
+      let _block
+      const _account = await Account.get(accountUUID)
 
-      const _block = await Block.get(accountUUID, name)
+      try {
+        _block = await Block.get(accountUUID, name)
+      } catch (error) {
+        await _account.saveError(error.message)
+        throw error
+      }
+
+      await _block.update(data)
+      const _blockDetails = _block.sanitize()
 
       logger.info(`Updating block ${name} in account: ${accountUUID}`)
-      await _block.update(data)
-
-      const _blockDetails = _block.sanitize()
       return _blockDetails
     } catch (error) {
       logger.error(`Block update failed: ${error.message}, account: ${accountUUID}`)
@@ -70,9 +80,16 @@ class BlockController {
 
   public static async delete(accountUUID: string, name: string): Promise<string> {
     try {
-      await Account.get(accountUUID)
+      let _block
 
-      const _block = await Block.get(accountUUID, name)
+      const _account = await Account.get(accountUUID)
+
+      try {
+        _block = await Block.get(accountUUID, name)
+      } catch (error) {
+        await _account.saveError(error.message)
+        throw error
+      }
 
       logger.info(`Removing block from account: ${accountUUID}`)
       await _block.delete()
