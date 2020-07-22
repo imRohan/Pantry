@@ -103,11 +103,13 @@ describe('When updating an account', () => {
   })
 
   it ('throws an error if validations fail', async () => {
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+
     const _invalidAccountUpdateParams: any = {
       notifications: 'not a boolean',
     }
 
-    await expect(AccountController.create(_invalidAccountUpdateParams))
+    await expect(AccountController.update(_existingAccount.uuid, _invalidAccountUpdateParams))
       .rejects
       .toThrow('Validation failed:')
   })
