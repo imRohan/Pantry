@@ -130,7 +130,7 @@
           in this Pantry
           - {{pantry.data.percentFull}}% Full
         </h2>
-        <template v-if="pantry.data.errors && pantry.data.baskets.length !== 0">
+        <template v-if="pantry.data.errors">
           <div class="banner__container banner--red banner--button" @click="toggleErrors()">
             Click to 
             {{ showErrors ? 'Hide' : 'Show' }}
@@ -168,6 +168,22 @@
         </div>
       </template>
       <template v-else>
+        <template v-if="pantry.data.errors">
+          <div class="banner__container banner--red banner--button" @click="toggleErrors()">
+            Click to 
+            {{ showErrors ? 'Hide' : 'Show' }}
+            Errors
+          </div>
+          <template v-if="showErrors">
+            <ul>
+              <li v-for="error in pantry.data.errors">
+                <span class="text--code">
+                  {{ error | trim }}
+                </span>
+              </li>
+            </ul>
+          </template>
+        </template>
         <p>
           Looks like your pantry is empty and currently has no baskets. 
         </p>
