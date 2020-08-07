@@ -1,9 +1,9 @@
 // Extarnal Libs
 
 // External Files
-import Account = require('../models/account')
-import Block = require('../models/block')
-import logService = require('../services/logger')
+import Account from '../models/account'
+import Block from '../models/block'
+import logService from '../services/logger'
 
 // Logger setup
 const logger = new logService('Block Controller')
@@ -102,4 +102,4 @@ class BlockController {
   }
 }
 
-export = BlockController
+export default BlockController

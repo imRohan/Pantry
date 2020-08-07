@@ -1,7 +1,7 @@
 // External Files
-import BlockController = require('../../src/controllers/block')
-import dataStore = require('../../src/services/dataStore')
-import mailer = require('../../src/services/mailer')
+import BlockController from '../../src/controllers/block'
+import * as dataStore from '../../src/services/dataStore'
+import * as mailer from '../../src/services/mailer'
 
 jest.mock('../../src/services/dataStore')
 jest.mock('../../src/services/mailer')

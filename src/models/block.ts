@@ -9,7 +9,7 @@ import merge = require('deepmerge')
 
 // External Files
 import { IsValidPayloadSize } from '../decorators/block'
-import dataStore = require('../services/dataStore')
+import * as dataStore from '../services/dataStore'
 
 // Interfaces
 import { IBlock } from '../interfaces/block'
@@ -85,7 +85,7 @@ class Block {
 
   public async delete(): Promise<void> {
     const _blockKey = Block.generateRedisKey(this.accountUUID, this.name)
-    await dataStore.delete(_blockKey)
+    await dataStore.remove(_blockKey)
   }
 
   public async refreshTTL(): Promise<void> {
@@ -106,4 +106,4 @@ class Block {
   }
 }
 
-export = Block
+export default Block

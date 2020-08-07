@@ -1,8 +1,8 @@
 // Extarnal Libs
 
 // External Files
-import dataStore = require('../services/dataStore')
-import logService = require('../services/logger')
+import * as dataStore from '../services/dataStore'
+import logService from '../services/logger'
 
 // Interfaces
 import { ISystemStatus } from '../interfaces/system'
@@ -36,4 +36,4 @@ class SystemController {
   }
 }
 
-export = SystemController
+export default SystemController
