@@ -1,11 +1,11 @@
 // Extarnal Libs
 
 // External Files
-import Account = require('../models/account')
-import Block = require('../models/block')
-import crm = require('../services/crm')
-import logService = require('../services/logger')
-import mailer = require('../services/mailer')
+import Account from '../models/account'
+import Block from '../models/block'
+import * as crm from '../services/crm'
+import logService from '../services/logger'
+import * as mailer from '../services/mailer'
 
 // Interfaces
 import { IAccountParams, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
@@ -82,4 +82,4 @@ class AccountController {
   }
 }
 
-export = AccountController
+export default AccountController
