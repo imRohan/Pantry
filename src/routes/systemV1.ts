@@ -2,8 +2,8 @@
 import express = require('express')
 
 // External Files
-import SystemController = require('../controllers/system')
-import logService = require('../services/logger')
+import SystemController from '../controllers/system'
+import logService from '../services/logger'
 
 // Logger setup
 const logger = new logService('API')
@@ -22,4 +22,4 @@ _systemV1Router.get('/status', async (req, res) => {
   }
 })
 
-module.exports = _systemV1Router
+export default _systemV1Router

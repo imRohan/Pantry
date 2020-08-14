@@ -2,7 +2,7 @@
 import AirTable = require('airtable')
 
 // External Files
-import logService = require('./logger')
+import logService from './logger'
 
 // Logger setup
 const logger = new logService('AirTable')

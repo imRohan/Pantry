@@ -2,9 +2,9 @@
 import express = require('express')
 
 // External Files
-import AccountController = require('../controllers/account')
-import BlockController = require('../controllers/block')
-import logService = require('../services/logger')
+import AccountController from '../controllers/account'
+import BlockController from '../controllers/block'
+import logService from '../services/logger'
 
 // Logger setup
 const logger = new logService('API')
@@ -123,4 +123,4 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
   }
 })
 
-module.exports = _apiV1Router
+export default _apiV1Router
