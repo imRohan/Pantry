@@ -12,8 +12,8 @@ import {
 import uuidv4 = require('uuid/v4')
 
 // External Files
-import dataStore = require('../services/dataStore')
-import mailer = require('../services/mailer')
+import * as dataStore from '../services/dataStore'
+import * as mailer from '../services/mailer'
 
 // Interfaces
 import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
@@ -131,7 +131,7 @@ class Account {
 
   public async delete(): Promise<void> {
     const _accountKey = Account.generateRedisKey(this.uuid)
-    await dataStore.delete(_accountKey)
+    await dataStore.remove(_accountKey)
   }
 
   public async refreshTTL(): Promise<void> {
@@ -179,4 +179,4 @@ class Account {
   }
 }
 
-export = Account
+export default Account

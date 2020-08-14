@@ -1,8 +1,8 @@
 // External Files
-import AccountController = require('../../src/controllers/account')
-import crm = require('../../src/services/crm')
-import dataStore = require('../../src/services/dataStore')
-import mailer = require('../../src/services/mailer')
+import AccountController from '../../src/controllers/account'
+import * as crm from '../../src/services/crm'
+import * as dataStore from '../../src/services/dataStore'
+import * as mailer from '../../src/services/mailer'
 
 jest.mock('../../src/services/dataStore')
 jest.mock('../../src/services/mailer')

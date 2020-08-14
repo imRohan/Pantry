@@ -13,11 +13,11 @@ import helmet = require('helmet')
 require('dotenv').config()
 
 // Routes
-import _routesV1 = require('./routes/apiV1')
-import _systemRoutesV1 = require('./routes/systemV1')
+import _routesV1 from './routes/apiV1'
+import _systemRoutesV1 from './routes/systemV1'
 
 // External files
-import logService = require('./services/logger')
+import logService from './services/logger'
 
 // Logger setup
 const logger = new logService('API')

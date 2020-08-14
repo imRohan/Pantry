@@ -1,6 +1,6 @@
 // External Files
-import SystemController = require('../../src/controllers/system')
-import dataStore = require('../../src/services/dataStore')
+import SystemController from '../../src/controllers/system'
+import * as dataStore from '../../src/services/dataStore'
 
 jest.mock('../../src/services/dataStore')
 
