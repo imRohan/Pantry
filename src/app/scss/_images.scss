@@ -28,4 +28,12 @@
   &--about {
     background-image: url('../assets/ZombieingDoodle.svg'), none;
   }
+  &__sponsor {
+    background-image: url('../assets/BitIoLogo.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 115px;
+    height: 33px;
+  }
 }
+
