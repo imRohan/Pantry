@@ -50,6 +50,10 @@ a:any-link {
     float: right;
     color: $secondary-color;
     cursor: pointer;
+    margin: 0 3px;
+    &--no-float {
+      float: inherit;
+    }
   }
   &--light {
     color: $secondary-color;

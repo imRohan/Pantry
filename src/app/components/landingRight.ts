@@ -128,6 +128,11 @@ const landingRight = {
       this.$emit('copy-text', this.pantry.id)
       this.copyPantryIdMessage = 'copied!'
     },
+    copyBasketLink(name: string) {
+      const _link =  `${API_PATH}/pantry/${this.pantry.id}/basket/${name}`
+      this.$emit('copy-text', _link)
+      alert('Basket link copied link to clipboard!')
+    },
     enterPantryName() {
       if (this.signupValid()) {
         this.showNameField = true
