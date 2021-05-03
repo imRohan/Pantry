@@ -63,6 +63,10 @@ const landingRight = {
 
       return _operational.length === _statusArray.length
     },
+
+    accountHasErrors() {
+      return this.pantry.data.errors && this.pantry.data.errors.length > 0
+    },
   },
   methods: {
     async createNewPantry() {
