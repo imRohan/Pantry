@@ -8,7 +8,12 @@ import bodyParser = require('body-parser')
 import cors = require('cors')
 import express = require('express')
 import helmet = require('helmet')
+import http = require('http')
 require('dotenv').config()
+
+// Setup Express
+const app = express()
+const server = http.createServer(app)
 
 // Routes
 import _routesV1 from './routes/apiV1'
@@ -16,25 +21,28 @@ import _systemRoutesV1 from './routes/systemV1'
 
 // External files
 import logService from './services/logger'
+import socketService from './services/socket'
 
 // Logger setup
 const logger = new logService('API')
 
 // Express server setup and start
-const server = express()
-server.use(cors())
-server.use(bodyParser.json())
-server.use(express.static(__dirname))
-server.use(helmet())
+app.use(cors())
+app.use(bodyParser.json())
+app.use(express.static(__dirname))
+app.use(helmet())
 
 // Routes
-server.use('/apiv1/system', _systemRoutesV1)
-server.use('/apiv1/pantry', _routesV1)
+app.use('/apiv1/system', _systemRoutesV1)
+app.use('/apiv1/pantry', _routesV1)
 
-server.get('/', (request, response) => {
+app.get('/', (request, response) => {
   logger.info('Served Landing Page')
   response.sendFile('index.html', { root: process.env.PWD })
 })
+
+// Socket setup
+app.set('socket', new socketService(server))
 
 function startApplication() {
   // Start the Express Server & Init the application
