@@ -135,6 +135,22 @@
       <h1>
         {{ pantry.data.name }}
       </h1>
+      <template v-if="accountHasErrors">
+        <div class="banner__container banner--red banner--button" @click="toggleErrors()">
+          Click to
+          {{ showErrors ? 'Hide' : 'Show' }}
+          Errors
+        </div>
+        <template v-if="showErrors">
+          <ul>
+            <li v-for="error in pantry.data.errors">
+              <span class="text--code">
+                {{ error | trim }}
+              </span>
+            </li>
+          </ul>
+        </template>
+      </template>
       <template v-if="pantry.data.baskets && pantry.data.baskets.length !== 0">
         <h2>
           {{pantry.data.baskets.length}}
@@ -142,22 +158,6 @@
           in this Pantry
           - {{pantry.data.percentFull}}% Full
         </h2>
-        <template v-if="pantry.data.errors && pantry.data.errors.length > 0">
-          <div class="banner__container banner--red banner--button" @click="toggleErrors()">
-            Click to 
-            {{ showErrors ? 'Hide' : 'Show' }}
-            Errors
-          </div>
-          <template v-if="showErrors">
-            <ul>
-              <li v-for="error in pantry.data.errors">
-                <span class="text--code">
-                  {{ error | trim }}
-                </span>
-              </li>
-            </ul>
-          </template>
-        </template>
         <div class="basket__container">
           <ul>
             <template v-for="basketName in pantry.data.baskets">
@@ -183,22 +183,6 @@
         </div>
       </template>
       <template v-else>
-        <template v-if="pantry.data.errors">
-          <div class="banner__container banner--red banner--button" @click="toggleErrors()">
-            Click to 
-            {{ showErrors ? 'Hide' : 'Show' }}
-            Errors
-          </div>
-          <template v-if="showErrors">
-            <ul>
-              <li v-for="error in pantry.data.errors">
-                <span class="text--code">
-                  {{ error | trim }}
-                </span>
-              </li>
-            </ul>
-          </template>
-        </template>
         <p>
           Looks like your pantry is empty and currently has no baskets. 
         </p>
