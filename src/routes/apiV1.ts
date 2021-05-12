@@ -76,6 +76,7 @@ _apiV1Router.post('/:pantryID/basket/:basketName', async (req, res) => {
     const _response = await BlockController.create(pantryID, basketName, body)
 
     res.send(_response)
+    req.app.get('socket').accountUpdated(pantryID)
   } catch (error) {
     res.status(400).send(`Could not create basket: ${error.message}`)
   }
@@ -90,6 +91,7 @@ _apiV1Router.put('/:pantryID/basket/:basketName', async (req, res) => {
     const _response = await BlockController.update(pantryID, basketName, body)
 
     res.send(_response)
+    req.app.get('socket').accountUpdated(pantryID)
   } catch (error) {
     res.status(400).send(`Could not update basket: ${error.message}`)
   }
@@ -118,6 +120,7 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
     const _response = await BlockController.delete(pantryID, basketName)
 
     res.send(_response)
+    req.app.get('socket').accountUpdated(pantryID)
   } catch (error) {
     res.status(400).send(`Could not delete basket: ${error.message}`)
   }

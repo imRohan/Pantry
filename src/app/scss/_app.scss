@@ -90,3 +90,9 @@ table {
 td {
   padding: 1em;
 }
+
+.heading__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
