@@ -151,13 +151,39 @@
           </ul>
         </template>
       </template>
-      <template v-if="pantry.data.baskets && pantry.data.baskets.length !== 0">
+      <div class="heading__container">
         <h2>
           {{pantry.data.baskets.length}}
           {{pantry.data.baskets.length > 1 ? 'Baskets' : 'Basket' }}
           in this Pantry
           - {{pantry.data.percentFull}}% Full
         </h2>
+        <template v-if="liveUpdatingEnabled()">
+          <div class="live__container">
+            Live Updating
+            <div class="live__icon">
+              <i></i>
+            </div>
+          </div>
+        </template>
+      </div>
+      <template v-if="pantry.data.baskets && pantry.data.baskets.length !== 0">
+        <template v-if="pantry.data.errors && pantry.data.errors.length > 0">
+          <div class="banner__container banner--red banner--button" @click="toggleErrors()">
+            Click to 
+            {{ showErrors ? 'Hide' : 'Show' }}
+            Errors
+          </div>
+          <template v-if="showErrors">
+            <ul>
+              <li v-for="error in pantry.data.errors">
+                <span class="text--code">
+                  {{ error | trim }}
+                </span>
+              </li>
+            </ul>
+          </template>
+        </template>
         <div class="basket__container">
           <ul>
             <template v-for="basketName in pantry.data.baskets">
@@ -184,20 +210,25 @@
       </template>
       <template v-else>
         <p>
-          Looks like your pantry is empty and currently has no baskets. 
+          To add a basket to your pantry, simply send a <b>POST</b> request
+          to our API with the <b>name</b> and the <b>payload</b> of the basket.
         </p>
         <p>
-          To add a basket to your pantry, simply send a <b>POST</b> request
-          to our API with the <b>name</b> and the <b>payload</b> of the basket
+          Feel free to keep this page open while you work to see real-time
+          updates.
+        </p>
+        <button @click="showDocs">
+          Show Me The API Docs!
+        </button>
+        <p>
+          If you're familiar with using the terminal, paste the snippet from
+          below to create your first basket, titled "testBasket"
         </p>
         <p class="text__container text--code">
           curl -XPOST -H "Content-type: application/json" -d '{
             "key": "value"
             }' '{{apiPath}}/pantry/{{this.pantry.id}}/basket/testBasket'
         </p>
-        <button @click="showDocs">
-          Show Me The API Docs!
-        </button>
       </template>
     </template>
     <template v-else>
