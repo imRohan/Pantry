@@ -2,6 +2,7 @@ export interface IAccountParams {
   name: string,
   description: string,
   contactEmail: string,
+  recaptchaResponse: string,
 }
 
 export interface IAccountUpdateParams {
