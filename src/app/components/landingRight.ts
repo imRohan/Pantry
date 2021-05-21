@@ -12,6 +12,14 @@ const landingRightTemplate = require('../templates/landingRight.html')
 // Interfaces
 const { IView } = require('../../interfaces/view.ts')
 
+/* tslint:disable */ 
+declare global {
+  interface Window {
+    grecaptcha: any
+  }
+}
+/* tslint:enable */
+
 // Constants
 const ROOT_PATH = configs.rootPath
 const API_PATH = configs.apiPath
@@ -27,6 +35,7 @@ const landingRight = {
   data() {
     return {
       apiPath: API_PATH,
+      siteKey: '6Leqqt4aAAAAAFCxWwcRO3YB6zuKKR2CGm8ACRuJ',
       systemStatus: null,
       signup: {
         email: null,
@@ -43,6 +52,7 @@ const landingRight = {
       copyPantryIdMessage: 'copy',
       socket: null,
       liveUpdating: false,
+      accountCreationInProgress: false,
     }
   },
   filters: {
@@ -74,13 +84,17 @@ const landingRight = {
   },
   methods: {
     async createNewPantry() {
+      const _recaptchaResponse = window.grecaptcha.getResponse()
       const { accountName, email } = this.signup
+
+      this.accountCreationInProgress = true
       const { data } = await axios({
         method: 'POST',
         data: {
           name: accountName,
           description: 'defaultDescription',
           contactEmail: email,
+          recaptchaResponse: _recaptchaResponse,
         },
         url: `${API_PATH}/pantry/create`,
       })
@@ -122,6 +136,9 @@ const landingRight = {
     pantryIDValid() {
       return this.pantry.id !== null
     },
+    createAccountButtonDisabled() {
+      return !this.signupNameValid() || this.accountCreationInProgress
+    },
     liveUpdatingEnabled() {
       return this.socket && this.liveUpdating
     },
@@ -144,10 +161,18 @@ const landingRight = {
       this.$emit('copy-text', _link)
       alert('Basket link copied link to clipboard!')
     },
-    enterPantryName() {
-      if (this.signupValid()) {
-        this.showNameField = true
-      }
+    beginSignup() {
+      this.showNameField = true
+    },
+    showReCaptcha() {
+      window.grecaptcha.render('recaptcha', {
+        sitekey: this.siteKey,
+      });
+    },
+    destroyReCaptcha() {
+      window.grecaptcha.reset()
+      document.getElementsByTagName('iframe')[0].remove()
+      this.recaptchaVisible = false
     },
     loadPantry() {
       if (this.pantryIDValid()) {

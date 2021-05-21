@@ -22,12 +22,10 @@
       </template>
     </p>
     <div v-if="!showNameField">
-      <div class="input__container">
-        <input v-model="signup.email" placeholder="you@example.com">
-        <button @click="enterPantryName" :disabled="!signupValid()">
-          Create a Pantry
-        </button>
-      </div>
+      <input v-model="signup.email" placeholder="you@example.com">
+      <button @click="beginSignup" :disabled="!signupValid()">
+        Create a Pantry
+      </button>
       <p v-if="signup.email && !signupValid()" class="text--light">
         Sorry, but that email is invalid.
       </p>
@@ -37,11 +35,12 @@
     </div>
     <div v-else>
       <div class="input__container">
-        <input v-model="signup.accountName" placeholder="">
-        <button @click="createNewPantry" :disabled="!signupNameValid()">
+        <input v-model="signup.accountName" v-on:focus="showReCaptcha" placeholder="">
+        <button @click="createNewPantry" :disabled="createAccountButtonDisabled()">
           Name your Pantry
         </button>
       </div>
+      <div id="recaptcha"></div>
       <p class="text--light">
         Give your Pantry a creative name
       </p>

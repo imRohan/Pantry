@@ -3,10 +3,12 @@ import AccountController from '../../src/controllers/account'
 import * as crm from '../../src/services/crm'
 import * as dataStore from '../../src/services/dataStore'
 import * as mailer from '../../src/services/mailer'
+import * as recaptcha from '../../src/services/recaptcha'
 
 jest.mock('../../src/services/dataStore')
 jest.mock('../../src/services/mailer')
 jest.mock('../../src/services/crm')
+jest.mock('../../src/services/recaptcha')
 
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
 
@@ -19,6 +21,7 @@ const _newAccountParams: IAccountParams = {
   name: 'New Account',
   description: 'Account made while testing',
   contactEmail: 'derp@flerp.com',
+  recaptchaResponse: 'derp',
 }
 
 const _updatedAccountParams: IAccountUpdateParams = {
@@ -85,6 +88,17 @@ describe('When creating an account', () => {
     await expect(AccountController.create(_invalidAccountParams))
       .rejects
       .toThrow('Validation failed:')
+  })
+
+  it ('attempts to verify the recaptcha', async () => {
+    const _spy = jest.spyOn(recaptcha, 'verify')
+
+    await AccountController.create(_newAccountParams)
+
+    expect(_spy).toHaveBeenCalled()
+    expect(_spy).toHaveBeenCalledWith(_newAccountParams.recaptchaResponse)
+
+    _spy.mockRestore()
   })
 })
 
