@@ -6,6 +6,7 @@ import Block from '../models/block'
 import * as crm from '../services/crm'
 import logService from '../services/logger'
 import * as mailer from '../services/mailer'
+import * as recaptcha from '../services/recaptcha'
 
 // Interfaces
 import { IAccountParams, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
@@ -16,6 +17,13 @@ const logger = new logService('Account Controller')
 class AccountController {
   public static async create(params: IAccountParams): Promise<string> {
     try {
+      const { recaptchaResponse } = params
+      const _verified = await recaptcha.verify(recaptchaResponse)
+
+      if (!_verified) {
+        throw new Error(`ReCaptcha Failed`)
+      }
+
       const _account = new Account(params)
       const _accountUUID = await _account.store()
 

@@ -1,5 +1,3 @@
-// Extarnal Libs
-
 // External Files
 import * as dataStore from '../services/dataStore'
 import logService from '../services/logger'
