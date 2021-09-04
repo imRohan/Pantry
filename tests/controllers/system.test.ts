@@ -17,6 +17,9 @@ afterEach(() => {
 describe('When fetching system status', () => {
   it ('returns the system status', async () => {
     mockedDataStore.ping.mockReturnValueOnce(Promise.resolve(true))
+    mockedDataStore.scan
+      .mockReturnValueOnce(Promise.resolve(['0', ['account:00000000-0000-0000-0000-000000000000']]))
+      .mockReturnValueOnce(Promise.resolve(['0', ['account:00000000-0000-0000-0000-000000000000']]))
 
     const _status: ISystemStatus = await SystemController.getStatus()
 
@@ -24,6 +27,7 @@ describe('When fetching system status', () => {
       api: true,
       website: true,
       dataStore: true,
+      totalAccounts: 1,
     })
   })
 

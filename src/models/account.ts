@@ -18,6 +18,8 @@ import * as mailer from '../services/mailer'
 // Interfaces
 import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
 
+const KEYS_PER_SCAN_ITERATION = 1_000_000;
+
 class Account {
   public static async get(uuid: string): Promise<Account> {
     const _accountKey = Account.generateRedisKey(uuid)
@@ -34,6 +36,20 @@ class Account {
     await _accountObject.refreshTTL()
 
     return _accountObject
+  }
+
+  public static async getTotalNumber(): Promise<number> {
+    const _pattern = `account:*-*-*-*-[a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9]`
+    let _total = 0
+    let _nextCursor = 0
+
+    do {
+      const [_cursor, _results] = await dataStore.scan(_nextCursor, _pattern, KEYS_PER_SCAN_ITERATION)
+      _total += _results.length
+      _nextCursor = parseInt(_cursor, 10)
+    } while (_nextCursor !== 0)
+
+    return _total
   }
 
   private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {

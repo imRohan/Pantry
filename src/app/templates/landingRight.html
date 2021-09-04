@@ -123,7 +123,7 @@
           {{ entity | capitalizeKey }}
         </span>
         <span :class="status ? 'text--green' : 'text--red'" class="text--right">
-          {{ status ? 'Operational' : 'Down' }}
+          {{ entity, status | formatStatus }}
         </span>
       </div>
     </template>
