@@ -6,6 +6,30 @@
 
 It was built to provide a simple, re-usable storage solution for smaller sized projects. It was created by developers for developers, to be there when you need it and to help you rapidly prototype your next project.
 
+## Development
+
+#### Clone the repo
+`git clone https://github.com/imRohan/Pantry.git && cd Pantry`
+
+#### Install Dependencies
+`yarn`
+
+#### Install Redis
+You will need to install Redis (v^6.2.0) on your machine and have server running
+using it's default settings
+
+#### Create & Edit a `.env` and `config.ts`
+`cp env.sample .env`
+`cp src/app/config.dev.ts src/app/config.ts`
+
+#### Build frontend assets and run server (default port 3000)
+
+`yarn run dev`
+
+#### Open Example HTML page
+
+Open `http://localhost:3000/` in the browser of your choice
+
 ## Sponsors
 ![Alt text](https://i.imgur.com/wyphsuG.png)
 
