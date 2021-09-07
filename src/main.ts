@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-// TODO
-// - Setup Travis or something to run pipelines and run tests
-
 // Get External Deps
 import bodyParser = require('body-parser')
 import cors = require('cors')
