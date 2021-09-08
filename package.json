@@ -10,7 +10,7 @@
     "type": "git"
   },
   "scripts": {
-    "dev": "concurrently -k 'tsc && node dist/src/main.js' 'webpack --config webpack.dev.js'",
+    "dev": "concurrently -k \"tsc && node dist/src/main.js\" \"webpack --config webpack.dev.js\"",
     "dev-server": "tsc && node --inspect=[0.0.0.0] dist/src/main.js",
     "linter": "tslint -c tslint.json -p tsconfig.json",
     "fix-linting": "tslint --fix -p tsconfig.json",
