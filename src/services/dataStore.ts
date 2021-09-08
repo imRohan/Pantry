@@ -84,10 +84,38 @@ export async function find(pattern: string): Promise<string[]> {
     const _keys = promisify(_redisClient.keys).bind(_redisClient)
     const _storedKeys = await _keys(pattern)
     _redisClient.quit()
-
     return _storedKeys
   } catch (error) {
     logger.error(`Error when finding keys: ${error.message}`)
+    throw new Error('Pantry is having critical issues')
+  }
+}
+
+export async function scan(
+  cursor: number,
+  pattern?: string,
+  count?: number,
+  type?: string,
+): Promise<[string, string[]]> {
+  try {
+    const _args: Array<string | number> = [cursor]
+    if (pattern) {
+      _args.push('MATCH', pattern)
+    }
+    if (count) {
+      _args.push('COUNT', count)
+    }
+    if (type) {
+      _args.push('TYPE', type)
+    }
+
+    const _redisClient = redis.createClient()
+    const _scan = promisify(_redisClient.scan).bind(_redisClient)
+    const _storedKeys = await _scan(..._args)
+    _redisClient.quit()
+    return _storedKeys
+  } catch (error) {
+    logger.error(`Error when scanning: ${error.message}`)
     throw new Error('Pantry is having critical issues')
   }
 }

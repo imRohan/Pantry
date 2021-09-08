@@ -60,7 +60,13 @@ const landingRight = {
       if (!key) { return '' }
 
       const _key = key.toString()
-      return(`${_key.charAt(0).toUpperCase()}${_key.slice(1)}`)
+      return(`${_key.charAt(0).toUpperCase()}${_key.slice(1).replace(/([A-Z][a-z])/g, ' $1')}`)
+    },
+    formatStatus(entity, status) {
+      if (entity === 'totalAccounts') {
+        return status === -1 ? 'unknown' : status.toString()
+      }
+      return status ? 'Operational' : 'Down'
     },
     trim(text) {
       return String(text).trim()
