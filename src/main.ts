@@ -18,7 +18,6 @@ import _systemRoutesV1 from './routes/systemV1'
 
 // External files
 import logService from './services/logger'
-import socketService from './services/socket'
 
 // Logger setup
 const logger = new logService('API')
@@ -37,9 +36,6 @@ app.get('/', (request, response) => {
   logger.info('Served Landing Page')
   response.sendFile('index.html', { root: process.env.PWD })
 })
-
-// Socket setup
-app.set('socket', new socketService(server))
 
 function startApplication() {
   // Start the Express Server & Init the application
