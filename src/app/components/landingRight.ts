@@ -1,7 +1,6 @@
 // External Files
 const axios = require('axios')
 const jsonView = require('vue-json-pretty').default
-const io = require('socket.io-client')
 
 // Configs
 const configs = require('../config.ts')
@@ -21,7 +20,6 @@ declare global {
 /* tslint:enable */
 
 // Constants
-const ROOT_PATH = configs.rootPath
 const API_PATH = configs.apiPath
 const DOCS_PATH = configs.docsPath
 
@@ -50,8 +48,6 @@ const landingRight = {
       showErrors: false,
       showNameField: false,
       copyPantryIdMessage: 'copy',
-      socket: null,
-      liveUpdating: false,
       accountCreationInProgress: false,
     }
   },
@@ -145,9 +141,6 @@ const landingRight = {
     createAccountButtonDisabled() {
       return !this.signupNameValid() || this.accountCreationInProgress
     },
-    liveUpdatingEnabled() {
-      return this.socket && this.liveUpdating
-    },
     getStarted() {
       this.loadPantry()
       this.$emit('change-view', IView.dashboard)
@@ -183,14 +176,12 @@ const landingRight = {
     loadPantry() {
       if (this.pantryIDValid()) {
         this.fetchPantry(this.pantry.id)
-        this.enableLiveUpdating(this.pantry.id)
       }
     },
     fetchURLParams() {
       if (this.view === IView.dashboard) {
         const _pantryId = decodeURIComponent(window.location.search.match(/(\?|&)pantryid\=([^&]*)/)[2])
         this.fetchPantry(_pantryId)
-        this.enableLiveUpdating(_pantryId)
       }
     },
     async fetchStatus() {
@@ -208,25 +199,10 @@ const landingRight = {
 
       return _positiveStatus ? _positiveMessage : _negativeMessage
     },
-    connectToSocket() {
-      this.socket = io(ROOT_PATH)
-      this.socket.on('connected', () => {
-        this.socketConnectionPresent = true
-      })
-    },
-    enableLiveUpdating(pantryID: string) {
-      if (this.socket) {
-        this.liveUpdating = true
-        this.socket.on(`${pantryID}-updated`, () => {
-          this.fetchPantry(pantryID)
-        })
-      }
-    },
   },
   mounted() {
     this.fetchURLParams()
     this.fetchStatus()
-    this.connectToSocket()
   },
 }
 

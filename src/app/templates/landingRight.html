@@ -157,14 +157,6 @@
           in this Pantry
           - {{pantry.data.percentFull}}% Full
         </h2>
-        <template v-if="liveUpdatingEnabled()">
-          <div class="live__container">
-            Live Updating
-            <div class="live__icon">
-              <i></i>
-            </div>
-          </div>
-        </template>
       </div>
       <template v-if="pantry.data.baskets && pantry.data.baskets.length !== 0">
         <div class="basket__container">
@@ -195,10 +187,6 @@
         <p>
           To add a basket to your pantry, simply send a <b>POST</b> request
           to our API with the <b>name</b> and the <b>payload</b> of the basket.
-        </p>
-        <p>
-          Feel free to keep this page open while you work to see real-time
-          updates.
         </p>
         <button @click="showDocs">
           Show Me The API Docs!
