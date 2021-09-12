@@ -3,12 +3,15 @@ import sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 // External Files
+import * as environment from './environment'
 import logService from './logger'
 
 // Logger setup
 const logger = new logService('Mailer')
 
 export async function sendWelcomeEmail(email: string, pantryID: string): Promise<void> {
+  if (environment.isDevelopment()) { return }
+
   try {
     const _email = {
       to: email,

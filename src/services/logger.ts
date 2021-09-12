@@ -5,6 +5,7 @@ require('dotenv').config()
 
 // External Files
 import { ILogLevel } from '../interfaces/logger'
+import * as environment from './environment'
 
 class Logger {
   private logClient
@@ -53,15 +54,19 @@ class Logger {
 
   private async postToSlack(level: ILogLevel, message: string) {
     try {
-      if (this.slackWebhook) {
-        const _time = new Date().toLocaleTimeString()
-        const _message = `${_time} ${level.toUpperCase()} - ${message}`
-        await axios({
-          method: 'POST',
-          data: { text: _message },
-          url: this.slackWebhook,
-        })
+      if (environment.isDevelopment()) { return }
+
+      if (this.slackWebhook === undefined) {
+        throw new Error('No Webhook Found')
       }
+
+      const _time = new Date().toLocaleTimeString()
+      const _message = `${_time} ${level.toUpperCase()} - ${message}`
+      await axios({
+        method: 'POST',
+        data: { text: _message },
+        url: this.slackWebhook,
+      })
     } catch (error) {
       this.logClient.error(`Could not post to Slack: ${error.message}`)
     }
