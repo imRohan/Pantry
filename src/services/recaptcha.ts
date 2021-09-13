@@ -3,6 +3,7 @@ import axios from 'axios'
 require('dotenv').config()
 
 // External Files
+import * as environment from './environment'
 import logService from './logger'
 
 // Logger setup
@@ -11,6 +12,8 @@ const logger = new logService('ReCaptcha')
 const _baseURL = 'https://www.google.com/recaptcha/api'
 
 export async function verify(response: string): Promise<boolean> {
+  if (environment.isDevelopment()) { return true }
+
   try {
     const { data } = await axios({
       method: 'POST',

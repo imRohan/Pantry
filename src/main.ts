@@ -17,6 +17,7 @@ import _routesV1 from './routes/apiV1'
 import _systemRoutesV1 from './routes/systemV1'
 
 // External files
+import * as environment from './services/environment'
 import logService from './services/logger'
 
 // Logger setup
@@ -39,8 +40,15 @@ app.get('/', (request, response) => {
 
 function startApplication() {
   // Start the Express Server & Init the application
+  const _port = process.env.API_SERVER_PORT
+  const _baseMessage = `Pantry is now running on port ${_port}`
+  let _bootMessage = _baseMessage
+
+  if (environment.isDevelopment()) {
+    _bootMessage = `${_baseMessage} in DEVELOPMENT MODE`
+  }
   const _serverInstance = server.listen(process.env.API_SERVER_PORT, () => {
-    logger.warn(`Pantry is now running on port ${process.env.API_SERVER_PORT}`)
+    logger.warn(_bootMessage)
   })
 
   process.on('SIGINT', () => {
