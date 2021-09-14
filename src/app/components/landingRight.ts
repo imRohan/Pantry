@@ -11,13 +11,13 @@ const landingRightTemplate = require('../templates/landingRight.html')
 // Interfaces
 const { IView } = require('../../interfaces/view.ts')
 
-/* tslint:disable */ 
+/* eslint-disable */ 
 declare global {
   interface Window {
     grecaptcha: any
   }
 }
-/* tslint:enable */
+/* eslint-enable */
 
 // Constants
 const API_PATH = configs.apiPath
@@ -30,7 +30,7 @@ const landingRight = {
     'json-view': jsonView,
   },
   template: landingRightTemplate,
-  data() {
+  data(): any {
     return {
       apiPath: API_PATH,
       siteKey: '6Leqqt4aAAAAAFCxWwcRO3YB6zuKKR2CGm8ACRuJ',
@@ -52,40 +52,42 @@ const landingRight = {
     }
   },
   filters: {
-    capitalizeKey(key) {
-      if (!key) { return '' }
+    capitalizeKey(key: boolean): string {
+      if (!key) {
+        return ''
+      }
 
       const _key = key.toString()
       return(`${_key.charAt(0).toUpperCase()}${_key.slice(1).replace(/([A-Z][a-z])/g, ' $1')}`)
     },
-    formatStatus(entity, status) {
+    formatStatus(entity: string, status: number|string): any {
       if (entity === 'totalAccounts') {
         return status === -1 ? 'unknown' : status.toString()
       }
       return status ? 'Operational' : 'Down'
     },
-    trim(text) {
+    trim(text: any): any {
       return String(text).trim()
     },
   },
   computed: {
-    isStatusPositive() {
-      if (!this.systemStatus) { return false }
+    isStatusPositive(): any {
+      if (!this.systemStatus) {
+        return false
+      }
 
       const _statusArray = Object.values(this.systemStatus)
-      const _operational = _statusArray.filter((status) => {
-        return status
-      })
+      const _operational = _statusArray.filter((status) => status)
 
       return _operational.length === _statusArray.length
     },
 
-    accountHasErrors() {
+    accountHasErrors(): any {
       return this.pantry.data.errors && this.pantry.data.errors.length > 0
     },
   },
   methods: {
-    async createNewPantry() {
+    async createNewPantry(): Promise<void> {
       const _recaptchaResponse = window.grecaptcha.getResponse()
       const { accountName, email } = this.signup
 
@@ -129,16 +131,17 @@ const landingRight = {
       this.showErrors = !this.showErrors
     },
     signupValid() {
-      const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return _emailRegix.test(String(this.signup.email).toLowerCase());
+      // eslint-disable-next-line max-len
+      const _emailRegix = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return _emailRegix.test(String(this.signup.email).toLowerCase())
     },
-    signupNameValid() {
+    signupNameValid(): boolean {
       return this.signup.accountName !== null
     },
     pantryIDValid() {
       return this.pantry.id !== null
     },
-    createAccountButtonDisabled() {
+    createAccountButtonDisabled(): boolean {
       return !this.signupNameValid() || this.accountCreationInProgress
     },
     getStarted() {
@@ -166,7 +169,7 @@ const landingRight = {
     showReCaptcha() {
       window.grecaptcha.render('recaptcha', {
         sitekey: this.siteKey,
-      });
+      })
     },
     destroyReCaptcha() {
       window.grecaptcha.reset()

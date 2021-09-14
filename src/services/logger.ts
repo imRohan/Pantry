@@ -10,7 +10,7 @@ class Logger {
   private logClient
   private slackWebhook = process.env.SLACK_LOG_WEBHOOK
 
-  constructor(name: string) {
+  public constructor(name: string) {
     this.logClient = pino({
       name,
       prettyPrint: true,

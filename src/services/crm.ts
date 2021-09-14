@@ -17,7 +17,7 @@ export async function addNewUser(email: string, pantryID: string): Promise<void>
       DateCreated: new Date(),
     })
 
-    logger.info(`Saved user details`)
+    logger.info('Saved user details')
   } catch (error) {
     logger.error(`Error when adding new user: ${error.message}`)
   }
