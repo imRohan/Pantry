@@ -11,6 +11,7 @@ jest.mock('../../src/services/crm')
 jest.mock('../../src/services/recaptcha')
 
 const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
+const mockedRecaptcha = recaptcha as jest.Mocked<typeof recaptcha>
 
 // Interfaces
 import { IAccountParams, IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../../src/interfaces/account'
@@ -100,6 +101,16 @@ describe('When creating an account', () => {
 
     _spy.mockRestore()
   })
+
+  describe('When the recaptcha fails', () => {
+    it ('throws an error', async () => {
+      mockedRecaptcha.verify.mockReturnValueOnce(Promise.resolve(false))
+
+      await expect(AccountController.create(_newAccountParams))
+        .rejects
+        .toThrow('ReCaptcha Failed')
+    })
+  })
 })
 
 describe('When updating an account', () => {
@@ -163,7 +174,11 @@ describe('When deleting an account', () => {
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
-    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([`account:${_existingAccount.uuid}::block:${_existingBlock.name}`]))
+    mockedDataStore.find.mockReturnValueOnce(
+      Promise.resolve(
+        [`account:${_existingAccount.uuid}::block:${_existingBlock.name}`]
+      )
+    )
 
     const _response = await AccountController.delete(_existingAccount.uuid)
 
