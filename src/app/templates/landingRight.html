@@ -195,10 +195,17 @@
           If you're familiar with using the terminal, paste the snippet from
           below to create your first basket, titled "testBasket"
         </p>
+        <h2>Linux</h2>
         <p class="text__container text--code">
           curl -XPOST -H "Content-type: application/json" -d '{
             "key": "value"
             }' '{{apiPath}}/pantry/{{this.pantry.id}}/basket/testBasket'
+        </p>
+        <h2>Windows - Powershell</h2>
+        <p class="text__container text--code">
+          Invoke-WebRequest -Uri '{{apiPath}}/pantry/{{this.pantry.id}}/basket/testBasket' -Method POST -ContentType 'application/json' -Body '{
+             "key": "value" 
+          }'
         </p>
       </template>
     </template>
