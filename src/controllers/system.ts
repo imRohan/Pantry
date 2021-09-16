@@ -13,7 +13,7 @@ class SystemController {
   public static async getStatus(): Promise<ISystemStatus> {
     try {
       const _dataStoreStatus = await dataStore.ping()
-      const _totalAccounts = await Account.getTotalNumber();
+      const _totalAccounts = await Account.getTotalNumber()
       const _status = {
         website: true,
         api: true,

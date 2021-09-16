@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 // Get External Deps
+import http = require('http')
 import bodyParser = require('body-parser')
 import cors = require('cors')
 import express = require('express')
 import helmet = require('helmet')
-import http = require('http')
 require('dotenv').config()
 
 // Setup Express

@@ -1,7 +1,7 @@
 // External Libs
 import crypto = require('crypto')
-import redis = require('redis')
 import { promisify } from 'util'
+import redis = require('redis')
 
 // External Files
 import logService from './logger'

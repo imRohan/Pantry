@@ -15,6 +15,28 @@ import * as dataStore from '../services/dataStore'
 import { IBlock } from '../interfaces/block'
 
 class Block {
+
+  @IsNotEmpty()
+  @IsString()
+  public accountUUID: string
+  @IsNotEmpty()
+  @IsString()
+  public name: string
+  @IsNotEmpty()
+  @IsObject()
+  @IsValidPayloadSize()
+  public payload: any
+
+  // Constants
+  private readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
+  private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
+
+  public constructor(accountUUID: string, name, payload: any) {
+    this.name = name
+    this.payload = payload
+    this.accountUUID = accountUUID
+  }
+
   public static async get(accountUUID: string, name: string): Promise<Block> {
     const _blockKey = Block.generateRedisKey(accountUUID, name)
     const _stringifiedBlock = await dataStore.get(_blockKey)
@@ -42,26 +64,6 @@ class Block {
     return `account:${accountUUID}::block:${name}`
   }
 
-  @IsNotEmpty()
-  @IsString()
-  public accountUUID: string
-  @IsNotEmpty()
-  @IsString()
-  public name: string
-  @IsNotEmpty()
-  @IsObject()
-  @IsValidPayloadSize()
-  public payload: any
-
-  // Constants
-  private readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
-  private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
-
-  constructor(accountUUID: string, name, payload: any) {
-    this.name = name
-    this.payload = payload
-    this.accountUUID = accountUUID
-  }
 
   public async store(): Promise<void> {
     const _errors = await validate(this)

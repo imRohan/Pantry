@@ -21,7 +21,7 @@ class AccountController {
       const _verified = await recaptcha.verify(recaptchaResponse)
 
       if (!_verified) {
-        throw new Error(`ReCaptcha Failed`)
+        throw new Error('ReCaptcha Failed')
       }
 
       const _account = new Account(params)
@@ -82,7 +82,7 @@ class AccountController {
       await _account.delete()
 
       logger.info(`Account: ${uuid} deleted`)
-      return `Your Pantry has been deleted!`
+      return 'Your Pantry has been deleted!'
     } catch (error) {
       logger.error(`Account deletion failed: ${error.message}`)
       throw error

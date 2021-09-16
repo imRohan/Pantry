@@ -18,48 +18,9 @@ import * as mailer from '../services/mailer'
 // Interfaces
 import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
 
-const KEYS_PER_SCAN_ITERATION = 1_000_000;
+const KEYS_PER_SCAN_ITERATION = 1_000_000
 
 class Account {
-  public static async get(uuid: string): Promise<Account> {
-    const _accountKey = Account.generateRedisKey(uuid)
-
-    const _stringifiedAccount = await dataStore.get(_accountKey)
-
-    if (!_stringifiedAccount) {
-      throw new Error(`pantry with id: ${uuid} not found`)
-    }
-
-    const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
-    const _accountObject = new Account(_accountParams)
-
-    await _accountObject.refreshTTL()
-
-    return _accountObject
-  }
-
-  public static async getTotalNumber(): Promise<number> {
-    const _pattern = `account:*-*-*-*-[a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9]`
-    let _total = 0
-    let _nextCursor = 0
-
-    do {
-      const [_cursor, _results] = await dataStore.scan(_nextCursor, _pattern, KEYS_PER_SCAN_ITERATION)
-      _total += _results.length
-      _nextCursor = parseInt(_cursor, 10)
-    } while (_nextCursor !== 0)
-
-    return _total
-  }
-
-  private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
-    const _account = JSON.parse(stringifiedAccount)
-    return _account
-  }
-
-  private static generateRedisKey(uuid: string): string {
-    return `account:${uuid}`
-  }
 
   @IsNotEmpty()
   @IsString()
@@ -88,7 +49,7 @@ class Account {
   private readonly defaultMaxNumberOfBlocks = 100
   private readonly errorsBeforeEmailSent = 5
 
-  constructor(params: any) {
+  public constructor(params: any) {
     const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks, errors } = params
     this.name = name
     this.description = description
@@ -97,6 +58,48 @@ class Account {
     this.maxNumberOfBlocks = maxNumberOfBlocks ?? this.defaultMaxNumberOfBlocks
     this.errors = errors ?? []
     this.uuid = uuid ?? uuidv4()
+  }
+
+
+  public static async get(uuid: string): Promise<Account> {
+    const _accountKey = Account.generateRedisKey(uuid)
+
+    const _stringifiedAccount = await dataStore.get(_accountKey)
+
+    if (!_stringifiedAccount) {
+      throw new Error(`pantry with id: ${uuid} not found`)
+    }
+
+    const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
+    const _accountObject = new Account(_accountParams)
+
+    await _accountObject.refreshTTL()
+
+    return _accountObject
+  }
+
+  public static async getTotalNumber(): Promise<number> {
+    // eslint-disable-next-line max-len
+    const _pattern = 'account:*-*-*-*-[a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9]'
+    let _total = 0
+    let _nextCursor = 0
+
+    do {
+      const [_cursor, _results] = await dataStore.scan(_nextCursor, _pattern, KEYS_PER_SCAN_ITERATION)
+      _total += _results.length
+      _nextCursor = parseInt(_cursor, 10)
+    } while (_nextCursor !== 0)
+
+    return _total
+  }
+
+  private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
+    const _account = JSON.parse(stringifiedAccount)
+    return _account
+  }
+
+  private static generateRedisKey(uuid: string): string {
+    return `account:${uuid}`
   }
 
   public async update(newData: Partial<IAccountUpdateParams>): Promise<void> {
@@ -158,9 +161,7 @@ class Account {
     const _accountKey = Account.generateRedisKey(this.uuid)
     const _blocks = await dataStore.find(`${_accountKey}::block:*`)
 
-    const _blocksSanitized = _blocks.map((block) => {
-      return block.split(':')[4]
-    })
+    const _blocksSanitized = _blocks.map((block) => block.split(':')[4])
 
     return _blocksSanitized
   }
