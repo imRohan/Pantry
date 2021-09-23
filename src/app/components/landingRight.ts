@@ -1,6 +1,7 @@
 // External Files
 const axios = require('axios')
 const jsonView = require('vue-json-pretty').default
+import 'vue-json-pretty/lib/styles.css'
 
 // Configs
 const configs = require('../config.ts')
