@@ -1,3 +1,5 @@
+import { IBlockInfo } from './block'
+
 export interface IAccountParams {
   name: string,
   description: string,
@@ -25,6 +27,6 @@ export interface IAccountPrivate extends IAccountBase {
 }
 
 export interface IAccountPublic extends IAccountBase {
-  baskets: string[],
+  baskets: IBlockInfo[],
   percentFull: number,
 }

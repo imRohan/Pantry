@@ -17,6 +17,7 @@ import * as mailer from '../services/mailer'
 
 // Interfaces
 import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
+import { IBlockInfo } from '../interfaces/block'
 
 const KEYS_PER_SCAN_ITERATION = 1_000_000
 
@@ -157,13 +158,16 @@ class Account {
     await this.store()
   }
 
-  public async getBlocks(): Promise<string[]> {
+  public async getBlocks(): Promise<IBlockInfo[]> {
     const _accountKey = Account.generateRedisKey(this.uuid)
-    const _blocks = await dataStore.find(`${_accountKey}::block:*`)
+    const _blockKeys = await dataStore.find(`${_accountKey}::block:*`)
+    const _blocks: IBlockInfo[] = await Promise.all(_blockKeys.map(async (key) => {
+      const _ttl = await dataStore.ttl(key)
+      const _sanitizedName = key.split(':')[4]
+      return({name: _sanitizedName, ttl: _ttl})
+    }))
 
-    const _blocksSanitized = _blocks.map((block) => block.split(':')[4])
-
-    return _blocksSanitized
+    return(_blocks)
   }
 
   public async saveError(message: string): Promise<void> {

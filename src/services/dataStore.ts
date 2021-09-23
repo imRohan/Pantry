@@ -133,3 +133,17 @@ export async function ping(): Promise<boolean> {
     return false
   }
 }
+
+export async function ttl(key: string): Promise<number> {
+  try {
+    const _redisClient = redis.createClient()
+    const _ttl = promisify(_redisClient.ttl).bind(_redisClient)
+    const _response = await _ttl(key)
+    _redisClient.quit()
+
+    return _response
+  } catch (error) {
+    logger.error(`Error when fetching ttl: ${error.message}`)
+    return -1
+  }
+}

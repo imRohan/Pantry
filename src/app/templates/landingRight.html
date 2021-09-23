@@ -161,16 +161,26 @@
       <template v-if="pantry.data.baskets && pantry.data.baskets.length !== 0">
         <div class="basket__container">
           <ul>
-            <template v-for="basketName in pantry.data.baskets">
+            <template v-for="{ name, ttl } in pantry.data.baskets">
               <li class="text__container">
-                {{ basketName }}
-                <span class="text__button" @click="toggleBasket(basketName)">
-                  {{ activeBasket === basketName ? 'Hide' : 'Show' }} Contents
+                {{ name }} - 
+                <small>
+                  Expiry Date: {{ getDateOfDeletion(ttl) }} 
+                </small>
+                <span class="text__button" title="View Contents"
+                  @click="toggleBasket(name)">
+                  <template v-if="activeBasket === name">
+                    <font-awesome-icon icon="eye-slash" />
+                  </template>
+                  <template v-else>
+                    <font-awesome-icon icon="eye" />
+                  </template>
                 </span>
-                <span class="text__button text__button--no-float" @click="copyBasketLink(basketName)">
-                  Copy Link
+                <span class="text__button" title="Copy Direct Link"
+                  @click="copyBasketLink(name)">
+                  <font-awesome-icon icon="clipboard" />
                 </span>
-                <template v-if="activeBasket === basketName">
+                <template v-if="activeBasket === name">
                   <div class="basket__payload-container">
                     <json-view
                       :deep="1"

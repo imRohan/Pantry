@@ -202,6 +202,11 @@ const landingRight = {
 
       return _positiveStatus ? _positiveMessage : _negativeMessage
     },
+    getDateOfDeletion(ttl: number): string {
+      const _currentDate = new Date()
+      _currentDate.setSeconds(ttl)
+      return _currentDate.toISOString().split('T')[0]
+    },
   },
   mounted() {
     this.fetchURLParams()
