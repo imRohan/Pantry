@@ -1,5 +1,6 @@
 # Pantry
 ![build](https://github.com/imRohan/Pantry/workflows/build/badge.svg?branch=master)
+![Maintainability](https://api.codeclimate.com/v1/badges/8f1460270ced1f60744c/maintainability)
 ![Issues Open](https://img.shields.io/github/issues/imrohan/Pantry?&logo=github)
 ![Issues Closed](https://img.shields.io/github/issues-closed-raw/imrohan/pantry?color=green&logo=github)
 [![Coverage Status](https://coveralls.io/repos/github/imRohan/Pantry/badge.svg?branch=master)](https://coveralls.io/github/imRohan/Pantry?branch=master)
