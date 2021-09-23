@@ -1,9 +1,16 @@
 // External Files
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faEye, faEyeSlash, faClipboard } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const vue = require('vue')
 const vueClipboard = require('vue-clipboard2')
 
 // Vue Setup
 vue.use(vueClipboard)
+vue.component('font-awesome-icon', FontAwesomeIcon)
+library.add(faClipboard)
+library.add(faEye)
+library.add(faEyeSlash)
 
 // CSS
 require('./scss/main.scss')

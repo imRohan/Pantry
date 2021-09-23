@@ -5,6 +5,7 @@ const dataStore = {
   find: jest.fn(async () => { }),
   scan: jest.fn(async () => { }),
   ping: jest.fn(async () => { }),
+  ttl: jest.fn(async () => { }),
 }
 
 export = dataStore

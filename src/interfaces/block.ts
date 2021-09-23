@@ -3,3 +3,8 @@ export interface IBlock {
   name: string,
   payload: any,
 }
+
+export interface IBlockInfo {
+  name: string,
+  ttl: number,
+}
