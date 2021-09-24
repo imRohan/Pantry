@@ -30,3 +30,7 @@ export interface IAccountPublic extends IAccountBase {
   baskets: IBlockInfo[],
   percentFull: number,
 }
+
+export interface IAccountRequestParams {
+  pantryID: string,
+}
