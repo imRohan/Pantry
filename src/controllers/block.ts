@@ -57,15 +57,7 @@ class BlockController {
 
   public static async update(accountUUID: string, name: string, data: any): Promise<any> {
     try {
-      let _block
-      const _account = await Account.get(accountUUID)
-
-      try {
-        _block = await Block.get(accountUUID, name)
-      } catch (error) {
-        await _account.saveError(error.message)
-        throw error
-      }
+      const _block = await BlockController.fetchBlock(accountUUID, name)
 
       await _block.update(data)
       const _blockDetails = _block.sanitize()
@@ -80,16 +72,7 @@ class BlockController {
 
   public static async delete(accountUUID: string, name: string): Promise<string> {
     try {
-      let _block
-
-      const _account = await Account.get(accountUUID)
-
-      try {
-        _block = await Block.get(accountUUID, name)
-      } catch (error) {
-        await _account.saveError(error.message)
-        throw error
-      }
+      const _block = await BlockController.fetchBlock(accountUUID, name)
 
       logger.info(`Removing block from account: ${accountUUID}`)
       await _block.delete()
@@ -97,6 +80,19 @@ class BlockController {
       return `${name} was removed from your Pantry!`
     } catch (error) {
       logger.error(`Block deletion failed: ${error.message}, account: ${accountUUID}`)
+      throw error
+    }
+  }
+
+  private static async fetchBlock(accountUUID: string, name: string): Promise<Block> {
+    const _account = await Account.get(accountUUID)
+
+    try {
+      const _block = await Block.get(accountUUID, name)
+
+      return _block
+    } catch (error) {
+      await _account.saveError(error.message)
       throw error
     }
   }

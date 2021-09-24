@@ -8,3 +8,8 @@ export interface IBlockInfo {
   name: string,
   ttl: number,
 }
+
+export interface IBlockRequestParams {
+  pantryID: string,
+  basketName: string,
+}
