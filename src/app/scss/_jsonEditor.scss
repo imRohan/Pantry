@@ -1,0 +1,23 @@
+.jsoneditor {
+  border-color: $orange !important;
+
+  &-menu {
+    background-color: $darkOrange !important;
+    border-color: $darkOrange !important;
+    a {
+      display: none;
+    }
+  }
+
+  &-modes {
+    display: none;
+  }
+
+  &-btns {
+    button {
+      background: $primary-color !important;
+      padding: 0.5em 2em !important;
+      color: $white !important;
+    }
+  }
+}

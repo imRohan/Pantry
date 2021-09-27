@@ -38,6 +38,13 @@ a:any-link {
     background: rgba(255,255,255,0.5);
     color: $text-color;
     overflow-wrap: anywhere;
+
+    &--button {
+      background: $primary-color;
+      color: $white;
+      cursor: pointer;
+      text-align: center;
+    }
   }
   &--code {
     font-family: 'courier', 'sans-serif';

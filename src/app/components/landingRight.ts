@@ -1,7 +1,5 @@
 // External Files
 const axios = require('axios')
-const jsonView = require('vue-json-pretty').default
-import 'vue-json-pretty/lib/styles.css'
 
 // Configs
 const configs = require('../config.ts')
@@ -11,6 +9,9 @@ const landingRightTemplate = require('../templates/landingRight.html')
 
 // Interfaces
 const { IView } = require('../../interfaces/view.ts')
+
+// Components
+const basket = require('./basket.ts')
 
 /* eslint-disable */ 
 declare global {
@@ -28,7 +29,7 @@ const landingRight = {
   props: ['view'],
   name: 'landingRight',
   components: {
-    'json-view': jsonView,
+    basket,
   },
   template: landingRightTemplate,
   data(): any {
@@ -44,7 +45,6 @@ const landingRight = {
         id: null,
         data: null,
       },
-      basket: null,
       activeBasket: null,
       showErrors: false,
       showNameField: false,
@@ -117,14 +117,8 @@ const landingRight = {
     },
     async toggleBasket(name: string) {
       if (this.activeBasket === name) {
-        this.basket = null
         this.activeBasket = null
       } else {
-        const { data } = await axios({
-          method: 'GET',
-          url: `${API_PATH}/pantry/${this.pantry.id}/basket/${name}`,
-        })
-        this.basket = data
         this.activeBasket = name
       }
     },
@@ -159,10 +153,8 @@ const landingRight = {
       this.$emit('copy-text', this.pantry.id)
       this.copyPantryIdMessage = 'copied!'
     },
-    copyBasketLink(name: string) {
-      const _link =  `${API_PATH}/pantry/${this.pantry.id}/basket/${name}`
-      this.$emit('copy-text', _link)
-      alert('Basket link copied link to clipboard!')
+    copyText(text: string) {
+      this.$emit('copy-text', text)
     },
     beginSignup() {
       this.showNameField = true
@@ -203,10 +195,24 @@ const landingRight = {
 
       return _positiveStatus ? _positiveMessage : _negativeMessage
     },
-    getDateOfDeletion(ttl: number): string {
-      const _currentDate = new Date()
-      _currentDate.setSeconds(ttl)
-      return _currentDate.toISOString().split('T')[0]
+    async refreshDashboard(): Promise<void> {
+      this.fetchPantry(this.pantry.id)
+    },
+    async createNewBasket(): Promise<void> {
+      const _randomNumber = Math.floor((Math.random() * 100) + 1)
+      const _defaultName = `newBasket${_randomNumber}`
+      const _name = prompt('What is the name of the new basket?', _defaultName)
+      if (_name) {
+        await axios({
+          method: 'POST',
+          data: {
+            key: 'value',
+          },
+          url: `${API_PATH}/pantry/${this.pantry.id}/basket/${_name}`,
+        })
+
+        this.fetchPantry(this.pantry.id)
+      }
     },
   },
   mounted() {
