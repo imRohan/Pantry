@@ -10,10 +10,17 @@
     </h1>
     <p>
       <template v-if="!showNameField">
-        Focus your efforts on building your next project and leave the
-        data storage to us. We'll help speed up your development time
-        letting you build awesome things fast! Try out our API, and start
-        securely storing data on the cloud for free!
+        <p>
+          Focus your efforts on building your next project and leave the
+          data storage to us. We'll help speed up your development time,
+          letting you build awesome things fast! By using our API, you can start
+          securely storing JSON data on the cloud for free in just 2 minutes.
+        </p>
+        <p>
+          Don't want to use our API? That's ok. We've built a powerful
+          dashboard so you can view and edit your Pantry's contents right from
+          your browser.
+        </p>
       </template>
       <template v-else>
         Let's give your pantry a name! This could be the name of your project
@@ -162,50 +169,40 @@
         <div class="basket__container">
           <ul>
             <template v-for="{ name, ttl } in pantry.data.baskets">
-              <li class="text__container">
-                {{ name }} - 
-                <small>
-                  Expiry Date: {{ getDateOfDeletion(ttl) }} 
-                </small>
-                <span class="text__button" title="View Contents"
-                  @click="toggleBasket(name)">
-                  <template v-if="activeBasket === name">
-                    <font-awesome-icon icon="eye-slash" />
-                  </template>
-                  <template v-else>
-                    <font-awesome-icon icon="eye" />
-                  </template>
-                </span>
-                <span class="text__button" title="Copy Direct Link"
-                  @click="copyBasketLink(name)">
-                  <font-awesome-icon icon="clipboard" />
-                </span>
-                <template v-if="activeBasket === name">
-                  <div class="basket__payload-container">
-                    <json-view
-                      :deep="1"
-                      :showLength="true"
-                      :data="basket"/>
-                  </div>
-                </template>
-              </li> 
+              <basket :pantry="pantry"
+                      :name="name"
+                      :ttl="ttl"
+                      :active="activeBasket === name"
+                      @update="refreshDashboard"
+                      @toggle-basket="toggleBasket"
+                      @copy-basket-path="copyText">
+              </basket>
             </template>
+            <li class="ga-event-create-basket-lazy text__container text__container--button"
+                @click="createNewBasket">
+              Create New Basket
+            </li> 
           </ul>
         </div>
       </template>
       <template v-else>
         <p>
-          To add a basket to your pantry, simply send a <b>POST</b> request
+          The Pantry API is organized around
+          <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a>.
+          To get started, add a basket to your pantry by sending a <b>POST</b> request
           to our API with the <b>name</b> and the <b>payload</b> of the basket.
+        </p>
+        <p>
+          Or, if you're familiar with using the terminal, paste a snippet from
+          below to create your first basket, titled "testBasket"
         </p>
         <button @click="showDocs">
           Show Me The API Docs!
         </button>
-        <p>
-          If you're familiar with using the terminal, paste the snippet from
-          below to create your first basket, titled "testBasket"
-        </p>
-        <h2>Linux</h2>
+        <button class="ga-event-create-basket" @click="createNewBasket">
+          I'm lazy, create a basket now!
+        </button>
+        <h2>Unix/Linux - Curl</h2>
         <p class="text__container text--code">
           curl -XPOST -H "Content-type: application/json" -d '{
             "key": "value"
@@ -222,12 +219,13 @@
     <template v-else>
       <h1>View Your Pantry</h1>
       <p>
-        Don't want to use our API? It's ok, we've all been there.
-        Enter your PantryID below and we'll show you what's inside it! 
+        Enter your PantryID below and we'll show you what's inside it. You'll
+        also be able to create new baskets, edit their JSON content and delete
+        existing baskets.
       </p>
       <div class="input__container">
         <input v-model="pantry.id" placeholder="Please paste your PantryID">
-        <button @click="loadPantry" :disabled="!pantryIDValid()">
+        <button class="ga-event-dashboard-login" @click="loadPantry" :disabled="!pantryIDValid()">
           Explore
         </button>
       </div>
