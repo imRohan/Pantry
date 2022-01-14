@@ -87,6 +87,15 @@ table {
   width: 100%;
 }
 
+.table {
+  &--borderless {
+    border: none;
+    td:not(:first-child) {
+      text-align: center;
+    }
+  }
+}
+
 td {
   padding: 1em;
 }

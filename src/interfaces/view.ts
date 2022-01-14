@@ -4,4 +4,5 @@ export enum IView {
   about = 'about',
   dashboard = 'dashboard',
   status = 'status',
+  sdk = 'sdk',
 }

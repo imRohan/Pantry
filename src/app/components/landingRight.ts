@@ -12,6 +12,8 @@ const { IView } = require('../../interfaces/view.ts')
 
 // Components
 const basket = require('./basket.ts')
+const dashboardEmpty = require('./dashboardEmpty.ts')
+const sdk = require('./sdk.ts')
 
 /* eslint-disable */ 
 declare global {
@@ -30,6 +32,8 @@ const landingRight = {
   name: 'landingRight',
   components: {
     basket,
+    dashboardEmpty,
+    sdk,
   },
   template: landingRightTemplate,
   data(): any {
@@ -62,7 +66,7 @@ const landingRight = {
       return(`${_key.charAt(0).toUpperCase()}${_key.slice(1).replace(/([A-Z][a-z])/g, ' $1')}`)
     },
     formatStatus(entity: string, status: number|string): any {
-      if (entity === 'totalAccounts') {
+      if (entity === 'activeAccounts') {
         return status === -1 ? 'unknown' : status.toString()
       }
       return status ? 'Operational' : 'Down'

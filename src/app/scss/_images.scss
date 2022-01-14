@@ -13,7 +13,7 @@
     background-repeat: no-repeat;
     z-index: 2;
   }
-  &--hero {
+  &--home {
     background-image: url('../assets/MeditatingDoodle.svg'), none;
   }
   &--created {
@@ -30,6 +30,9 @@
   }
   &--status {
     background-image: url('../assets/RollerSkatingDoodle.svg'), none;
+  }
+  &--sdk {
+    background-image: url('../assets/RunningDoodle.svg'), none;
   }
   &__sponsor {
     background-image: url('../assets/BitIoLogo.png');

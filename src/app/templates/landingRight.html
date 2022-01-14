@@ -136,6 +136,10 @@
     </template>
   </template>
 
+  <template v-if="view === 'sdk'">
+    <sdk />
+  </template>
+
   <template v-if="view === 'dashboard'">
     <template v-if="pantry.data">
       <h1>
@@ -175,8 +179,7 @@
                       :active="activeBasket === name"
                       @update="refreshDashboard"
                       @toggle-basket="toggleBasket"
-                      @copy-basket-path="copyText">
-              </basket>
+                      @copy-basket-path="copyText" />
             </template>
             <li class="ga-event-create-basket-lazy text__container text__container--button"
                 @click="createNewBasket">
@@ -186,34 +189,8 @@
         </div>
       </template>
       <template v-else>
-        <p>
-          The Pantry API is organized around
-          <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a>.
-          To get started, add a basket to your pantry by sending a <b>POST</b> request
-          to our API with the <b>name</b> and the <b>payload</b> of the basket.
-        </p>
-        <p>
-          Or, if you're familiar with using the terminal, paste a snippet from
-          below to create your first basket, titled "testBasket"
-        </p>
-        <button @click="showDocs">
-          Show Me The API Docs!
-        </button>
-        <button class="ga-event-create-basket" @click="createNewBasket">
-          I'm lazy, create a basket now!
-        </button>
-        <h2>Unix/Linux - Curl</h2>
-        <p class="text__container text--code">
-          curl -XPOST -H "Content-type: application/json" -d '{
-            "key": "value"
-            }' '{{apiPath}}/pantry/{{this.pantry.id}}/basket/testBasket'
-        </p>
-        <h2>Windows - Powershell</h2>
-        <p class="text__container text--code">
-          Invoke-WebRequest -Uri '{{apiPath}}/pantry/{{this.pantry.id}}/basket/testBasket' -Method POST -ContentType 'application/json' -Body '{
-             "key": "value" 
-          }'
-        </p>
+        <dashboardEmpty :pantry="pantry"
+                        @update="refreshDashboard" />
       </template>
     </template>
     <template v-else>
