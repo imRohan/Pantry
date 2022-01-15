@@ -1,5 +1,7 @@
 // External Libs
 import express = require('express')
+import expressBrute = require('express-brute')
+import redisStore = require('express-brute-redis')
 
 // External Files
 import AccountController from '../controllers/account'
@@ -13,13 +15,20 @@ import { IBlockRequestParams } from '../interfaces/block'
 // Logger setup
 const logger = new logService('API')
 
+// Express Brute setup
+const store = new redisStore()
+const bruteForce = new expressBrute(store, {
+  freeRetries: 30,
+  minWait: 10000, // 10s
+  maxWait: 60000, // 1min
+})
+
 // Router setup
 const _apiV1Router = express.Router()
 
 _apiV1Router.post('/create', async (req, res) => {
   try {
     const { body } = req
-
 
     logger.info('[POST] Create Account', body)
     const _newAccountUUID = await AccountController.create(body)
@@ -98,18 +107,21 @@ _apiV1Router.put('/:pantryID/basket/:basketName', async (req, res) => {
   }
 })
 
-_apiV1Router.get('/:pantryID/basket/:basketName', async (req, res) => {
-  try {
-    const { pantryID, basketName } = basketParams(req)
+_apiV1Router.get('/:pantryID/basket/:basketName',
+  bruteForce.prevent,
+  async (req, res) => {
+    try {
+      const { pantryID, basketName } = basketParams(req)
 
-    logger.info('[GET] Get Basket', { pantryID, basketName })
-    const _response = await BlockController.get(pantryID, basketName)
+      logger.info('[GET] Get Basket', { pantryID, basketName })
+      const _response = await BlockController.get(pantryID, basketName)
 
-    res.send(_response)
-  } catch (error) {
-    res.status(400).send(`Could not get basket: ${error.message}`)
+      res.send(_response)
+    } catch (error) {
+      res.status(400).send(`Could not get basket: ${error.message}`)
+    }
   }
-})
+)
 
 _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
   try {
