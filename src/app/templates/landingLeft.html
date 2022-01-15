@@ -22,22 +22,5 @@
       fill="#f9e9e987" />
     </g>
   </svg>
-  <template v-if="view === 'home'">
-    <div class="images__character images--hero"></div>
-  </template>
-  <template v-if="view === 'created'">
-    <div class="images__character images--created"></div>
-  </template>
-  <template v-if="view === 'getStarted'">
-    <div class="images__character images--getStarted"></div>
-  </template>
-  <template v-if="view === 'about'">
-    <div class="images__character images--about"></div>
-  </template>
-  <template v-if="view === 'dashboard'">
-    <div class="images__character images--dashboard"></div>
-  </template>
-  <template v-if="view === 'status'">
-    <div class="images__character images--status"></div>
-  </template>
+  <div :class="'images__character images--' + view"></div>
 </div>

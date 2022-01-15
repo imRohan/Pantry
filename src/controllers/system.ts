@@ -18,7 +18,7 @@ class SystemController {
         website: true,
         api: true,
         dataStore: _dataStoreStatus,
-        totalAccounts: _totalAccounts,
+        activeAccounts: _totalAccounts,
       }
 
       logger.info('System status retrieved')
@@ -30,7 +30,7 @@ class SystemController {
         website: true,
         api: true,
         dataStore: false,
-        totalAccounts: -1,
+        activeAccounts: -1,
       }
       return _errorStatus
     }

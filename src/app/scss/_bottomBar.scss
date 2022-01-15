@@ -1,6 +1,6 @@
 .bottomBar {
   &__container {
-    grid-column-start: 1;
+    grid-column-start: 3;
     grid-column-end: 5;
     grid-row-start: 3;
     grid-row-end: 4;
@@ -8,10 +8,10 @@
     padding: 0em 2em;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: right;
     font-size: 0.8em;
   }
-  &__link, &__sponsor {
+  &__link {
     color: $secondary-color;
     font-weight: bold;
     cursor: pointer;

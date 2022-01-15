@@ -1,0 +1,32 @@
+<div>
+  <p>
+    Our API is organized around
+    <a target="blank"
+       href="https://en.wikipedia.org/wiki/Representational_state_transfer">
+      REST
+    </a>, and accepts JSON-encoded request bodies. To get started, please create
+    your first basket in your pantry by following our API documentation.
+  </p>
+  <button @click="showDocs">
+    Show Me The API Docs!
+  </button>
+  <button @click="createNewBasket">
+    I'm lazy, create a basket now!
+  </button>
+  <p>
+    Or, if you're familiar with using the terminal, paste a snippet from
+    below to create your first basket, titled "testBasket"
+  </p>
+  <h2>Unix/Linux - Curl</h2>
+  <p class="text__container text--code">
+    curl -XPOST -H "Content-type: application/json" -d '{
+      "key": "value"
+      }' '{{apiPath}}/pantry/{{this.pantry.id}}/basket/testBasket'
+  </p>
+  <h2>Windows - Powershell</h2>
+  <p class="text__container text--code">
+    Invoke-WebRequest -Uri '{{apiPath}}/pantry/{{this.pantry.id}}/basket/testBasket' -Method POST -ContentType 'application/json' -Body '{
+       "key": "value" 
+    }'
+  </p>
+</div>

@@ -27,7 +27,7 @@ describe('When fetching system status', () => {
       api: true,
       website: true,
       dataStore: true,
-      totalAccounts: 1,
+      activeAccounts: 1,
     })
   })
 

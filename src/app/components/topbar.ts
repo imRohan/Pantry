@@ -30,6 +30,9 @@ const topbar = {
     goHome() {
       this.$emit('change-view', IView.home)
     },
+    showSDK() {
+      this.$emit('change-view', IView.sdk)
+    },
   },
 }
 
