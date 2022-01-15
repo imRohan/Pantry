@@ -25,7 +25,7 @@ const logger = new logService('API')
 
 // Express server setup and start
 app.use(cors())
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '1mb' }))
 app.use(express.static(__dirname))
 app.use(helmet())
 
