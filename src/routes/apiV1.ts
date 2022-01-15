@@ -18,10 +18,10 @@ const logger = new logService('API')
 // Express Brute setup
 const store = new redisStore()
 const bruteForce = new expressBrute(store, {
-  freeRetries: 9,
+  freeRetries: 19,
   minWait: 5000, // 5s
   maxWait: 10000, // 10s
-  lifetime: 10 // 10s,
+  lifetime: 10, // 10s,
 })
 
 // Router setup
