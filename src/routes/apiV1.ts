@@ -15,13 +15,14 @@ import { IBlockRequestParams } from '../interfaces/block'
 // Logger setup
 const logger = new logService('API')
 
-// Express Brute setup
+// Express Brute setup (1 request per 1/2 sec)
 const store = new redisStore()
 const bruteForce = new expressBrute(store, {
-  freeRetries: 19,
-  minWait: 5000, // 5s
-  maxWait: 10000, // 10s
+  freeRetries: 5,
+  minWait: 9000, // 9s
+  maxWait: 9000, // 9s
   lifetime: 10, // 10s,
+  refreshTimeoutOnRequest: false,
 })
 
 // Router setup
