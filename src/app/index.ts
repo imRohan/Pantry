@@ -1,17 +1,5 @@
 // External Files
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faEye, faEyeSlash, faClipboard, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const vue = require('vue')
-const vueClipboard = require('vue-clipboard2')
-
-// Vue Setup
-vue.use(vueClipboard)
-vue.component('font-awesome-icon', FontAwesomeIcon)
-library.add(faClipboard)
-library.add(faEye)
-library.add(faEyeSlash)
-library.add(faTrash)
 
 // CSS
 require('./scss/main.scss')
@@ -20,17 +8,14 @@ require('./scss/main.scss')
 const { IView } = require('../interfaces/view.ts')
 
 // Components
-const landingLeft = require('./components/landingLeft.ts')
-const landingRight = require('./components/landingRight.ts')
+const mainContent = require('./components/mainContent.ts')
 const topbar = require('./components/topbar.ts')
 const bottomBar = require('./components/bottomBar.ts')
-
 
 const pantry = new vue({
   el: '.app',
   components: {
-    landingLeft,
-    landingRight,
+    mainContent,
     topbar,
     bottomBar,
   },
@@ -42,10 +27,6 @@ const pantry = new vue({
   methods: {
     changeView(view: string) {
       this.view = IView[view]
-    },
-    copyText(text: string) {
-      const _container = this.$refs.container
-      this.$copyText(text, _container)
     },
     checkIfInView() {
       if (window.location.search) {

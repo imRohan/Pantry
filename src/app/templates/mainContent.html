@@ -1,0 +1,25 @@
+<div class="landing__right">
+  <template v-if="view === 'home'">
+    <home @account-created="displayOnboarding" @change-view="changeView" />
+  </template>
+
+  <template v-if="view === 'created'">
+    <onboarding :pantryID="pantryID" @change-view="changeView" />
+  </template>
+
+  <template v-if="view === 'about'">
+    <about />
+  </template>
+
+  <template v-if="view === 'status'">
+    <systemStatus />
+  </template>
+
+  <template v-if="view === 'sdk'">
+    <sdk />
+  </template>
+
+  <template v-if="view === 'dashboard'">
+    <dashboard :pantryID="pantryID"/>
+  </template>
+</div>

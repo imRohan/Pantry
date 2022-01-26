@@ -1,26 +1,67 @@
-<div>
-  <h1>
-    Developer Tools
-  </h1>
+<main class="-mt-44">
+  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+      <div class="relative px-4 sm:px-6 lg:px-8">
+        <div class="text-lg max-w-prose mx-auto">
+          <h1>
+            <span class="block text-base text-center text-orange-600
+                         font-semibold tracking-wide uppercase">
+              Libraries and SDK's
+            </span>
+            <span class="mt-2 block text-3xl text-center leading-8
+                         font-extrabold tracking-tight text-gray-900
+                         sm:text-4xl">
+              Developer Tools
+            </span>
+          </h1>
+          <p class="mt-8 text-xl text-gray-500 leading-8">
+            Speed up development by integrating Pantry into your
+            application using one of these libraries.
+          </p>
 
-  <p>
-    Get up and running with these user-created helper libraries, and integration tools.
-  </p>
-
-  <table class="table--borderless">
-    <thead>
-      <th></th> 
-      <th>Platform</th> 
-      <th>Documentation</th> 
-    </thead> 
-    <tbody>
-      <template v-for="sdk in sdks">
-        <tr>
-          <td class="text--key">{{ sdk.name }}</td>
-          <td>{{ sdk.platform }}</td>
-          <td><a :href="sdk.link">{{ sdk.hostPlatform }}</a></td>
-        </tr>
-      </template>
-    </tbody>
-  </table>
-</div>
+          <div>
+            <ul role="list" class="mt-3 grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-2">
+              <template v-for="sdk in sdks">
+                <li class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200">
+                  <div class="w-full flex items-center justify-between p-6 space-x-6">
+                    <div class="flex-1 truncate">
+                      <div class="flex items-center space-x-3">
+                        <h3 class="text-gray-900 text-sm font-medium truncate">
+                          {{ sdk.name }}
+                        </h3>
+                        <span class="flex-shrink-0 inline-block px-2 py-0.5
+                                     text-green-800 text-xs font-medium
+                                     bg-green-100 rounded-full">
+                          {{ sdk.platform }}
+                        </span>
+                      </div>
+                      <p class="mt-1 text-gray-500 text-sm truncate">
+                        Author: {{ sdk.author }}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="-mt-px flex divide-x divide-gray-200">
+                      <div class="w-0 flex-1 flex">
+                        <a :href="sdk.link" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                          <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"><path
+                            stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0
+                            002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10
+                            14"></path></svg></path></svg>
+                          <span class="ml-3">View Project</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

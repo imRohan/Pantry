@@ -1,9 +1,10 @@
 .jsoneditor {
   border-color: $orange !important;
+  border-radius: 0.375rem;
 
   &-menu {
-    background-color: $darkOrange !important;
-    border-color: $darkOrange !important;
+    background-color: $orange !important;
+    border-color: $orange !important;
     a {
       display: none;
     }
@@ -20,4 +21,8 @@
       color: $white !important;
     }
   }
+}
+
+.ace-jsoneditor {
+  min-height: 50vh !important;
 }

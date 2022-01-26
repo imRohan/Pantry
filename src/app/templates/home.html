@@ -1,0 +1,28 @@
+<div>
+  <banner :promo="promo" @cta-clicked="bannerCTAClicked" />
+  <div class="pt-5 bg-orange-100 pb-10 lg:overflow-hidden">
+    <div class="pt-5 pb-5 bg-orange-100 mx-auto max-w-7xl lg:px-8">
+      <div class="lg:grid lg:grid-cols-2 lg:gap-8">
+        <div class="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
+          <div>
+            <template v-if="finishOnboarding">
+              <finishSignup @store-name="beginRegistration" />
+            </template>
+            <template v-else>
+              <initialSignup @show-recaptcha="showReCaptcha"
+                             @store-email="beginSignup" />
+            </template>
+            <div class="mt-8" id="recaptcha"></div>
+          </div>
+        </div>
+        <div class="flex justify-center items-center">
+          <div class="images__character images--home images--floating"></div>
+        </div>
+      </div>
+    </div>
+    <features />
+    <example />
+    <stats />
+    <quote />
+  </div>
+</div>

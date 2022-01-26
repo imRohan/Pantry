@@ -1,0 +1,78 @@
+<main class="flex-1">
+  <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 md:px-8">
+    <div class="relative px-4 sm:px-6 lg:px-8">
+      <div class="prose max-w-prose mx-auto">
+        <h1>
+          <span class="block text-base text-center text-orange-600 font-semibold tracking-wide uppercase">
+          Welcome to Pantry
+          </span>
+          <span class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            Getting Started
+          </span>
+        </h1>
+
+        <p class="mt-8 text-gray-500 leading-8">
+          The API is organized around
+          <a target="blank"
+             class="font-medium text-orange-600 hover:text-orange-500"
+             href="https://en.wikipedia.org/wiki/Representational_state_transfer">
+            REST,
+          </a>
+          and accepts JSON-encoded request bodies. To get started, <b>create
+          your first basket</b> in your pantry by following our
+          <span @click="showDocs"
+             class="font-medium text-orange-600 hover:text-orange-500">
+            API documentation.
+          </span>
+        </p>
+
+        <p class="mt-3 text-gray-500 leading-8">
+          If you're ok using the terminal, paste a snippet from
+          below to create your first basket.
+        </p>
+
+        <p class="mt-3 text-gray-500 leading-8">
+          Or, click on 'Create new basket' from the sidebar on the left and use
+          our dashboard to create one.
+        </p>
+
+        <div class="-ml-2 mt-5 flex flex-wrap items-baseline">
+          <h3 class="ml-2 mt-2 text-lg leading-6 font-medium text-gray-900">
+            Curl
+          </h3>
+          <p class="ml-2 mt-1 text-sm text-gray-500 truncate">
+            Unix/Linux
+          </p>
+        </div>
+        <p class="mt-3 py-3 px-4 text-white bg-gray-700 rounded-md">
+          curl -XPOST -H "Content-type: application/json" -d '{
+            "key": "value"
+            }' '{{apiPath}}/pantry/{{this.pantryId}}/basket/testBasket'
+        </p>
+
+        <div class="-ml-2 mt-5 flex flex-wrap items-baseline">
+          <h3 class="ml-2 mt-2 text-lg leading-6 font-medium text-gray-900">
+            Powershell
+          </h3>
+          <p class="ml-2 mt-1 text-sm text-gray-500 truncate">
+            Windows
+          </p>
+        </div>
+
+        <p class="mt-3 py-3 px-4 text-white bg-gray-700 rounded-md">
+          Invoke-WebRequest -Uri '{{apiPath}}/pantry/{{this.pantryId}}/basket/testBasket' -Method POST -ContentType 'application/json' -Body '{
+             "key": "value" 
+          }'
+        </p>
+
+        <button @click="showDocs" class="mt-8 min-w-full px-6 py-3
+                        border border-transparent text-base font-medium
+                        rounded-md shadow-sm text-white bg-orange-500
+                        hover:bg-orange-600 focus:outline-none focus:ring-2
+                        focus:ring-offset-2 focus:ring-orange-300" >
+          Show Me The API Docs!
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
