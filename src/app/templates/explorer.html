@@ -1,0 +1,45 @@
+<div class="inset-0 flex z-40">
+  <div class="hidden md:flex md:w-64 md:flex-col md:inset-y-0">
+    <div class="flex flex-col flex-grow border-r border-gray-200 bg-white overflow-y-auto">
+      <div class="flex items-center flex-shrink-0 px-4">
+        <span class="text-lg leading-6 font-medium text-gray-900">
+          {{ pantry.name }}
+        </span>
+        <span class="ml-2 mt-1 text-sm text-gray-500 truncate">
+          {{ pantry.percentFull}}% Full
+        </span>
+      </div>
+      <div class="mt-5 flex-grow flex flex-col">
+        <nav class="flex-1 px-2 pb-4 space-y-1">
+          <template v-for="{ name, ttl } in pantry.baskets">
+            <a href="#"
+               :class="[activeBasket === name ? 'bg-gray-100' : '']"
+               class="hover:bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+               @click="viewBasket(name)">
+              {{ name }}
+            </a>
+          </template>
+          <a href="#"
+             class="hover:bg-green-100 rounded-md text-gray-900 group flex items-center px-2 py-2 text-sm font-medium"
+             @click="createBasket">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+            </svg>
+            Create new basket
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col flex-1">
+    <template v-if="isPantryEmpty">
+      <explorerEmpty :pantry-id="pantry.id" />
+    </template>
+    <template v-else-if="basket">
+      <basket :pantry-id="pantry.id" :basket="basket" @update="refresh"/>
+    </template>
+    <template v-else>
+      <explorerOnboarding @load-basket="loadBasket" />
+    </template>
+  </div>
+</div>

@@ -1,45 +1,37 @@
 .images {
-  &--blob {
-    top: 0;
-    position: fixed;
-    z-index: 1;
-    overflow: visible;
-  }
   &__character {
-    position: fixed;
-    width: 30vw;
-    height: 30vw;
-    left: 0;
+    width: 26vw;
+    height: 36vh;
     background-repeat: no-repeat;
     z-index: 2;
   }
+
+  &__hero {
+    width: 50%;
+    height: 30vw;
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 2;
+  }
+
   &--home {
     background-image: url('../assets/MeditatingDoodle.svg'), none;
   }
-  &--created {
-    background-image: url('../assets/SprintingDoodle.svg'), none;
+
+  &--example {
+    background-image: url('../assets/example.svg'), none;
   }
-  &--getStarted {
-    background-image: url('../assets/ReadingSideDoodle.svg'), none;
-  }
-  &--dashboard {
-    background-image: url('../assets/UnboxingDoodle.svg'), none;
-  }
-  &--about {
-    background-image: url('../assets/ZombieingDoodle.svg'), none;
-  }
-  &--status {
-    background-image: url('../assets/RollerSkatingDoodle.svg'), none;
-  }
-  &--sdk {
-    background-image: url('../assets/RunningDoodle.svg'), none;
-  }
-  &__sponsor {
-    background-image: url('../assets/BitIoLogo.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    width: 115px;
-    height: 33px;
+
+  &--floating {
+    animation-name: floating;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
   }
 }
 
+@keyframes floating {
+    0% { transform: translate(0,  0px); }
+    50%  { transform: translate(0, 15px); }
+    100%   { transform: translate(0, -0px); }   
+}

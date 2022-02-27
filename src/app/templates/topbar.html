@@ -1,32 +1,37 @@
-<div class="topbar__container">
-  <svg
-    class="images--blob"
-    width="200px"
-    height="200px"
-    viewBox="0 0 300 300"
-    xmlns="http://www.w3.org/2000/svg">
-    <g transform="translate(50,50)">
-			<path xmlns="http://www.w3.org/2000/svg" d="M125.9,-121.1C173.6,-78.3,229.8,-39.1,241.7,11.9C253.6,62.9,221.2,125.9,173.5,157.4C125.9,188.9,62.9,188.9,4.7,184.2C-53.5,179.5,-107,170,-146.3,138.5C-185.7,107,-210.8,53.5,-217.6,-6.7C-224.3,-66.9,-212.5,-133.9,-173.2,-176.7C-133.9,-219.5,-66.9,-238.3,-13.9,-224.4C39.1,-210.5,78.3,-163.9,125.9,-121.1Z" fill="#f5bda4"/>
-    </g>
-  </svg>
-  <div class="topbar__logo" @click="goHome">
-    Pantry.
-  </div>
-  <div class="topbar__link-container">
-    <div class="topbar__link" @click="showAbout">
-      About
-    </div>
-    <div class="topbar__link" @click="showStatus">
-      Status
-    </div>
-    <div class="topbar__link" @click="showDocs">
-      Documentation
-    </div>
-    <div class="topbar__link" @click="showSDK">
-      Developer Tools
-    </div>
-    <div class="topbar__link" @click="showDashboard">
-      Dashboard
-    </div>
+<div class="min-h-full">
+  <div :class="topbarClass()">
+    <nav class="bg-orange-400 border-b border-indigo-300 border-opacity-25 lg:border-none">
+      <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+        <div class="relative h-16 flex items-center justify-between lg:border-b lg:border-indigo-400 lg:border-opacity-25">
+          <button class="text-white logo hover:bg-orange-500 hover:bg-opacity-75
+            rounded-md py-2 px-3 -ml-3 text-4xl font-medium float-left" @click="goHome">
+            Pantry 🍊
+          </button>
+          <div class="px-2 flex items-left lg:px-0">
+            <div class="hidden lg:block lg:ml-10">
+              <div class="flex space-x-4 text-orange-100 text-md">
+                <button class="hover:bg-orange-500 hover:bg-opacity-75
+                  rounded-md py-2 px-3 font-bold hover:text-white" @click="showAbout">
+                  FAQ's
+                </button>
+                <button class="hover:bg-orange-500 hover:bg-opacity-75
+                  rounded-md py-2 px-3 font-bold hover:text-white" @click="showSDK">
+                  Developer Tools
+                </button>
+                <button class="hover:bg-orange-500 hover:bg-opacity-75
+                  rounded-md py-2 px-3 font-bold hover:text-white" @click="showDocs">
+                  API Documentation
+                </button>
+                <button class="bg-orange-300 text-white hover:bg-orange-500 hover:bg-opacity-75
+                  rounded-md py-2 px-3 font-bold" @click="showDashboard">
+                  Dashboard
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
   </div>
 </div>
+

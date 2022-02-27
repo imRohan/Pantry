@@ -1,0 +1,41 @@
+<main class="-mt-32">
+  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+      <div class="relative px-4 sm:px-6 lg:px-8">
+        <div class="text-lg max-w-prose mx-auto">
+          <h1>
+            <span class="block text-base text-center text-orange-600
+                         font-semibold tracking-wide uppercase">
+              Success!
+            </span>
+            <span class="mt-2 block text-3xl text-center leading-8
+                         font-extrabold tracking-tight text-gray-900
+                         sm:text-4xl">
+              Save your PantryID
+            </span>
+          </h1>
+          <p class="mt-8 text-xl text-gray-500 leading-8">
+            Here is your <b>PantryID</b>! Think of this as your API key, and
+            keep this safe as we won't be sharing it with you again. Once you've 
+            saved it somewhere, hit the button below and we'll show you how to
+            add items to your pantry.
+          </p>
+
+          <p class="mt-8 mb-8 block text-2xl text-center leading-8
+                    font-extrabold tracking-tight text-gray-900
+                    sm:text-2xl">
+            {{ pantryID }}
+          </p>
+
+          <button @click="getStarted" class="min-w-full px-6 py-3
+                          border border-transparent text-base font-medium
+                          rounded-md shadow-sm text-white bg-orange-500
+                          hover:bg-orange-600 focus:outline-none focus:ring-2
+                          focus:ring-offset-2 focus:ring-orange-300" >
+            Let's Get Started!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

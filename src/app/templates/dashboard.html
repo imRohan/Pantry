@@ -1,0 +1,21 @@
+<div>
+  <div class="-mt-52 mb-8">
+    <template v-if="signedIn">
+      <banner :promo="promo" @cta-clicked="bannerCTAClicked" />
+    </template>
+  </div>
+  <main class="">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <template v-if="signedIn">
+        <div class="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+          <div class="relative">
+            <explorer :pantry="pantry" @refresh="refresh" />
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <login @login="login" />
+      </template>
+    </div>
+  </main>
+</div>
