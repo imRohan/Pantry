@@ -60,9 +60,6 @@ typings/
 #vim
 *.sw?
 
-#dist
-/dist/*
-
 #front-end config
 config.ts
 
