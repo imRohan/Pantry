@@ -57,11 +57,14 @@ typings/
 # dotenv environment variables file
 .env
 
-#vim
+# vim
 *.sw?
 
-#front-end config
+# front-end config
 config.ts
 
-#.DS_STORE
+# .DS_STORE
 .DS_STORE
+
+# asdf
+.tool-versions
