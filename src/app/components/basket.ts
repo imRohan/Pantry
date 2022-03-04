@@ -8,6 +8,9 @@ const configs = require('../config.ts')
 // Templates
 const basketTemplate = require('../templates/basket.html')
 
+// Components
+const modal = require('./modal.ts')
+
 // Constants
 const API_PATH = configs.apiPath
 
@@ -15,12 +18,14 @@ const basket = {
   props: ['pantryId', 'basket'],
   name: 'basket',
   components: {
+    modal,
     'json-edit': jsonEditor,
   },
   template: basketTemplate,
   data(): any {
     return {
       apiPath: API_PATH,
+      shareModalVisible: false,
     }
   },
   computed: {
@@ -37,15 +42,22 @@ const basket = {
     },
   },
   methods: {
+    async copyPath(path: string): Promise<void> {
+      await navigator.clipboard.writeText(path)
+      alert('Saved to clipboard')
+    },
     refreshDashboard(): void {
       this.$emit('update')
+    },
+    basketPath(): string {
+      return `${API_PATH}/pantry/${this.pantryId}/basket/${this.name}`
     },
     async deleteBasket(): Promise<void> {
       const _response = confirm(`Are you sure you'd like to delete ${this.name}?`)
       if (_response) {
         await axios({
           method: 'DELETE',
-          url: `${API_PATH}/pantry/${this.pantryId}/basket/${this.name}`,
+          url: this.basketPath(),
         })
         this.refreshDashboard()
       }
@@ -54,10 +66,16 @@ const basket = {
       await axios({
         method: 'PUT',
         data: this.data,
-        url: `${API_PATH}/pantry/${this.pantryId}/basket/${this.name}`,
+        url: this.basketPath(),
       })
       alert(`${this.name} contents saved!`)
       this.refreshDashboard()
+    },
+    openShareModal(): void {
+      this.shareModalVisible = true
+    },
+    closeShareModal(): void {
+      this.shareModalVisible = false
     },
   },
 }

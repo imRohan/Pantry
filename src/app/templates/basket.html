@@ -7,13 +7,22 @@
         </h3>
         <div class="mt-3 flex sm:mt-0 sm:ml-4">
           <button type="button"
-                  @click="deleteBasket"
-                  class="ml-3 inline-flex items-center px-4 py-2 border
-                  border-transparent rounded-md shadow-sm text-sm font-medium
-                  text-white bg-red-600 hover:bg-red-700
+                  @click="openShareModal"
+                  class="ml-3 inline-flex items-center px-4 py-2
+                  rounded-md text-sm font-medium
+                  text-gray-700 bg-none hover:bg-gray-100
                   focus:outline-none focus:ring-2 focus:ring-offset-2
-                  focus:ring-red-500">
-            Delete basket
+                  focus:ring-indigo-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+          </button>
+          <button type="button"
+                  @click="deleteBasket"
+                  class="ml-3 inline-flex items-center px-4 py-2
+                  rounded-md text-sm font-medium
+                  text-gray-700 bg-none hover:bg-gray-100
+                  focus:outline-none focus:ring-2 focus:ring-offset-2
+                  focus:ring-indigo-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
           </button>
         </div>
       </div>
@@ -26,6 +35,40 @@
       </div>
     </div>
   </div>
+  <template v-if="shareModalVisible">
+    <modal @close="closeShareModal">
+      <template v-slot:icon>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+      </template>
+      <template v-slot:title>Get Link</template>
+      <template v-slot:content>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <b>Private:</b> Only share with people who have access to your Pantry
+          </label>
+          <div class="mt-1 flex rounded-md shadow-sm">
+            <div class="relative flex items-stretch flex-grow focus-within:z-10">
+              <span class="inline-flex items-center px-3 rounded-l-md border border-r-0
+                          border-green-400 bg-green-200 text-gray-700 sm:text-sm">
+                GET/POST
+              </span>
+              <input type="text" name="email" id="email" readonly
+                     class="focus:ring-indigo-500 focus:border-indigo-500
+                           block w-full rounded-none sm:text-sm border
+                     border-gray-300 pl-3"
+                     :value="basketPath()">
+            </div>
+            <button type="button"
+                    @click="copyPath(basketPath())"
+                    class="-ml-px relative inline-flex items-center space-x-2 px-4 py-2
+                          border border-gray-300 text-sm font-medium rounded-r-md text-gray-700
+                          bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1
+                          focus:ring-indigo-500 focus:border-indigo-500">
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+      </template>
+    </modal>
+  </template>
 </main>
-
-
