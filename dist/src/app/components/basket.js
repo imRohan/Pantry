@@ -15,18 +15,22 @@ const jsonEditor = require('vue-json-editor').default;
 const configs = require('../config.ts');
 // Templates
 const basketTemplate = require('../templates/basket.html');
+// Components
+const modal = require('./modal.ts');
 // Constants
 const API_PATH = configs.apiPath;
 const basket = {
     props: ['pantryId', 'basket'],
     name: 'basket',
     components: {
+        modal,
         'json-edit': jsonEditor,
     },
     template: basketTemplate,
     data() {
         return {
             apiPath: API_PATH,
+            shareModalVisible: false,
         };
     },
     computed: {
@@ -43,8 +47,17 @@ const basket = {
         },
     },
     methods: {
+        copyPath(path) {
+            return __awaiter(this, void 0, void 0, function* () {
+                yield navigator.clipboard.writeText(path);
+                alert('Saved to clipboard');
+            });
+        },
         refreshDashboard() {
             this.$emit('update');
+        },
+        basketPath() {
+            return `${API_PATH}/pantry/${this.pantryId}/basket/${this.name}`;
         },
         deleteBasket() {
             return __awaiter(this, void 0, void 0, function* () {
@@ -52,7 +65,7 @@ const basket = {
                 if (_response) {
                     yield axios({
                         method: 'DELETE',
-                        url: `${API_PATH}/pantry/${this.pantryId}/basket/${this.name}`,
+                        url: this.basketPath(),
                     });
                     this.refreshDashboard();
                 }
@@ -63,11 +76,17 @@ const basket = {
                 yield axios({
                     method: 'PUT',
                     data: this.data,
-                    url: `${API_PATH}/pantry/${this.pantryId}/basket/${this.name}`,
+                    url: this.basketPath(),
                 });
                 alert(`${this.name} contents saved!`);
                 this.refreshDashboard();
             });
+        },
+        openShareModal() {
+            this.shareModalVisible = true;
+        },
+        closeShareModal() {
+            this.shareModalVisible = false;
         },
     },
 };
