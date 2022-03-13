@@ -2,7 +2,6 @@
 import express = require('express')
 
 // External Files
-import SystemController from '../controllers/system'
 import logService from '../services/logger'
 
 // Logger setup
@@ -14,11 +13,10 @@ const _systemV1Router = express.Router()
 _systemV1Router.get('/status', async (req, res) => {
   try {
     logger.info('[GET] Service Status')
-    const _status = await SystemController.getStatus()
 
-    res.send(_status)
+    res.send('ok')
   } catch (error) {
-    res.status(400).send(`Could not create new pantry: ${error.message}`)
+    res.status(400).send(`Could not get system status: ${error.message}`)
   }
 })
 
