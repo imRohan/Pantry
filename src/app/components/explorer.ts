@@ -14,6 +14,7 @@ const API_PATH = configs.apiPath
 const explorerEmpty = require('./explorerEmpty.ts')
 const explorerOnboarding = require('./explorerOnboarding.ts')
 const basket = require('./basket.ts')
+const modal = require('./modal.ts')
 
 const explorer = {
   name: 'explorer',
@@ -23,11 +24,12 @@ const explorer = {
     explorerEmpty,
     explorerOnboarding,
     basket,
+    modal,
   },
   data(): any {
     return {
-      errorsVisible: false,
       basket: null,
+      errorsModalVisible: false,
     }
   },
   computed: {
@@ -42,13 +44,16 @@ const explorer = {
     },
   },
   methods: {
+    openErrorsModal(): void {
+      this.errorsModalVisible = true
+    },
+    closeErrorsModal(): void {
+      this.errorsModalVisible = false
+    },
     getDateOfDeletion(ttl: number): string {
       const _currentDate = new Date()
       _currentDate.setSeconds(ttl)
       return _currentDate.toISOString().split('T')[0]
-    },
-    toggleErrors(): void {
-      this.errorsVisible = !this.errorsVisible
     },
     refresh(): void {
       this.$emit('refresh')
