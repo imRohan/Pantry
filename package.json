@@ -79,6 +79,7 @@
     "express-brute-redis": "^0.0.1",
     "helmet": "^3.22.0",
     "pino": "^5.17.0",
+    "pino-logflare": "^0.3.12",
     "redis": "^3.1.1",
     "url-loader": "^1.0.1",
     "uuid": "^3.4.0",

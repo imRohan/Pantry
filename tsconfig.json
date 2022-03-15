@@ -3,7 +3,7 @@
     "lib": [
       "es6",
       "es2017",
-      "dom",
+      "dom"
     ],
     "allowJs": true,
     "checkJs": true,
@@ -17,6 +17,7 @@
     "outDir": "dist",
     "noImplicitReturns": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true
   },
   "include": [
     "**/*.ts"

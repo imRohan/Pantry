@@ -1,6 +1,7 @@
 // External Libs
 import axios from 'axios'
 import pino = require('pino')
+import { createWriteStream } from 'pino-logflare'
 require('dotenv').config()
 
 // External Files
@@ -12,26 +13,36 @@ class Logger {
   private slackWebhook = process.env.SLACK_LOG_WEBHOOK
 
   public constructor(name: string) {
-    this.logClient = pino({
-      name,
-      prettyPrint: true,
-    })
+    this.logClient = this.buildLogClient(name)
   }
 
-  public logAndSlack(message: string, object?: any) {
+  public logAndSlack(message: string, object?: any): void {
     this.sendToClient(ILogLevel.info, message, object, true)
   }
 
-  public info(message: string, object?: any) {
+  public info(message: string, object?: any): void {
     this.sendToClient(ILogLevel.info, message, object)
   }
 
-  public warn(message: string, object?: any) {
+  public warn(message: string, object?: any): void {
     this.sendToClient(ILogLevel.warn, message, object)
   }
 
-  public error(message: string, object?: any) {
+  public error(message: string, object?: any): void {
     this.sendToClient(ILogLevel.error, message, object)
+  }
+
+  private buildLogClient(name: string) {
+    if (environment.isDevelopment()) {
+      return pino({ name, prettyPrint: true })
+    }
+
+    const _pinoStream = createWriteStream({
+      apiKey: process.env.LOGFLARE_API_KEY,
+      sourceToken: process.env.LOGFLARE_SOURCE_TOKEN,
+    })
+
+    return pino({ name }, _pinoStream)
   }
 
   // Send logs to not only the logging client, but also outbound to Slack.
@@ -48,7 +59,7 @@ class Logger {
     }
 
     if (level !== ILogLevel.info || postToSlack) {
-      this.postToSlack(level, message)
+      void this.postToSlack(level, message)
     }
   }
 
