@@ -68,3 +68,8 @@ config.ts
 
 # asdf
 .tool-versions
+
+# Dist
+dist/tests/
+dist/src/*/
+dist/src/main.js
