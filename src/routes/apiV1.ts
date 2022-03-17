@@ -81,33 +81,37 @@ _apiV1Router.delete('/:pantryID', async (req, res) => {
   }
 })
 
-_apiV1Router.post('/:pantryID/basket/:basketName', async (req, res) => {
-  try {
-    const { body } = req
-    const { pantryID, basketName } = basketParams(req)
+_apiV1Router.post('/:pantryID/basket/:basketName',
+  bruteForce.prevent,
+  async (req, res) => {
+    try {
+      const { body } = req
+      const { pantryID, basketName } = basketParams(req)
 
-    logger.info('[POST] Create Basket', { pantryID, basketName })
-    const _response = await BlockController.create(pantryID, basketName, body)
+      logger.info('[POST] Create Basket', { pantryID, basketName })
+      const _response = await BlockController.create(pantryID, basketName, body)
 
-    res.send(_response)
-  } catch (error) {
-    res.status(400).send(`Could not create basket: ${error.message}`)
-  }
-})
+      res.send(_response)
+    } catch (error) {
+      res.status(400).send(`Could not create basket: ${error.message}`)
+    }
+  })
 
-_apiV1Router.put('/:pantryID/basket/:basketName', async (req, res) => {
-  try {
-    const { body } = req
-    const { pantryID, basketName } = basketParams(req)
+_apiV1Router.put('/:pantryID/basket/:basketName',
+  bruteForce.prevent,
+  async (req, res) => {
+    try {
+      const { body } = req
+      const { pantryID, basketName } = basketParams(req)
 
-    logger.info('[PUT] Update Basket', { pantryID, basketName })
-    const _response = await BlockController.update(pantryID, basketName, body)
+      logger.info('[PUT] Update Basket', { pantryID, basketName })
+      const _response = await BlockController.update(pantryID, basketName, body)
 
-    res.send(_response)
-  } catch (error) {
-    res.status(400).send(`Could not update basket: ${error.message}`)
-  }
-})
+      res.send(_response)
+    } catch (error) {
+      res.status(400).send(`Could not update basket: ${error.message}`)
+    }
+  })
 
 _apiV1Router.get('/:pantryID/basket/:basketName',
   bruteForce.prevent,
