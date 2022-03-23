@@ -31,6 +31,12 @@ const sdk = {
           author: 'Krutonium',
           link: 'https://github.com/Krutonium/libPantryDotNet',
         },
+        {
+          name: 'pantry_wrapper',
+          platform: 'Python',
+          author: 'alexmulligan',
+          link: 'https://github.com/alexmulligan/pantry_wrapper',
+        },
       ],
     }
   },
