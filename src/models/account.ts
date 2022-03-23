@@ -23,6 +23,8 @@ const KEYS_PER_SCAN_ITERATION = 1_000_000
 
 class Account {
 
+  @IsUUID('4')
+  public uuid: string
   @IsNotEmpty()
   @IsString()
   private name: string
@@ -41,8 +43,6 @@ class Account {
   @IsNotEmpty()
   @IsArray()
   private errors: string[]
-  @IsUUID('4')
-  private uuid: string
 
   // Constants
   private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)

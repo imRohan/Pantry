@@ -55,6 +55,7 @@ afterEach(() => {
 describe('When creating an account', () => {
   it ('returns the account uuid', async () => {
     const _uuid: string = await AccountController.create(_newAccountParams)
+
     expect(_uuid).toBeDefined()
   })
 

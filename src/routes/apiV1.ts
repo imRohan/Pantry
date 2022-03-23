@@ -6,6 +6,7 @@ import redisStore = require('express-brute-redis')
 // External Files
 import AccountController from '../controllers/account'
 import BlockController from '../controllers/block'
+import PublicBlockController from '../controllers/publicBlock'
 import logService from '../services/logger'
 
 // Interfaces
@@ -139,6 +140,19 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
     res.send(_response)
   } catch (error) {
     res.status(400).send(`Could not delete basket: ${error.message}`)
+  }
+})
+
+_apiV1Router.post('/:pantryID/public/:basketName', async (req, res) => {
+  try {
+    const { pantryID, basketName } = basketParams(req)
+
+    logger.info('[POST] Create public basket link', { pantryID, basketName })
+    const _response = await PublicBlockController.create(pantryID, basketName)
+
+    res.send(_response)
+  } catch (error) {
+    res.status(400).send(`Could not create public basket link: ${error.message}`)
   }
 })
 
