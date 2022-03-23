@@ -87,7 +87,10 @@ const home = {
       this.$emit('account-created', data)
     },
     bannerCTAClicked(): void {
-      this.$emit('change-view', IView.sdk)
+      this.changeView(IView.sdk)
+    },
+    changeView(view: typeof IView): void {
+      this.$emit('change-view', view)
     },
   },
 }

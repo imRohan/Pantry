@@ -37,7 +37,6 @@ const topbar = {
     showSDK() {
       this.$emit('change-view', IView.sdk)
     },
-
     topbarClass(): string {
       if (this.view !== IView.home) {
         return 'bg-orange-100 pb-52'
