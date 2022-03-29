@@ -64,7 +64,7 @@ const basket = {
     },
     async save(): Promise<void> {
       await axios({
-        method: 'PUT',
+        method: 'POST',
         data: this.data,
         url: this.basketPath(),
       })

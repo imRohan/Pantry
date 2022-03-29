@@ -17,7 +17,12 @@ const logger = new logService('API')
 
 // Express Brute setup (1 request per 1/2 sec)
 const store = new redisStore()
+const failCallback = (req, res, next, nextValid) => {
+  const message = `Please wait till ${nextValid} to make future requests`
+  res.status(429).send(`Pantry API limit reached. ${message}`)
+}
 const bruteForce = new expressBrute(store, {
+  failCallback,
   freeRetries: 5,
   minWait: 9000, // 9s
   maxWait: 9000, // 9s
@@ -110,7 +115,12 @@ _apiV1Router.put('/:pantryID/basket/:basketName', async (req, res) => {
 })
 
 _apiV1Router.get('/:pantryID/basket/:basketName',
-  bruteForce.prevent,
+  bruteForce.getMiddleware({
+    key: (req, res, next) => {
+      const { pantryID } = accountParams(req)
+      next(pantryID)
+    },
+  }),
   async (req, res) => {
     try {
       const { pantryID, basketName } = basketParams(req)
