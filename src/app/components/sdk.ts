@@ -42,6 +42,13 @@ const sdk = {
           link: 'https://github.com/alexmulligan/pantry_wrapper',
           verified: false,
         },
+        {
+          name: 'pantry-nim',
+          platform: 'Nim',
+          author: 'Jake Leahy',
+          link: 'https://github.com/ire4ever1190/pantry-nim',
+          verified: false,
+        },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
                             text-xs font-medium
@@ -56,6 +63,7 @@ const sdk = {
         'bash': 'bg-gray-200',
         'python': 'bg-yellow-200',
         '.net': 'bg-blue-200',
+        'nim': 'bg-yellow-400',
       }
 
       return _table[_platform] ?? 'bg-gray-200'
