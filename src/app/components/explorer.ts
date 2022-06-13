@@ -75,6 +75,36 @@ const explorer = {
         this.refresh()
       }
     },
+    async renamePantry(): Promise<void> {
+      const _defaultPantryName = this.pantry.name
+      const _namePantry = prompt('Pantry Name:', _defaultPantryName)
+      if (_namePantry) {
+        await axios({
+          method: 'PUT',
+          data: {
+            name: _namePantry,
+          },
+          url: `${API_PATH}/pantry/${this.pantry.id}`,
+        })
+
+        this.refresh()
+      }
+    },
+    async changePantryDescription(): Promise<void> {
+      const _defaultDesc = this.pantry.description
+      const _description = prompt('Pantry Description:', _defaultDesc)
+      if (_description) {
+        await axios({
+          method: 'PUT',
+          data: {
+            description: _description,
+          },
+          url: `${API_PATH}/pantry/${this.pantry.id}`,
+        })
+
+        this.refresh()
+      }
+    },
     async viewBasket(name: string): Promise<void> {
       const { data } = await axios({
         method: 'GET',
