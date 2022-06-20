@@ -49,6 +49,13 @@ const sdk = {
           link: 'https://github.com/ire4ever1190/pantry-nim',
           verified: false,
         },
+        {
+          name: 'JPantry',
+          platform: 'Java',
+          author: 'Magnus Gunnarsson',
+          link: 'https://github.com/EnderCrypt/JPantry',
+          verified: false,
+        },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
                             text-xs font-medium
