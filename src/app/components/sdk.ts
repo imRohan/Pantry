@@ -50,6 +50,13 @@ const sdk = {
           verified: false,
         },
         {
+          name: 'JPantry',
+          platform: 'Java',
+          author: 'Magnus Gunnarsson',
+          link: 'https://github.com/EnderCrypt/JPantry',
+          verified: false,
+        },
+        {
           name: 'pantry-cloud',
           platform: 'Python',
           author: 'Sarvesh Kumar Dwivedi',
@@ -71,6 +78,7 @@ const sdk = {
         'python': 'bg-yellow-200',
         '.net': 'bg-blue-200',
         'nim': 'bg-yellow-400',
+        'java': 'bg-red-400',
       }
 
       return _table[_platform] ?? 'bg-gray-200'
