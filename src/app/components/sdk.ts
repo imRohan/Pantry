@@ -71,6 +71,7 @@ const sdk = {
         'python': 'bg-yellow-200',
         '.net': 'bg-blue-200',
         'nim': 'bg-yellow-400',
+        'java': 'bg-red-400',
       }
 
       return _table[_platform] ?? 'bg-gray-200'
