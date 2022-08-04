@@ -63,6 +63,13 @@ const sdk = {
           link: 'https://github.com/sarvesh4396/pantry-cloud',
           verified: false,
         },
+        {
+          name: 'pantry-cloud',
+          platform: 'PHP',
+          author: 'Seba',
+          link: 'https://github.com/sebaOfficial/pantry-cloud/',
+          verified: false,
+        },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
                             text-xs font-medium
