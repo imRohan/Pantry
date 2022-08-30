@@ -60,18 +60,26 @@ _apiV1Router.put('/:pantryID', async (req, res) => {
   }
 })
 
-_apiV1Router.get('/:pantryID', async (req, res) => {
-  try {
-    const { pantryID } = accountParams(req)
+_apiV1Router.get('/:pantryID',
+  bruteForce.getMiddleware({
+    key: (req, res, next) => {
+      const { pantryID } = accountParams(req)
+      next(pantryID)
+    },
+  }),
+  async (req, res) => {
+    try {
+      const { pantryID } = accountParams(req)
 
-    logger.info('[GET] Get Account', { pantryID })
-    const _account = await AccountController.get(pantryID)
+      logger.info('[GET] Get Account', { pantryID })
+      const _account = await AccountController.get(pantryID)
 
-    res.send(_account)
-  } catch (error) {
-    res.status(400).send(`Could not get pantry: ${error.message}`)
+      res.send(_account)
+    } catch (error) {
+      res.status(400).send(`Could not get pantry: ${error.message}`)
+    }
   }
-})
+)
 
 _apiV1Router.delete('/:pantryID', async (req, res) => {
   try {
