@@ -70,6 +70,13 @@ const sdk = {
           link: 'https://github.com/sebaOfficial/pantry-cloud/',
           verified: false,
         },
+        {
+          name: 'pantry-sdk',
+          platform: 'Typescript',
+          author: 'YieldRay',
+          link: 'https://github.com/YieldRay/pantry-sdk',
+          verified: false,
+        },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
                             text-xs font-medium
