@@ -32,8 +32,3 @@ using it's default settings
 #### Open Example HTML page
 
 Open `http://localhost:3000/` in the browser of your choice
-
-## Sponsors
-![Alt text](https://i.imgur.com/wyphsuG.png)
-
-[bit.io](https://bit.io/about?utm_source=getpantry_github&utm_medium=sponsor&utm_campaign=get_pantry_sponsorship) is proud to sponsor Pantry! [bit.io](https://bit.io/about?utm_source=getpantry_github&utm_medium=sponsor&utm_campaign=get_pantry_sponsorship) shares Pantry’s mission of increasing developer speed and productivity by getting rid of the annoyances of data infrastructure and making data more accessible. We’re hiring!
