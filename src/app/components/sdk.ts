@@ -77,6 +77,13 @@ const sdk = {
           link: 'https://github.com/Atoo35/pantry_client/',
           verified: false,
         },
+        {
+          name: 'pantry',
+          platform: 'Dart',
+          author: 'Georges',
+          link: 'https://github.com/georges-ph/pantry',
+          verified: false,
+        },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
                             text-xs font-medium
@@ -93,6 +100,7 @@ const sdk = {
         '.net': 'bg-blue-200',
         'nim': 'bg-yellow-400',
         'java': 'bg-red-400',
+        'dart': 'bg-blue-500',
       }
 
       return _table[_platform] ?? 'bg-gray-200'
