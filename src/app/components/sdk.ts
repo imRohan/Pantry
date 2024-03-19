@@ -84,6 +84,13 @@ const sdk = {
           link: 'https://github.com/georges-ph/pantry',
           verified: false,
         },
+        {
+          name: 'pantry_client',
+          platform: 'Rust',
+          author: 'Atoo35',
+          link: 'https://github.com/Atoo35/pantry_client_rust/',
+          verified: false,
+        },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
                             text-xs font-medium
