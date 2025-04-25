@@ -103,7 +103,7 @@ const sdk = {
           platform: 'Node.js',
           author: 'DinoscapeProgramming',
           link: 'https://github.com/DinoscapeProgramming/PantryJS/',
-          verified: false
+          verified: false,
         },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
