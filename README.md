@@ -1,5 +1,5 @@
 # Pantry
-![build](https://github.com/imRohan/Pantry/workflows/build/badge.svg?branch=master)
+[![build](https://github.com/imRohan/Pantry/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/imRohan/Pantry/actions/workflows/continuous_integration.yml)
 ![Maintainability](https://api.codeclimate.com/v1/badges/8f1460270ced1f60744c/maintainability)
 ![Issues Open](https://img.shields.io/github/issues/imrohan/Pantry?&logo=github)
 ![Issues Closed](https://img.shields.io/github/issues-closed-raw/imrohan/pantry?color=green&logo=github)
