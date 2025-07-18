@@ -22,6 +22,13 @@ const sdk = {
           verified: true,
         },
         {
+          name: 'pantryclient-esp',
+          platform: 'ESP32/ESP8266',
+          author: 'Zakrzewiaczek',
+          link: 'https://github.com/Zakrzewiaczek/pantryclient-esp',
+          verified: false,
+        },
+        {
           name: 'libPantryDotNet',
           platform: '.Net',
           author: 'Krutonium',
