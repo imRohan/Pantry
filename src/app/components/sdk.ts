@@ -98,6 +98,13 @@ const sdk = {
           link: 'https://github.com/dkoleev/UniPantry/',
           verified: false,
         },
+        {
+          name: 'PantryJS',
+          platform: 'Node.js',
+          author: 'DinoscapeProgramming',
+          link: 'https://github.com/DinoscapeProgramming/PantryJS/',
+          verified: false,
+        },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
                             text-xs font-medium
