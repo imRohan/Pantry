@@ -71,5 +71,3 @@ config.ts
 
 # Dist
 dist/tests/
-dist/src/*/
-dist/src/main.js
