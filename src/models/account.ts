@@ -13,7 +13,6 @@ import uuidv4 = require('uuid/v4')
 
 // External Files
 import * as dataStore from '../services/dataStore'
-import * as mailer from '../services/mailer'
 
 // Interfaces
 import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
@@ -48,7 +47,6 @@ class Account {
   private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
   private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
   private readonly defaultMaxNumberOfBlocks = 100
-  private readonly errorsBeforeEmailSent = 5
 
   public constructor(params: any) {
     const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks, errors } = params
@@ -176,14 +174,6 @@ class Account {
 
     this.errors = [...this.errors, _errorString]
     await this.store()
-
-    if (this.errorsThresholdReached() && this.notifications) {
-      await mailer.sendAccountErrorsEmail(message, this.contactEmail, this.uuid)
-    }
-  }
-
-  private errorsThresholdReached(): boolean {
-    return this.errors.length % this.errorsBeforeEmailSent === 0
   }
 
   private generateRedisPayload(): string {
