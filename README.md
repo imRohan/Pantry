@@ -33,3 +33,7 @@ using it's default settings
 #### Open Example HTML page
 
 Open `http://localhost:3000/` in the browser of your choice
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=imRohan/Pantry&type=date&legend=top-left)](https://www.star-history.com/#imRohan/Pantry&type=date&legend=top-left)
