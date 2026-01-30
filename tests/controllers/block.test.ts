@@ -33,14 +33,14 @@ afterEach(() => {
 })
 
 describe('When creating a block', () => {
-  it ('returns successful create message', async () => {
+  it ('returns the payload of the block', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
 
     const _response = await BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' })
 
-    expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
+    expect(_response).toEqual({ derp: 'flerp' })
   })
 
   it ('allows for empty payload', async () => {
@@ -50,7 +50,7 @@ describe('When creating a block', () => {
 
     const _response = await BlockController.create(_accountUUID, 'NewBlock', {})
 
-    expect(_response).toMatch(/Your Pantry was updated with basket: NewBlock/)
+    expect(_response).toEqual({})
   })
 
   it ('throws an error if validation fails', async () => {
@@ -132,14 +132,14 @@ describe('When retrieving a block', () => {
 })
 
 describe('When deleting a block', () => {
-  it ('returns confirmation message', async () => {
+  it ('returns void', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
     const _payload = await BlockController.delete(_accountUUID, 'NewBlock')
 
-    expect(_payload).toMatch(/NewBlock was removed from your Pantry/)
+    expect(_payload).not.toBeDefined()
   })
 
   it ('throws an error if block does not exist', async () => {

@@ -81,8 +81,8 @@ _apiV1Router.delete('/:pantryID', (req, res) => __awaiter(void 0, void 0, void 0
     try {
         const { pantryID } = accountParams(req);
         logger.info('[DELETE] Delete Account', { pantryID });
-        const _response = yield account_1.default.delete(pantryID);
-        res.send(_response);
+        yield account_1.default.delete(pantryID);
+        res.status(204);
     }
     catch (error) {
         res.status(400).send(`Could not delete pantry: ${error.message}`);
