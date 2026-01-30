@@ -15,7 +15,7 @@
     "linter": "eslint -c .eslintrc.js --ext .ts src/",
     "fix-linting": "eslint -c .eslintrc.js --ext .ts src/ --fix",
     "tests": "jest --silent --verbose --coverage",
-    "build": "webpack --config webpack.prod.js",
+    "build": "tsc && webpack --config webpack.prod.js",
     "validate": "jest && eslint -c .eslintrc.js --ext .ts src/",
     "server": "tsc && node dist/src/main.js"
   },
