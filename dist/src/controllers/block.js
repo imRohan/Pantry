@@ -44,7 +44,7 @@ class BlockController {
     static get(accountUUID, name) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                logger.info(`Retrieving block: ${name} in account: #{accountUUID}`);
+                logger.info(`Retrieving block: ${name} in account: ${accountUUID}`);
                 const _block = yield block_1.default.get(accountUUID, name);
                 const _blockDetails = _block.sanitize();
                 return _blockDetails;

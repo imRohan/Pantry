@@ -6,11 +6,13 @@ import redisStore = require('express-brute-redis')
 // External Files
 import AccountController from '../controllers/account'
 import BlockController from '../controllers/block'
+import PublicBlockController from '../controllers/publicBlock'
 import logService from '../services/logger'
 
 // Interfaces
 import { IAccountRequestParams } from '../interfaces/account'
 import { IBlockRequestParams } from '../interfaces/block'
+import { IPublicBlockRequestParams } from '../interfaces/publicBlock'
 
 // Logger setup
 const logger = new logService('API')
@@ -156,6 +158,19 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
   }
 })
 
+_apiV1Router.get('/:pantryID/basket/:basketName/public', async (req, res) => {
+  try {
+    const { pantryID, basketName } = publicBasketParams(req)
+
+    logger.info(`[GET] Create Public Basket for ${pantryID}, ${basketName}`)
+    const _newPublicBasketUUID = await PublicBlockController.create(pantryID, basketName)
+
+    res.send(_newPublicBasketUUID)
+  } catch (error) {
+    res.status(400).send(`Could not create new Public Basket: ${error.message}`)
+  }
+})
+
 function basketParams(req): IBlockRequestParams {
   const { params } = req
   const { pantryID, basketName } = params
@@ -166,6 +181,12 @@ function accountParams(req): IAccountRequestParams {
   const { params } = req
   const { pantryID } = params
   return { pantryID }
+}
+
+function publicBasketParams(req): IPublicBlockRequestParams {
+  const { params } = req
+  const { pantryID, basketName, publicBasketID } = params
+  return { pantryID, basketName, publicBasketID }
 }
 
 export default _apiV1Router

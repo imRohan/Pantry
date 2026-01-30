@@ -9,7 +9,7 @@ import logService from '../services/logger'
 const logger = new logService('Block Controller')
 
 class BlockController {
-  public static async create(accountUUID: string, name: string, payload: any): Promise<string> {
+  public static async create(accountUUID: string, name: string, payload: JSON): Promise<JSON> {
     try {
       logger.info(`Creating block ${name} in account: ${accountUUID}`)
 
@@ -34,9 +34,9 @@ class BlockController {
     }
   }
 
-  public static async get(accountUUID: string, name: string): Promise<any> {
+  public static async get(accountUUID: string, name: string): Promise<JSON> {
     try {
-      logger.info(`Retrieving block: ${name} in account: #{accountUUID}`)
+      logger.info(`Retrieving block: ${name} in account: ${accountUUID}`)
 
       const _block = await Block.get(accountUUID, name)
       const _blockDetails = _block.sanitize()
@@ -48,7 +48,7 @@ class BlockController {
     }
   }
 
-  public static async update(accountUUID: string, name: string, data: any): Promise<any> {
+  public static async update(accountUUID: string, name: string, data: JSON): Promise<JSON> {
     try {
       logger.info(`Updating block ${name} in account: ${accountUUID}`)
 

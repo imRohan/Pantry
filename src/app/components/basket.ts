@@ -26,6 +26,7 @@ const basket = {
     return {
       apiPath: API_PATH,
       shareModalVisible: false,
+      publicBasketPath: null,
     }
   },
   computed: {
@@ -52,6 +53,13 @@ const basket = {
     basketPath(): string {
       return `${API_PATH}/pantry/${this.pantryId}/basket/${this.name}`
     },
+    async getPublicBasket(): Promise<void> {
+      const { data } = await axios({
+        method: 'GET',
+        url: `${this.basketPath()}/public`,
+      })
+      this.publicBasketPath = `${API_PATH}/public/${data}`
+    },
     async deleteBasket(): Promise<void> {
       const _response = confirm(`Are you sure you'd like to delete ${this.name}?`)
       if (_response) {
@@ -63,15 +71,16 @@ const basket = {
       }
     },
     async save(): Promise<void> {
-      await axios({
+      const { data } = await axios({
         method: 'POST',
         data: this.data,
         url: this.basketPath(),
       })
       alert(`${this.name} contents saved!`)
-      this.refreshDashboard()
+      this.set(data)
     },
     openShareModal(): void {
+      this.getPublicBasket()
       this.shareModalVisible = true
     },
     closeShareModal(): void {

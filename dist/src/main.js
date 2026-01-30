@@ -36,6 +36,7 @@ const server = http.createServer(app);
 // Routes
 const apiV1_1 = __importDefault(require("./routes/apiV1"));
 const systemV1_1 = __importDefault(require("./routes/systemV1"));
+const publicRoutesV1_1 = __importDefault(require("./routes/publicRoutesV1"));
 // External files
 const environment = __importStar(require("./services/environment"));
 const logger_1 = __importDefault(require("./services/logger"));
@@ -49,6 +50,7 @@ app.use(helmet());
 // Routes
 app.use('/apiv1/system', systemV1_1.default);
 app.use('/apiv1/pantry', apiV1_1.default);
+app.use('/apiv1/public', publicRoutesV1_1.default);
 app.get('/', (request, response) => {
     logger.info('Served Landing Page');
     response.sendFile('index.html', { root: process.env.PWD });

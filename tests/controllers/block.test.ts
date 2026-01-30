@@ -37,8 +37,9 @@ describe('When creating a block', () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
+    const _payload = JSON.parse('{"derp": "flerp"}')
 
-    const _response = await BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' })
+    const _response = await BlockController.create(_accountUUID, 'NewBlock', _payload)
 
     expect(_response).toEqual({ derp: 'flerp' })
   })
@@ -48,7 +49,7 @@ describe('When creating a block', () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
 
-    const _response = await BlockController.create(_accountUUID, 'NewBlock', {})
+    const _response = await BlockController.create(_accountUUID, 'NewBlock', JSON.parse('{}'))
 
     expect(_response).toEqual({})
   })
@@ -58,7 +59,7 @@ describe('When creating a block', () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
 
-    await expect(BlockController.create(_accountUUID, 'NewBlock', 'string'))
+    await expect(BlockController.create(_accountUUID, 'NewBlock', null))
       .rejects
       .toThrow('Validation failed:')
   })
@@ -76,15 +77,16 @@ describe('When creating a block', () => {
     }
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_maxedAccount)))
     mockedDataStore.find.mockReturnValueOnce(Promise.resolve(['oldBlock']))
+    const _payload = JSON.parse('{"derp": "flerp"}')
 
-    await expect(BlockController.create(_accountUUID, 'NewBlock', { derp: 'flerp' }))
+    await expect(BlockController.create(_accountUUID, 'NewBlock', _payload))
       .rejects
       .toThrow('max number of baskets reached')
   })
 })
 
 describe('When updating a block', () => {
-  const _newBlockData = { newKey: 'newValue' }
+  const _newBlockData = JSON.parse('{"newKey": "newValue" }')
 
   it('successfully updates payload of block', async () => {
     const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'

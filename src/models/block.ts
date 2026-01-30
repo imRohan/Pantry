@@ -25,13 +25,13 @@ class Block {
   @IsNotEmpty()
   @IsObject()
   @IsValidPayloadSize()
-  public payload: any
+  public payload: JSON
 
   // Constants
   private readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
   private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
 
-  public constructor(accountUUID: string, name, payload: any) {
+  public constructor(accountUUID: string, name: string, payload: JSON) {
     this.name = name
     this.payload = payload
     this.accountUUID = accountUUID
@@ -56,7 +56,7 @@ class Block {
   }
 
   private static convertRedisPayload(stringifiedBlock: string): IBlock {
-    const _block = JSON.parse(stringifiedBlock)
+    const _block: IBlock = JSON.parse(stringifiedBlock)
     return _block
   }
 
@@ -77,7 +77,7 @@ class Block {
     await dataStore.set(_blockKey, _stringifiedBlock, this.lifeSpan)
   }
 
-  public async update(newData: any): Promise<any> {
+  public async update(newData: JSON): Promise<JSON> {
     const _updatedPayload = merge(this.payload, newData)
     this.payload = _updatedPayload
     await this.store()
@@ -94,7 +94,7 @@ class Block {
     await this.store()
   }
 
-  public sanitize(): any {
+  public sanitize(): JSON {
     return this.payload
   }
 
