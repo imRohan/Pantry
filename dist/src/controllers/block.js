@@ -32,7 +32,8 @@ class BlockController {
                 }
                 const _block = new block_1.default(accountUUID, name, payload);
                 yield _block.store();
-                return `Your Pantry was updated with basket: ${name}!`;
+                const _blockDetails = _block.sanitize();
+                return _blockDetails;
             }
             catch (error) {
                 logger.error(`Block creation failed: ${error.message}, account: ${accountUUID}`);
@@ -75,7 +76,7 @@ class BlockController {
                 logger.info(`Removing block ${name} from account: ${accountUUID}`);
                 const _block = yield block_1.default.get(accountUUID, name);
                 yield _block.delete();
-                return `${name} was removed from your Pantry!`;
+                logger.info(`Block ${name} was successfully removed from account: ${accountUUID}`);
             }
             catch (error) {
                 logger.error(`Block deletion failed: ${error.message}, account: ${accountUUID}`);

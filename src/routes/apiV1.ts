@@ -86,9 +86,9 @@ _apiV1Router.delete('/:pantryID', async (req, res) => {
     const { pantryID } = accountParams(req)
 
     logger.info('[DELETE] Delete Account', { pantryID })
-    const _response = await AccountController.delete(pantryID)
+    await AccountController.delete(pantryID)
 
-    res.send(_response)
+    res.status(204)
   } catch (error) {
     res.status(400).send(`Could not delete pantry: ${error.message}`)
   }
