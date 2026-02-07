@@ -1,0 +1,82 @@
+// External Files
+import PublicBlockController from '../../src/controllers/publicBlock'
+import * as dataStore from '../../src/services/dataStore'
+
+jest.mock('../../src/services/dataStore')
+
+const mockedDataStore = dataStore as jest.Mocked<typeof dataStore>
+
+// Interfaces
+import { IPublicBlock } from '../../src/interfaces/publicBlock'
+import { IAccountPrivate } from '../../src/interfaces/account'
+import { IBlock } from '../../src/interfaces/block'
+
+// Constants
+const _existingAccount: IAccountPrivate = {
+  name: 'Existing Account',
+  description: 'Account made while testing',
+  contactEmail: 'derp@flerp.com',
+  maxNumberOfBlocks: 50,
+  notifications: true,
+  errors: [],
+  uuid: '6dc70531-d0bf-4b3a-8265-b20f8a69e180',
+}
+
+const _existingBlock: IBlock = {
+  accountUUID: _existingAccount.uuid,
+  name: 'ExistingBlock',
+  payload: { derp: 'flerp' },
+}
+
+const _existingPublicBlock: IPublicBlock = {
+  accountUUID: _existingAccount.uuid,
+  blockName: _existingBlock.name,
+  id: '5dc70531-d0bf-4b3a-8265-b20f8a69e180',
+}
+
+afterEach(() => {
+  mockedDataStore.get.mockReset()
+  jest.clearAllMocks()
+})
+
+describe('When creating a public block', () => {
+  it ('returns the public blocks id', async () => {
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const _response = await PublicBlockController.create(_existingAccount.uuid, _existingBlock.name)
+
+    expect(_response).toBeDefined()
+  })
+
+  describe('When the block does not exist', () => {
+    it ('throws an error', async () => {
+      mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
+
+      await expect(PublicBlockController.create(_existingAccount.uuid, _existingBlock.name))
+        .rejects
+        .toThrow(`basket not found, please contact the Pantry owner`)
+    })
+  })
+})
+
+describe('When retrieving a public block', () => {
+  it ('successfully returns payload of the associated block', async () => {
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const _payload = await PublicBlockController.get(_existingPublicBlock.id)
+
+    expect(_payload).toEqual({ derp: 'flerp' })
+  })
+
+  it ('throws an error if public block does not exist', async () => {
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(null))
+
+    await expect(PublicBlockController.get(_existingPublicBlock.id))
+      .rejects
+      .toThrow(`${_existingPublicBlock.id} does not exist`)
+  })
+})

@@ -15,6 +15,7 @@ const server = http.createServer(app)
 // Routes
 import _routesV1 from './routes/apiV1'
 import _systemRoutesV1 from './routes/systemV1'
+import _publicRoutesV1 from './routes/publicRoutesV1'
 
 // External files
 import * as environment from './services/environment'
@@ -32,6 +33,7 @@ app.use(helmet())
 // Routes
 app.use('/apiv1/system', _systemRoutesV1)
 app.use('/apiv1/pantry', _routesV1)
+app.use('/apiv1/public', _publicRoutesV1)
 
 app.get('/', (request, response) => {
   logger.info('Served Landing Page')

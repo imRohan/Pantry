@@ -31,6 +31,7 @@ const basket = {
         return {
             apiPath: API_PATH,
             shareModalVisible: false,
+            publicBasketPath: null,
         };
     },
     computed: {
@@ -59,6 +60,15 @@ const basket = {
         basketPath() {
             return `${API_PATH}/pantry/${this.pantryId}/basket/${this.name}`;
         },
+        getPublicBasket() {
+            return __awaiter(this, void 0, void 0, function* () {
+                const { data } = yield axios({
+                    method: 'GET',
+                    url: `${this.basketPath()}/public`,
+                });
+                this.publicBasketPath = `${API_PATH}/public/${data}`;
+            });
+        },
         deleteBasket() {
             return __awaiter(this, void 0, void 0, function* () {
                 const _response = confirm(`Are you sure you'd like to delete ${this.name}?`);
@@ -73,16 +83,17 @@ const basket = {
         },
         save() {
             return __awaiter(this, void 0, void 0, function* () {
-                yield axios({
+                const { data } = yield axios({
                     method: 'POST',
                     data: this.data,
                     url: this.basketPath(),
                 });
                 alert(`${this.name} contents saved!`);
-                this.refreshDashboard();
+                this.set(data);
             });
         },
         openShareModal() {
+            this.getPublicBasket();
             this.shareModalVisible = true;
         },
         closeShareModal() {

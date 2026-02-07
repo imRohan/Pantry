@@ -19,6 +19,7 @@ const redisStore = require("express-brute-redis");
 // External Files
 const account_1 = __importDefault(require("../controllers/account"));
 const block_1 = __importDefault(require("../controllers/block"));
+const publicBlock_1 = __importDefault(require("../controllers/publicBlock"));
 const logger_1 = __importDefault(require("../services/logger"));
 // Logger setup
 const logger = new logger_1.default('API');
@@ -139,6 +140,17 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', (req, res) => __awaiter(voi
         res.status(400).send(`Could not delete basket: ${error.message}`);
     }
 }));
+_apiV1Router.get('/:pantryID/basket/:basketName/public', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { pantryID, basketName } = publicBasketParams(req);
+        logger.info(`[GET] Create Public Basket for ${pantryID}, ${basketName}`);
+        const _newPublicBasketUUID = yield publicBlock_1.default.create(pantryID, basketName);
+        res.send(_newPublicBasketUUID);
+    }
+    catch (error) {
+        res.status(400).send(`Could not create new Public Basket: ${error.message}`);
+    }
+}));
 function basketParams(req) {
     const { params } = req;
     const { pantryID, basketName } = params;
@@ -148,5 +160,10 @@ function accountParams(req) {
     const { params } = req;
     const { pantryID } = params;
     return { pantryID };
+}
+function publicBasketParams(req) {
+    const { params } = req;
+    const { pantryID, basketName, publicBasketID } = params;
+    return { pantryID, basketName, publicBasketID };
 }
 exports.default = _apiV1Router;

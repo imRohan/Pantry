@@ -17,6 +17,7 @@ const explorerTemplate = require('../templates/explorer.html');
 // Constants
 const API_PATH = configs.apiPath;
 // Components
+const changelog = require('./changelog.ts');
 const explorerEmpty = require('./explorerEmpty.ts');
 const explorerOnboarding = require('./explorerOnboarding.ts');
 const basket = require('./basket.ts');
@@ -26,6 +27,7 @@ const explorer = {
     props: ['pantry'],
     template: explorerTemplate,
     components: {
+        changelog,
         explorerEmpty,
         explorerOnboarding,
         basket,

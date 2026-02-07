@@ -30,6 +30,12 @@ const about = {
             stored on our servers after being properly sanitized.`,
                 },
                 {
+                    title: 'Who can access my Pantry & Baskets?',
+                    answer: `You can share direct links to your baskets (GET & POST), or
+            a read-only (GET) "public". Public links are a great way to allow
+            anyone to read the contents of a specific basket but not modify them.`,
+                },
+                {
                     title: 'What are the limitations?',
                     answer: `A Pantry can have up to 100 baskets (JSON objects), each with a max size
             of 1.44mb per basket. API requests are limited to 2 calls per second. That's it.`,
