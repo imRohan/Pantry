@@ -12,18 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// External Libs
 const express = require("express");
-// External Files
 const logger_1 = __importDefault(require("../services/logger"));
-// Logger setup
+const clientValidator_1 = __importDefault(require("../services/clientValidator"));
+const system_1 = __importDefault(require("../controllers/system"));
 const logger = new logger_1.default('API');
-// Router setup
 const _systemV1Router = express.Router();
 _systemV1Router.get('/status', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         logger.info('[GET] Service Status');
-        res.send('ok');
+        if (clientValidator_1.default.validate(req)) {
+            const _stats = yield system_1.default.getStatus();
+            res.send(_stats);
+        }
+        else {
+            logger.warn('Unauthorized client');
+            res.status(401).send('Unauthorized');
+        }
     }
     catch (error) {
         res.status(400).send(`Could not get system status: ${error.message}`);

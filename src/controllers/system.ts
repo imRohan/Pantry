@@ -1,12 +1,10 @@
-// External Files
-import * as dataStore from '../services/dataStore'
 import logService from '../services/logger'
-
-// Interfaces
-import { ISystemStatus } from '../interfaces/system'
+import * as dataStore from '../services/dataStore'
 import Account from '../models/account'
+import PublicBlock from '../models/publicBlock'
 
-// Logger setup
+import { ISystemStatus } from '../interfaces/system'
+
 const logger = new logService('System Controller')
 
 class SystemController {
@@ -14,11 +12,13 @@ class SystemController {
     try {
       const _dataStoreStatus = await dataStore.ping()
       const _totalAccounts = await Account.getTotalNumber()
+      const _totalPublicBlocks = await PublicBlock.getTotalNumber()
       const _status = {
         website: true,
         api: true,
         dataStore: _dataStoreStatus,
         activeAccounts: _totalAccounts,
+        publicBlocks: _totalPublicBlocks,
       }
 
       logger.info('System status retrieved')
@@ -31,6 +31,7 @@ class SystemController {
         api: true,
         dataStore: false,
         activeAccounts: -1,
+        publicBlocks: -1,
       }
       return _errorStatus
     }

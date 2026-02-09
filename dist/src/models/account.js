@@ -39,7 +39,6 @@ const class_validator_1 = require("class-validator");
 const uuidv4 = require("uuid/v4");
 // External Files
 const dataStore = __importStar(require("../services/dataStore"));
-const KEYS_PER_SCAN_ITERATION = 1000000;
 class Account {
     constructor(params) {
         // Constants
@@ -75,7 +74,7 @@ class Account {
             let _total = 0;
             let _nextCursor = 0;
             do {
-                const [_cursor, _results] = yield dataStore.scan(_nextCursor, _pattern, KEYS_PER_SCAN_ITERATION);
+                const [_cursor, _results] = yield dataStore.scan(_nextCursor, _pattern, 1000);
                 _total += _results.length;
                 _nextCursor = parseInt(_cursor, 10);
             } while (_nextCursor !== 0);

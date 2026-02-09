@@ -46,6 +46,21 @@ class PublicBlock {
     return _publicBlock
   }
 
+  public static async getTotalNumber(): Promise<number> {
+    const _keysPerScan = 10000
+    const _pattern = '*public_block:*'
+    let _total = 0
+    let _nextCursor = 0
+
+    do {
+      const [_cursor, _results] = await dataStore.scan(_nextCursor, _pattern, _keysPerScan)
+      _total += _results.length
+      _nextCursor = parseInt(_cursor, 10)
+    } while (_nextCursor !== 0)
+
+    return _total
+  }
+
   public async store(): Promise<string> {
     const _errors = await validate(this)
     if (_errors.length > 0) {

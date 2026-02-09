@@ -59,6 +59,20 @@ class PublicBlock {
             return _publicBlock;
         });
     }
+    static getTotalNumber() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const _keysPerScan = 10000;
+            const _pattern = '*public_block:*';
+            let _total = 0;
+            let _nextCursor = 0;
+            do {
+                const [_cursor, _results] = yield dataStore.scan(_nextCursor, _pattern, _keysPerScan);
+                _total += _results.length;
+                _nextCursor = parseInt(_cursor, 10);
+            } while (_nextCursor !== 0);
+            return _total;
+        });
+    }
     store() {
         return __awaiter(this, void 0, void 0, function* () {
             const _errors = yield (0, class_validator_1.validate)(this);
