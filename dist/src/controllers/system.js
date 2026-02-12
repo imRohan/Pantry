@@ -31,11 +31,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// External Files
-const dataStore = __importStar(require("../services/dataStore"));
 const logger_1 = __importDefault(require("../services/logger"));
+const dataStore = __importStar(require("../services/dataStore"));
 const account_1 = __importDefault(require("../models/account"));
-// Logger setup
+const publicBlock_1 = __importDefault(require("../models/publicBlock"));
 const logger = new logger_1.default('System Controller');
 class SystemController {
     static getStatus() {
@@ -43,11 +42,13 @@ class SystemController {
             try {
                 const _dataStoreStatus = yield dataStore.ping();
                 const _totalAccounts = yield account_1.default.getTotalNumber();
+                const _totalPublicBlocks = yield publicBlock_1.default.getTotalNumber();
                 const _status = {
                     website: true,
                     api: true,
                     dataStore: _dataStoreStatus,
                     activeAccounts: _totalAccounts,
+                    publicBlocks: _totalPublicBlocks,
                 };
                 logger.info('System status retrieved');
                 return _status;
@@ -59,6 +60,7 @@ class SystemController {
                     api: true,
                     dataStore: false,
                     activeAccounts: -1,
+                    publicBlocks: -1,
                 };
                 return _errorStatus;
             }

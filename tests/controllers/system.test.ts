@@ -20,6 +20,7 @@ describe('When fetching system status', () => {
     mockedDataStore.scan
       .mockReturnValueOnce(Promise.resolve(['0', ['account:00000000-0000-0000-0000-000000000000']]))
       .mockReturnValueOnce(Promise.resolve(['0', ['account:00000000-0000-0000-0000-000000000000']]))
+      .mockReturnValueOnce(Promise.resolve(['0', ['public_block:00000000-0000-0000-0000-000000000000']]))
 
     const _status: ISystemStatus = await SystemController.getStatus()
 
@@ -28,6 +29,7 @@ describe('When fetching system status', () => {
       website: true,
       dataStore: true,
       activeAccounts: 1,
+      publicBlocks: 1,
     })
   })
 

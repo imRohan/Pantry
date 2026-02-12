@@ -18,8 +18,6 @@ import * as dataStore from '../services/dataStore'
 import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interfaces/account'
 import { IBlockInfo } from '../interfaces/block'
 
-const KEYS_PER_SCAN_ITERATION = 1_000_000
-
 class Account {
 
   @IsNotEmpty()
@@ -84,7 +82,7 @@ class Account {
     let _nextCursor = 0
 
     do {
-      const [_cursor, _results] = await dataStore.scan(_nextCursor, _pattern, KEYS_PER_SCAN_ITERATION)
+      const [_cursor, _results] = await dataStore.scan(_nextCursor, _pattern, 1000)
       _total += _results.length
       _nextCursor = parseInt(_cursor, 10)
     } while (_nextCursor !== 0)
@@ -93,7 +91,7 @@ class Account {
   }
 
   private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
-    const _account = JSON.parse(stringifiedAccount)
+    const _account: IAccountPrivate = JSON.parse(stringifiedAccount)
     return _account
   }
 
