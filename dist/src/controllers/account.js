@@ -35,9 +35,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // External Files
 const account_1 = __importDefault(require("../models/account"));
 const block_1 = __importDefault(require("../models/block"));
-const crm = __importStar(require("../services/crm"));
+const crm_1 = __importDefault(require("../services/crm"));
 const logger_1 = __importDefault(require("../services/logger"));
-const mailer = __importStar(require("../services/mailer"));
 const recaptcha = __importStar(require("../services/recaptcha"));
 // Logger setup
 const logger = new logger_1.default('Account Controller');
@@ -53,8 +52,7 @@ class AccountController {
                 const _account = new account_1.default(params);
                 const _accountUUID = yield _account.store();
                 const { contactEmail } = params;
-                yield mailer.sendWelcomeEmail(contactEmail, _accountUUID);
-                crm.addNewUser(contactEmail, _accountUUID);
+                void crm_1.default.addNewUser(contactEmail, _accountUUID);
                 logger.logAndSlack(`Account created for ${contactEmail}: ${_accountUUID}`);
                 return _accountUUID;
             }

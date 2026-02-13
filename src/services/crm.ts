@@ -1,27 +1,43 @@
-// External Libs
-import AirTable = require('airtable')
+import axios from 'axios'
 
-// External Files
-import * as environment from './environment'
 import logService from './logger'
 
-// Logger setup
-const logger = new logService('AirTable')
+const logger = new logService('CRM')
 
-export async function addNewUser(email: string, pantryID: string): Promise<void> {
-  if (environment.isDevelopment()) { return }
+class Crm {
+  public static  readonly baseID: string = process.env.AIRTABLE_BASE_ID
+  public static  readonly tableID: string = process.env.AIRTABLE_TABLE_ID
+  public static  readonly apiToken: string = process.env.AIRTABLE_API_TOKEN
+  public static  readonly airtableBaseURL: string = 'https://api.airtable.com/v0'
 
-  try {
-    const _table = new AirTable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE)
+  public static async addNewUser(email: string, pantryId: string): Promise<void> {
+    try {
+      const _url = `${this.airtableBaseURL}/${this.baseID}/${this.tableID}`
+      await axios({
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiToken}`,
+          'Content-Type': 'application/json',
+        },
+        url: _url,
+        data: {
+          records: [
+            {
+              fields: {
+                Email: email,
+                PantryId: pantryId,
+                DateCreated: new Date(),
+              },
+            },
+          ],
+        },
+      })
 
-    await _table('Users').create({
-      Email: email,
-      PantryId: pantryID,
-      DateCreated: new Date(),
-    })
-
-    logger.info('Saved user details')
-  } catch (error) {
-    logger.error(`Error when adding new user: ${error.message}`)
+      logger.info(`Saved user to table ${this.tableID}`)
+    } catch (error) {
+      logger.error(`Error when saving new user: ${error.message}`)
+    }
   }
 }
+
+export default Crm
