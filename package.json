@@ -67,7 +67,6 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@sendgrid/mail": "^7.1.1",
-    "airtable": "^0.8.1",
     "axios": "^0.21.2",
     "body-parser": "^1.18.3",
     "class-validator": "^0.11.1",

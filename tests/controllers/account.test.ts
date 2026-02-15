@@ -1,6 +1,6 @@
 // External Files
 import AccountController from '../../src/controllers/account'
-import * as crm from '../../src/services/crm'
+import Crm from '../../src/services/crm'
 import * as dataStore from '../../src/services/dataStore'
 import * as mailer from '../../src/services/mailer'
 import * as recaptcha from '../../src/services/recaptcha'
@@ -58,19 +58,18 @@ describe('When creating an account', () => {
     expect(_uuid).toBeDefined()
   })
 
-  it ('sends a welcome email', async () => {
+  it ('does not send a welcome email', async () => {
     const _spy = jest.spyOn(mailer, 'sendWelcomeEmail')
 
-    const _uuid: string = await AccountController.create(_newAccountParams)
+    await AccountController.create(_newAccountParams)
 
-    expect(_spy).toHaveBeenCalled()
-    expect(_spy).toHaveBeenCalledWith(_newAccountParams.contactEmail, _uuid)
+    expect(_spy).not.toHaveBeenCalled()
 
     _spy.mockRestore()
   })
 
   it ('stores user details in crm platform', async () => {
-    const _spy = jest.spyOn(crm, 'addNewUser')
+    const _spy = jest.spyOn(Crm, 'addNewUser')
 
     const _uuid: string = await AccountController.create(_newAccountParams)
 

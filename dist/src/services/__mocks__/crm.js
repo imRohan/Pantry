@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const crm = {
+const Crm = {
     addNewUser: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
 };
-module.exports = crm;
+module.exports = Crm;

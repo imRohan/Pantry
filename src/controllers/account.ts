@@ -3,9 +3,8 @@
 // External Files
 import Account from '../models/account'
 import Block from '../models/block'
-import * as crm from '../services/crm'
+import Crm from '../services/crm'
 import logService from '../services/logger'
-import * as mailer from '../services/mailer'
 import * as recaptcha from '../services/recaptcha'
 
 // Interfaces
@@ -28,8 +27,7 @@ class AccountController {
       const _accountUUID = await _account.store()
 
       const { contactEmail } = params
-      await mailer.sendWelcomeEmail(contactEmail, _accountUUID)
-      crm.addNewUser(contactEmail, _accountUUID)
+      void Crm.addNewUser(contactEmail, _accountUUID)
 
       logger.logAndSlack(`Account created for ${contactEmail}: ${_accountUUID}`)
       return _accountUUID
