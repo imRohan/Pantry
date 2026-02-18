@@ -1,8 +1,8 @@
 // External Files
 import AccountController from '../../src/controllers/account'
 import Crm from '../../src/services/crm'
+import Mailer from '../../src/services/mailer'
 import * as dataStore from '../../src/services/dataStore'
-import * as mailer from '../../src/services/mailer'
 import * as recaptcha from '../../src/services/recaptcha'
 
 jest.mock('../../src/services/dataStore')
@@ -58,12 +58,13 @@ describe('When creating an account', () => {
     expect(_uuid).toBeDefined()
   })
 
-  it ('does not send a welcome email', async () => {
-    const _spy = jest.spyOn(mailer, 'sendWelcomeEmail')
+  it ('sends a welcome email', async () => {
+    const _spy = jest.spyOn(Mailer, 'sendWelcomeEmail')
 
-    await AccountController.create(_newAccountParams)
+    const _uuid: string = await AccountController.create(_newAccountParams)
 
-    expect(_spy).not.toHaveBeenCalled()
+    expect(_spy).toHaveBeenCalledWith(_newAccountParams.contactEmail, _uuid,
+      _newAccountParams.name)
 
     _spy.mockRestore()
   })

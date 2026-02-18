@@ -31,51 +31,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendAccountErrorsEmail = exports.sendWelcomeEmail = void 0;
-// External Libs
-const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-// External Files
+const axios_1 = __importDefault(require("axios"));
 const environment = __importStar(require("./environment"));
 const logger_1 = __importDefault(require("./logger"));
-// Logger setup
 const logger = new logger_1.default('Mailer');
-function sendWelcomeEmail(email, pantryID) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (environment.isDevelopment()) {
-            return;
-        }
-        try {
-            const _email = {
-                to: email,
-                from: 'noreply@getpantry.cloud',
-                templateId: process.env.WELCOME_EMAIL_ID,
-                dynamic_template_data: { pantryID },
-            };
-            logger.info(`Sending welcome email to ${email}`);
-            yield sgMail.send(_email);
-        }
-        catch (error) {
-            logger.error(`Sending welcome email failed: ${error.message}`);
-        }
-    });
+class Mailer {
+    static sendWelcomeEmail(email, pantryID, pantryName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (environment.isDevelopment()) {
+                return;
+            }
+            try {
+                yield (0, axios_1.default)({
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${this.apiKey}`,
+                        'Content-Type': 'application/json',
+                    },
+                    url: this.plunkEndpoint,
+                    data: {
+                        to: email,
+                        template: this.welcomeEmailId,
+                        data: { pantryID, pantryName },
+                    },
+                });
+                logger.info(`Sent a welcome email to ${email}`);
+            }
+            catch (error) {
+                logger.error(`Sending welcome email failed: ${error.message}`);
+            }
+        });
+    }
 }
-exports.sendWelcomeEmail = sendWelcomeEmail;
-function sendAccountErrorsEmail(errorMessage, email, pantryID) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const _email = {
-                to: email,
-                from: 'noreply@getpantry.cloud',
-                templateId: process.env.ACCOUNT_ERRORS_EMAIL_ID,
-                dynamic_template_data: { pantryID, errorMessage },
-            };
-            logger.info(`Sending account errors email to ${email}`);
-            yield sgMail.send(_email);
-        }
-        catch (error) {
-            logger.error(`Sending account errors email  failed: ${error.message}`);
-        }
-    });
-}
-exports.sendAccountErrorsEmail = sendAccountErrorsEmail;
+Mailer.apiKey = process.env.MAILER_API_KEY;
+Mailer.plunkEndpoint = 'https://next-api.useplunk.com/v1/send';
+Mailer.welcomeEmailId = process.env.WELCOME_EMAIL_ID;
+exports.default = Mailer;

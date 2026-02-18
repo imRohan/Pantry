@@ -1,44 +1,39 @@
-// External Libs
-import sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+import axios from 'axios'
 
-// External Files
 import * as environment from './environment'
 import logService from './logger'
 
-// Logger setup
 const logger = new logService('Mailer')
 
-export async function sendWelcomeEmail(email: string, pantryID: string): Promise<void> {
-  if (environment.isDevelopment()) { return }
+class Mailer {
+  private static apiKey: string = process.env.MAILER_API_KEY
+  private static plunkEndpoint: string = 'https://next-api.useplunk.com/v1/send'
+  private static welcomeEmailId = process.env.WELCOME_EMAIL_ID
 
-  try {
-    const _email = {
-      to: email,
-      from: 'noreply@getpantry.cloud',
-      templateId: process.env.WELCOME_EMAIL_ID,
-      dynamic_template_data: { pantryID },
+  public static async sendWelcomeEmail(email: string, pantryID: string,
+                                       pantryName: string): Promise<void> {
+    if (environment.isDevelopment()) { return }
+
+    try {
+      await axios({
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        url: this.plunkEndpoint,
+        data: {
+          to: email,
+          template: this.welcomeEmailId,
+          data: { pantryID, pantryName },
+        },
+      })
+
+      logger.info(`Sent a welcome email to ${email}`)
+    } catch (error) {
+      logger.error(`Sending welcome email failed: ${error.message}`)
     }
-
-    logger.info(`Sending welcome email to ${email}`)
-    await sgMail.send(_email)
-  } catch (error) {
-    logger.error(`Sending welcome email failed: ${error.message}`)
   }
 }
 
-export async function sendAccountErrorsEmail(errorMessage: string, email: string, pantryID: string): Promise<void> {
-  try {
-    const _email = {
-      to: email,
-      from: 'noreply@getpantry.cloud',
-      templateId: process.env.ACCOUNT_ERRORS_EMAIL_ID,
-      dynamic_template_data: { pantryID, errorMessage },
-    }
-
-    logger.info(`Sending account errors email to ${email}`)
-    await sgMail.send(_email)
-  } catch (error) {
-    logger.error(`Sending account errors email  failed: ${error.message}`)
-  }
-}
+export default Mailer

@@ -95,26 +95,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@sendgrid/client@^7.4.7":
-  version "7.4.7"
-  resolved "https://registry.npmjs.org/@sendgrid/client/-/client-7.4.7.tgz"
-  dependencies:
-    "@sendgrid/helpers" "^7.4.6"
-    axios "^0.21.4"
-
-"@sendgrid/helpers@^7.4.6":
-  version "7.4.6"
-  resolved "https://registry.npmjs.org/@sendgrid/helpers/-/helpers-7.4.6.tgz"
-  dependencies:
-    deepmerge "^4.2.2"
-
-"@sendgrid/mail@^7.1.1":
-  version "7.4.7"
-  resolved "https://registry.npmjs.org/@sendgrid/mail/-/mail-7.4.7.tgz"
-  dependencies:
-    "@sendgrid/client" "^7.4.7"
-    "@sendgrid/helpers" "^7.4.6"
-
 "@sindresorhus/is@^4.0.0":
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.6.0.tgz#3c7c9c46e678feefe7a2e5bb609d3dbd665ffb3f"
@@ -747,7 +727,7 @@ aws4@^1.8.0:
   version "1.11.0"
   resolved "https://registry.npmjs.org/aws4/-/aws4-1.11.0.tgz"
 
-axios@^0.21.1, axios@^0.21.2, axios@^0.21.4:
+axios@^0.21.1, axios@^0.21.2:
   version "0.21.4"
   resolved "https://registry.npmjs.org/axios/-/axios-0.21.4.tgz"
   dependencies:
