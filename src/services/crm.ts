@@ -1,16 +1,19 @@
 import axios from 'axios'
 
+import * as environment from './environment'
 import logService from './logger'
 
 const logger = new logService('CRM')
 
 class Crm {
-  public static  readonly baseID: string = process.env.AIRTABLE_BASE_ID
-  public static  readonly tableID: string = process.env.AIRTABLE_TABLE_ID
-  public static  readonly apiToken: string = process.env.AIRTABLE_API_TOKEN
-  public static  readonly airtableBaseURL: string = 'https://api.airtable.com/v0'
+  private static readonly baseID: string = process.env.AIRTABLE_BASE_ID
+  private static readonly tableID: string = process.env.AIRTABLE_TABLE_ID
+  private static readonly apiToken: string = process.env.AIRTABLE_API_TOKEN
+  private static readonly airtableBaseURL: string = 'https://api.airtable.com/v0'
 
   public static async addNewUser(email: string, pantryId: string): Promise<void> {
+    if (environment.isDevelopment()) { return }
+
     try {
       const _url = `${this.airtableBaseURL}/${this.baseID}/${this.tableID}`
       await axios({

@@ -4,6 +4,7 @@
 import Account from '../models/account'
 import Block from '../models/block'
 import Crm from '../services/crm'
+import Mailer from '../services/mailer'
 import logService from '../services/logger'
 import * as recaptcha from '../services/recaptcha'
 
@@ -28,6 +29,7 @@ class AccountController {
 
       const { contactEmail } = params
       void Crm.addNewUser(contactEmail, _accountUUID)
+      void Mailer.sendWelcomeEmail(contactEmail, _account.uuid, _account.name)
 
       logger.logAndSlack(`Account created for ${contactEmail}: ${_accountUUID}`)
       return _accountUUID

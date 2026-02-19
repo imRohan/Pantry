@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const mailer = {
+const Mailer = {
     sendWelcomeEmail: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
     sendAccountErrorsEmail: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
 };
-module.exports = mailer;
+module.exports = Mailer;

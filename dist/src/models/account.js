@@ -176,6 +176,9 @@ class Account {
     }
 }
 __decorate([
+    (0, class_validator_1.IsUUID)('4')
+], Account.prototype, "uuid", void 0);
+__decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)()
 ], Account.prototype, "name", void 0);
@@ -199,7 +202,4 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsArray)()
 ], Account.prototype, "errors", void 0);
-__decorate([
-    (0, class_validator_1.IsUUID)('4')
-], Account.prototype, "uuid", void 0);
 exports.default = Account;

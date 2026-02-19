@@ -20,9 +20,11 @@ import { IBlockInfo } from '../interfaces/block'
 
 class Account {
 
+  @IsUUID('4')
+  public uuid: string
   @IsNotEmpty()
   @IsString()
-  private name: string
+  public name: string
   @IsNotEmpty()
   @IsString()
   private description: string
@@ -38,8 +40,6 @@ class Account {
   @IsNotEmpty()
   @IsArray()
   private errors: string[]
-  @IsUUID('4')
-  private uuid: string
 
   // Constants
   private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
