@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // External Files
-const account_1 = __importDefault(require("../models/account"));
 const block_1 = __importDefault(require("../models/block"));
 const logger_1 = __importDefault(require("../services/logger"));
 // Logger setup
@@ -23,15 +22,10 @@ class BlockController {
     static create(accountUUID, name, payload) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                logger.info(`Creating block ${name} in account: ${accountUUID}`);
-                const _account = yield account_1.default.get(accountUUID);
-                const _accountFull = yield _account.checkIfFull();
-                if (_accountFull) {
-                    const _errorMessage = 'max number of baskets reached';
-                    throw new Error(_errorMessage);
-                }
                 const _block = new block_1.default(accountUUID, name, payload);
+                yield _block.verifyAccountNotFull();
                 yield _block.store();
+                logger.info(`Block ${name} created in account: ${accountUUID}`);
                 const _blockDetails = _block.sanitize();
                 return _blockDetails;
             }
@@ -44,8 +38,8 @@ class BlockController {
     static get(accountUUID, name) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                logger.info(`Retrieving block: ${name} in account: ${accountUUID}`);
                 const _block = yield block_1.default.get(accountUUID, name);
+                logger.info(`Block ${name} retrieved from account: ${accountUUID}`);
                 const _blockDetails = _block.sanitize();
                 return _blockDetails;
             }
@@ -58,9 +52,9 @@ class BlockController {
     static update(accountUUID, name, data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                logger.info(`Updating block ${name} in account: ${accountUUID}`);
                 const _block = yield block_1.default.get(accountUUID, name);
                 yield _block.update(data);
+                logger.info(`Block ${name} updated in account: ${accountUUID}`);
                 const _blockDetails = _block.sanitize();
                 return _blockDetails;
             }
@@ -73,7 +67,6 @@ class BlockController {
     static delete(accountUUID, name) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                logger.info(`Removing block ${name} from account: ${accountUUID}`);
                 const _block = yield block_1.default.get(accountUUID, name);
                 yield _block.delete();
                 logger.info(`Block ${name} was successfully removed from account: ${accountUUID}`);

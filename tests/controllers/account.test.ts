@@ -1,5 +1,6 @@
 // External Files
 import AccountController from '../../src/controllers/account'
+import Account from '../../src/models/account'
 import Crm from '../../src/services/crm'
 import Mailer from '../../src/services/mailer'
 import * as dataStore from '../../src/services/dataStore'
@@ -150,6 +151,16 @@ describe('When retrieving an account', () => {
     expect(_accountBase).toBeDefined()
   })
 
+  it ('refreshes the TTL of the account', async () => {
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
+    const _redisKey = `account:${_existingAccount.uuid}`
+
+    await AccountController.get(_existingAccount.uuid)
+
+    expect(mockedDataStore.refreshTTL).toHaveBeenCalledWith(_redisKey, Account.lifeSpan)
+  })
+
   it ('throws an error if account does not exist', async () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
 
@@ -173,7 +184,7 @@ describe('When deleting an account', () => {
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
-
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.find.mockReturnValueOnce(
       Promise.resolve(
         [`account:${_existingAccount.uuid}::block:${_existingBlock.name}`]

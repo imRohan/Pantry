@@ -12,9 +12,12 @@ import { IsValidPayloadSize } from '../decorators/block'
 import * as dataStore from '../services/dataStore'
 
 // Interfaces
-import { IBlock } from '../interfaces/block'
+import { IBlock, IBlockPublic } from '../interfaces/block'
+import Account from './account'
 
 class Block {
+  public static readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
+  public static readonly lifeSpan = Number(86400 * this.lifeSpanDays)
 
   @IsNotEmpty()
   @IsString()
@@ -25,45 +28,27 @@ class Block {
   @IsNotEmpty()
   @IsObject()
   @IsValidPayloadSize()
-  public payload: JSON
-
-  // Constants
-  private readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
-  private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
+  public payload: any
+  @IsNotEmpty()
+  public account: Account
+  @IsNotEmpty()
+  @IsString()
+  private redisKey: string
 
   public constructor(accountUUID: string, name: string, payload: JSON) {
     this.name = name
     this.payload = payload
     this.accountUUID = accountUUID
+    this.redisKey = `account:${this.accountUUID}::block:${this.name}`
+    this.account = null
   }
 
   public static async get(accountUUID: string, name: string): Promise<Block> {
-    const _blockKey = Block.generateRedisKey(accountUUID, name)
-    const _stringifiedBlock = await dataStore.get(_blockKey)
-
-    if (!_stringifiedBlock) {
-      throw new Error(`${name} does not exist`)
-    }
-
-    const _blockContents = Block.convertRedisPayload(_stringifiedBlock)
-    const { payload } = _blockContents
-
-    const _block = new Block(accountUUID, name, payload)
-
+    const _block = new Block(accountUUID, name, null)
+    await _block.hydrate()
     await _block.refreshTTL()
-
     return _block
   }
-
-  private static convertRedisPayload(stringifiedBlock: string): IBlock {
-    const _block: IBlock = JSON.parse(stringifiedBlock)
-    return _block
-  }
-
-  private static generateRedisKey(accountUUID: string, name: string): string {
-    return `account:${accountUUID}::block:${name}`
-  }
-
 
   public async store(): Promise<void> {
     const _errors = await validate(this)
@@ -71,10 +56,8 @@ class Block {
       throw new Error(`Validation failed: ${_errors}`)
     }
 
-    const _blockKey = Block.generateRedisKey(this.accountUUID, this.name)
     const _stringifiedBlock = this.generateRedisPayload()
-
-    await dataStore.set(_blockKey, _stringifiedBlock, this.lifeSpan)
+    await dataStore.set(this.redisKey, _stringifiedBlock, Block.lifeSpan)
   }
 
   public async update(newData: JSON): Promise<JSON> {
@@ -82,20 +65,24 @@ class Block {
     this.payload = _updatedPayload
     await this.store()
 
-    return(_updatedPayload)
+    return _updatedPayload
   }
 
   public async delete(): Promise<void> {
-    const _blockKey = Block.generateRedisKey(this.accountUUID, this.name)
-    await dataStore.remove(_blockKey)
+    await dataStore.remove(this.redisKey)
   }
 
   public async refreshTTL(): Promise<void> {
-    await this.store()
+    await dataStore.refreshTTL(this.redisKey, Block.lifeSpan)
   }
 
-  public sanitize(): JSON {
-    return this.payload
+  public sanitize(): IBlockPublic {
+    return { ...this.payload }
+  }
+
+  public async verifyAccountNotFull(): Promise<void> {
+    await this.hydrateAccount()
+    await this.account.verifyIfFull()
   }
 
   private generateRedisPayload(): string {
@@ -105,6 +92,23 @@ class Block {
       payload: this.payload,
     }
     return JSON.stringify(_payload)
+  }
+
+  private async hydrate(): Promise<void> {
+    await this.hydrateAccount()
+    const _stringifiedBlock = await dataStore.get(this.redisKey)
+
+    if (!_stringifiedBlock) {
+      throw new Error(`${this.name} does not exist`)
+    }
+
+    const _blockContents: IBlock = JSON.parse(_stringifiedBlock)
+    const { payload } = _blockContents
+    this.payload = payload
+  }
+
+  private async hydrateAccount(): Promise<void> {
+    this.account = await Account.get(this.accountUUID)
   }
 }
 

@@ -51,12 +51,12 @@ class AccountController {
                     throw new Error('ReCaptcha Failed');
                 }
                 const _account = new account_1.default(params);
-                const _accountUUID = yield _account.store();
+                yield _account.store();
                 const { contactEmail } = params;
-                void crm_1.default.addNewUser(contactEmail, _accountUUID);
+                void crm_1.default.addNewUser(contactEmail, _account.uuid);
                 void mailer_1.default.sendWelcomeEmail(contactEmail, _account.uuid, _account.name);
-                logger.logAndSlack(`Account created for ${contactEmail}: ${_accountUUID}`);
-                return _accountUUID;
+                logger.logAndSlack(`Account created for ${contactEmail}: ${_account.uuid}`);
+                return _account.uuid;
             }
             catch (error) {
                 logger.error(`Account creation failed: ${error.message}`);
@@ -69,8 +69,8 @@ class AccountController {
             try {
                 const _account = yield account_1.default.get(uuid);
                 yield _account.update(data);
+                logger.info(`Account ${uuid} was updated`);
                 const _accountDetails = _account.sanitize();
-                logger.info('Account updated');
                 return _accountDetails;
             }
             catch (error) {
@@ -84,7 +84,7 @@ class AccountController {
             try {
                 const _account = yield account_1.default.get(uuid);
                 const _accountDetails = _account.sanitize();
-                logger.info('Account retrieved');
+                logger.info(`Account ${uuid} retrieved`);
                 return _accountDetails;
             }
             catch (error) {
@@ -98,7 +98,7 @@ class AccountController {
             try {
                 const _account = yield account_1.default.get(uuid);
                 const _blocks = yield _account.getBlocks();
-                logger.info(`Deleting account: ${uuid}`);
+                logger.info(`Starting deletion of account: ${uuid}`);
                 for (const _item of _blocks) {
                     const { name } = _item;
                     logger.info(`Deleting block ${name} in account: ${uuid}`);
@@ -106,7 +106,7 @@ class AccountController {
                     yield _block.delete();
                 }
                 yield _account.delete();
-                logger.info(`Account: ${uuid} deleted`);
+                logger.info(`Account ${uuid} deleted`);
                 return 'Your Pantry has been deleted!';
             }
             catch (error) {

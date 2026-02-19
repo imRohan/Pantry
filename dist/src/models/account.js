@@ -33,6 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 // Extarnal Libs
 const class_validator_1 = require("class-validator");
@@ -42,8 +43,6 @@ const dataStore = __importStar(require("../services/dataStore"));
 class Account {
     constructor(params) {
         // Constants
-        this.lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN);
-        this.lifeSpan = Number(86400 * this.lifeSpanDays);
         this.defaultMaxNumberOfBlocks = 100;
         const { name, description, contactEmail, notifications, uuid, maxNumberOfBlocks, errors } = params;
         this.name = name;
@@ -53,18 +52,14 @@ class Account {
         this.maxNumberOfBlocks = maxNumberOfBlocks !== null && maxNumberOfBlocks !== void 0 ? maxNumberOfBlocks : this.defaultMaxNumberOfBlocks;
         this.errors = errors !== null && errors !== void 0 ? errors : [];
         this.uuid = uuid !== null && uuid !== void 0 ? uuid : uuidv4();
+        this.redisKey = `account:${this.uuid}`;
     }
     static get(uuid) {
         return __awaiter(this, void 0, void 0, function* () {
-            const _accountKey = Account.generateRedisKey(uuid);
-            const _stringifiedAccount = yield dataStore.get(_accountKey);
-            if (!_stringifiedAccount) {
-                throw new Error(`pantry with id: ${uuid} not found`);
-            }
-            const _accountParams = Account.convertRedisPayload(_stringifiedAccount);
-            const _accountObject = new Account(_accountParams);
-            yield _accountObject.refreshTTL();
-            return _accountObject;
+            const _account = new Account({ uuid });
+            yield _account.hydrate();
+            yield _account.refreshTTL();
+            return _account;
         });
     }
     static getTotalNumber() {
@@ -81,13 +76,6 @@ class Account {
             return _total;
         });
     }
-    static convertRedisPayload(stringifiedAccount) {
-        const _account = JSON.parse(stringifiedAccount);
-        return _account;
-    }
-    static generateRedisKey(uuid) {
-        return `account:${uuid}`;
-    }
     update(newData) {
         return __awaiter(this, void 0, void 0, function* () {
             const { name, description, notifications } = newData;
@@ -103,10 +91,8 @@ class Account {
             if (_errors.length > 0) {
                 throw new Error(`Validation failed: ${_errors}`);
             }
-            const _accountKey = Account.generateRedisKey(this.uuid);
             const _stringifiedAccount = this.generateRedisPayload();
-            yield dataStore.set(_accountKey, _stringifiedAccount, this.lifeSpan);
-            return this.uuid;
+            yield dataStore.set(this.redisKey, _stringifiedAccount, Account.lifeSpan);
         });
     }
     sanitize() {
@@ -124,28 +110,31 @@ class Account {
             return _sanitizedItems;
         });
     }
-    checkIfFull() {
+    verifyIfFull() {
         return __awaiter(this, void 0, void 0, function* () {
             const _blocks = yield this.getBlocks();
             const _isFull = _blocks.length === this.maxNumberOfBlocks;
-            return _isFull;
+            if (_isFull) {
+                throw new Error('maximum storage limit has been reached');
+            }
+            else {
+                return true;
+            }
         });
     }
     delete() {
         return __awaiter(this, void 0, void 0, function* () {
-            const _accountKey = Account.generateRedisKey(this.uuid);
-            yield dataStore.remove(_accountKey);
+            yield dataStore.remove(this.redisKey);
         });
     }
     refreshTTL() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.store();
+            yield dataStore.refreshTTL(this.redisKey, Account.lifeSpan);
         });
     }
     getBlocks() {
         return __awaiter(this, void 0, void 0, function* () {
-            const _accountKey = Account.generateRedisKey(this.uuid);
-            const _blockKeys = yield dataStore.find(`${_accountKey}::block:*`);
+            const _blockKeys = yield dataStore.find(`${this.redisKey}::block:*`);
             const _blocks = yield Promise.all(_blockKeys.map((key) => __awaiter(this, void 0, void 0, function* () {
                 const _ttl = yield dataStore.ttl(key);
                 const _sanitizedName = key.split(':')[4];
@@ -174,7 +163,26 @@ class Account {
         };
         return JSON.stringify(_accountDetails);
     }
+    hydrate() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const _stringifiedAccount = yield dataStore.get(this.redisKey);
+            if (!_stringifiedAccount) {
+                throw new Error(`pantry with id: ${this.uuid} not found`);
+            }
+            const _accountParams = JSON.parse(_stringifiedAccount);
+            const { name, description, contactEmail, notifications, maxNumberOfBlocks, errors } = _accountParams;
+            this.name = name;
+            this.description = description;
+            this.contactEmail = contactEmail;
+            this.notifications = notifications;
+            this.maxNumberOfBlocks = maxNumberOfBlocks;
+            this.errors = errors;
+        });
+    }
 }
+_a = Account;
+Account.lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN);
+Account.lifeSpan = Number(86400 * _a.lifeSpanDays);
 __decorate([
     (0, class_validator_1.IsUUID)('4')
 ], Account.prototype, "uuid", void 0);
@@ -202,4 +210,8 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsArray)()
 ], Account.prototype, "errors", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)()
+], Account.prototype, "redisKey", void 0);
 exports.default = Account;

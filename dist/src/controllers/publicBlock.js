@@ -36,9 +36,7 @@ class PublicBlockController {
             try {
                 const _publicBlock = yield publicBlock_1.default.get(id);
                 logger.info(`Public Block retrieved: ${id}`);
-                const _block = _publicBlock.block;
-                const _blockDetails = _block.sanitize();
-                return _blockDetails;
+                return _publicBlock.sanitizedBlock();
             }
             catch (error) {
                 logger.error(`Public Block retrieval failed: ${error.message}`);
