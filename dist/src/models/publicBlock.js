@@ -36,6 +36,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const crypto = require("crypto");
 const class_validator_1 = require("class-validator");
@@ -43,8 +44,6 @@ const dataStore = __importStar(require("../services/dataStore"));
 const block_1 = __importDefault(require("./block"));
 class PublicBlock {
     constructor(accountUUID, blockName, id = null) {
-        this.lifeSpanDays = Number(process.env.BLOCK_LIFESPAN);
-        this.lifeSpan = Number(86400 * this.lifeSpanDays);
         this.accountUUID = accountUUID;
         this.blockName = blockName;
         this.id = id !== null && id !== void 0 ? id : this.generateHash();
@@ -55,7 +54,7 @@ class PublicBlock {
         return __awaiter(this, void 0, void 0, function* () {
             const _publicBlock = new PublicBlock(null, null, id);
             yield _publicBlock.hydrate();
-            yield _publicBlock.saveToRedis();
+            yield _publicBlock.refreshTTL();
             return _publicBlock;
         });
     }
@@ -75,20 +74,18 @@ class PublicBlock {
     }
     store() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.hydrateBlock();
             const _errors = yield (0, class_validator_1.validate)(this);
             if (_errors.length > 0) {
                 throw new Error(`Validation failed: ${_errors}`);
             }
-            yield this.refreshBlock();
-            yield this.saveToRedis();
+            const _stringifiedPublicBlock = this.generateRedisPayload();
+            yield dataStore.set(this.redisKey, _stringifiedPublicBlock, PublicBlock.lifeSpan);
             return this.id;
         });
     }
-    saveToRedis() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const _stringifiedPublicBlock = this.generateRedisPayload();
-            yield dataStore.set(this.redisKey, _stringifiedPublicBlock, this.lifeSpan);
-        });
+    sanitizedBlock() {
+        return this.block.sanitize();
     }
     hydrate() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -100,15 +97,15 @@ class PublicBlock {
             const { accountUUID, blockName } = _publicBlockContents;
             this.accountUUID = accountUUID;
             this.blockName = blockName;
-            yield this.refreshBlock();
+            yield this.hydrateBlock();
         });
     }
-    refreshBlock() {
+    hydrateBlock() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 this.block = yield block_1.default.get(this.accountUUID, this.blockName);
             }
-            catch (_a) {
+            catch (_error) {
                 throw new Error('basket not found, please contact the Pantry owner');
             }
         });
@@ -126,7 +123,15 @@ class PublicBlock {
         };
         return JSON.stringify(_publicBlock);
     }
+    refreshTTL() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield dataStore.refreshTTL(this.redisKey, PublicBlock.lifeSpan);
+        });
+    }
 }
+_a = PublicBlock;
+PublicBlock.lifeSpanDays = Number(process.env.BLOCK_LIFESPAN);
+PublicBlock.lifeSpan = Number(86400 * _a.lifeSpanDays);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)()
@@ -143,4 +148,7 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)()
 ], PublicBlock.prototype, "redisKey", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)()
+], PublicBlock.prototype, "block", void 0);
 exports.default = PublicBlock;

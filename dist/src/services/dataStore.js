@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ttl = exports.ping = exports.scan = exports.find = exports.remove = exports.set = exports.get = void 0;
+exports.ttl = exports.ping = exports.scan = exports.find = exports.refreshTTL = exports.remove = exports.set = exports.get = void 0;
 // External Libs
 const crypto = require("crypto");
 const util_1 = require("util");
@@ -84,6 +84,22 @@ function remove(key) {
     });
 }
 exports.remove = remove;
+function refreshTTL(key, expiryTTL) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const _redisClient = redis.createClient();
+            const _expire = (0, util_1.promisify)(_redisClient.expire).bind(_redisClient);
+            yield _expire(key, expiryTTL);
+            _redisClient.quit();
+            return;
+        }
+        catch (error) {
+            logger.error(`Error when refreshing TTL of a key: ${error.message}`);
+            throw new Error('Pantry is having critical issues');
+        }
+    });
+}
+exports.refreshTTL = refreshTTL;
 function find(pattern) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

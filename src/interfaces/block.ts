@@ -13,3 +13,7 @@ export interface IBlockRequestParams {
   pantryID: string,
   basketName: string,
 }
+
+export interface IBlockPublic {
+  [key: string]: unknown
+}

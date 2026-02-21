@@ -7,11 +7,14 @@ import {
 
 
 import { IPublicBlock } from '../interfaces/publicBlock'
+import { IBlockPublic } from '../interfaces/block'
 
 import * as dataStore from '../services/dataStore'
 import Block from './block'
 
 class PublicBlock {
+  public static readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
+  public static readonly lifeSpan = Number(86400 * this.lifeSpanDays)
 
   @IsNotEmpty()
   @IsString()
@@ -25,11 +28,8 @@ class PublicBlock {
   @IsNotEmpty()
   @IsString()
   private redisKey: string
-  public block: Block
-
-
-  private readonly lifeSpanDays = Number(process.env.BLOCK_LIFESPAN)
-  private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
+  @IsNotEmpty()
+  private block: Block
 
   public constructor(accountUUID: string, blockName: string, id: string = null) {
     this.accountUUID = accountUUID
@@ -42,7 +42,7 @@ class PublicBlock {
   public static async get(id: string): Promise<PublicBlock> {
     const _publicBlock = new PublicBlock(null, null, id)
     await _publicBlock.hydrate()
-    await _publicBlock.saveToRedis()
+    await _publicBlock.refreshTTL()
     return _publicBlock
   }
 
@@ -62,19 +62,21 @@ class PublicBlock {
   }
 
   public async store(): Promise<string> {
+    await this.hydrateBlock()
+
     const _errors = await validate(this)
     if (_errors.length > 0) {
       throw new Error(`Validation failed: ${_errors}`)
     }
 
-    await this.refreshBlock()
-    await this.saveToRedis()
+    const _stringifiedPublicBlock = this.generateRedisPayload()
+    await dataStore.set(this.redisKey, _stringifiedPublicBlock, PublicBlock.lifeSpan)
+
     return this.id
   }
 
-  private async saveToRedis(): Promise<void> {
-    const _stringifiedPublicBlock = this.generateRedisPayload()
-    await dataStore.set(this.redisKey, _stringifiedPublicBlock, this.lifeSpan)
+  public sanitizedBlock(): IBlockPublic {
+    return this.block.sanitize()
   }
 
   private async hydrate(): Promise<void> {
@@ -88,13 +90,13 @@ class PublicBlock {
 
     this.accountUUID = accountUUID
     this.blockName = blockName
-    await this.refreshBlock()
+    await this.hydrateBlock()
   }
 
-  private async refreshBlock(): Promise<void> {
+  private async hydrateBlock(): Promise<void> {
     try {
       this.block = await Block.get(this.accountUUID, this.blockName)
-    } catch {
+    } catch (_error) {
       throw new Error('basket not found, please contact the Pantry owner')
     }
   }
@@ -112,6 +114,10 @@ class PublicBlock {
       id: this.id,
     }
     return JSON.stringify(_publicBlock)
+  }
+
+  private async refreshTTL(): Promise<void> {
+    await dataStore.refreshTTL(this.redisKey, PublicBlock.lifeSpan)
   }
 }
 

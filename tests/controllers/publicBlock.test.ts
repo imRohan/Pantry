@@ -1,5 +1,7 @@
 // External Files
 import PublicBlockController from '../../src/controllers/publicBlock'
+import Block from '../../src/models/block'
+import PublicBlock from '../../src/models/publicBlock'
 import * as dataStore from '../../src/services/dataStore'
 
 jest.mock('../../src/services/dataStore')
@@ -42,10 +44,24 @@ afterEach(() => {
 describe('When creating a public block', () => {
   it ('returns the public blocks id', async () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
 
     const _response = await PublicBlockController.create(_existingAccount.uuid, _existingBlock.name)
 
     expect(_response).toBeDefined()
+  })
+
+  it ('refreshes the TTL of the block', async () => {
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
+    const _redisKey = `account:${_existingAccount.uuid}::block:${_existingBlock.name}`
+
+    await PublicBlockController.create(_existingAccount.uuid, _existingBlock.name)
+
+    expect(mockedDataStore.refreshTTL).toHaveBeenCalledWith(_redisKey, Block.lifeSpan)
   })
 
   describe('When the block does not exist', () => {
@@ -64,11 +80,43 @@ describe('When retrieving a public block', () => {
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
     mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
     const _payload = await PublicBlockController.get(_existingPublicBlock.id)
 
     expect(_payload).toEqual({ derp: 'flerp' })
+  })
+
+  it ('refreshes the TTL of the public block', async () => {
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+    const _redisKey = `public_block:${_existingPublicBlock.id}`
+
+    await PublicBlockController.get(_existingPublicBlock.id)
+
+    expect(mockedDataStore.refreshTTL)
+      .toHaveBeenCalledWith(_redisKey, PublicBlock.lifeSpan)
+  })
+
+  it ('refreshes the TTL of the block', async () => {
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+    const _redisKey = `account:${_existingAccount.uuid}::block:${_existingBlock.name}`
+
+    await PublicBlockController.get(_existingPublicBlock.id)
+
+    expect(mockedDataStore.refreshTTL)
+      .toHaveBeenCalledWith(_redisKey, Block.lifeSpan)
   })
 
   it ('throws an error if public block does not exist', async () => {

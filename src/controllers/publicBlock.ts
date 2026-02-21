@@ -1,6 +1,8 @@
 import PublicBlock from '../models/publicBlock'
 import logService from '../services/logger'
 
+import { IBlockPublic } from '../interfaces/block'
+
 // Logger setup
 const logger = new logService('Public Block Controller')
 
@@ -11,7 +13,6 @@ class PublicBlockController {
       const _publicBlockUUID = await _publicBlock.store()
 
       logger.info(`Public Block created: ${_publicBlockUUID}`)
-
       return _publicBlockUUID
     } catch (error) {
       logger.error(`Public Block creation failed: ${error.message}`)
@@ -19,14 +20,12 @@ class PublicBlockController {
     }
   }
 
-  public static async get(id: string): Promise<JSON> {
+  public static async get(id: string): Promise<IBlockPublic> {
     try {
       const _publicBlock = await PublicBlock.get(id)
-      logger.info(`Public Block retrieved: ${id}`)
 
-      const _block = _publicBlock.block
-      const _blockDetails = _block.sanitize()
-      return _blockDetails
+      logger.info(`Public Block retrieved: ${id}`)
+      return _publicBlock.sanitizedBlock()
     } catch (error) {
       logger.error(`Public Block retrieval failed: ${error.message}`)
       throw error

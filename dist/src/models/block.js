@@ -33,6 +33,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 // Extarnal Libs
 const class_validator_1 = require("class-validator");
@@ -40,35 +44,22 @@ const merge = require("deepmerge");
 // External Files
 const block_1 = require("../decorators/block");
 const dataStore = __importStar(require("../services/dataStore"));
+const account_1 = __importDefault(require("./account"));
 class Block {
     constructor(accountUUID, name, payload) {
-        // Constants
-        this.lifeSpanDays = Number(process.env.BLOCK_LIFESPAN);
-        this.lifeSpan = Number(86400 * this.lifeSpanDays);
         this.name = name;
         this.payload = payload;
         this.accountUUID = accountUUID;
+        this.redisKey = `account:${this.accountUUID}::block:${this.name}`;
+        this.account = null;
     }
     static get(accountUUID, name) {
         return __awaiter(this, void 0, void 0, function* () {
-            const _blockKey = Block.generateRedisKey(accountUUID, name);
-            const _stringifiedBlock = yield dataStore.get(_blockKey);
-            if (!_stringifiedBlock) {
-                throw new Error(`${name} does not exist`);
-            }
-            const _blockContents = Block.convertRedisPayload(_stringifiedBlock);
-            const { payload } = _blockContents;
-            const _block = new Block(accountUUID, name, payload);
+            const _block = new Block(accountUUID, name, null);
+            yield _block.hydrate();
             yield _block.refreshTTL();
             return _block;
         });
-    }
-    static convertRedisPayload(stringifiedBlock) {
-        const _block = JSON.parse(stringifiedBlock);
-        return _block;
-    }
-    static generateRedisKey(accountUUID, name) {
-        return `account:${accountUUID}::block:${name}`;
     }
     store() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -76,9 +67,8 @@ class Block {
             if (_errors.length > 0) {
                 throw new Error(`Validation failed: ${_errors}`);
             }
-            const _blockKey = Block.generateRedisKey(this.accountUUID, this.name);
             const _stringifiedBlock = this.generateRedisPayload();
-            yield dataStore.set(_blockKey, _stringifiedBlock, this.lifeSpan);
+            yield dataStore.set(this.redisKey, _stringifiedBlock, Block.lifeSpan);
         });
     }
     update(newData) {
@@ -86,22 +76,27 @@ class Block {
             const _updatedPayload = merge(this.payload, newData);
             this.payload = _updatedPayload;
             yield this.store();
-            return (_updatedPayload);
+            return _updatedPayload;
         });
     }
     delete() {
         return __awaiter(this, void 0, void 0, function* () {
-            const _blockKey = Block.generateRedisKey(this.accountUUID, this.name);
-            yield dataStore.remove(_blockKey);
+            yield dataStore.remove(this.redisKey);
         });
     }
     refreshTTL() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.store();
+            yield dataStore.refreshTTL(this.redisKey, Block.lifeSpan);
         });
     }
     sanitize() {
-        return this.payload;
+        return Object.assign({}, this.payload);
+    }
+    verifyAccountNotFull() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.hydrateAccount();
+            yield this.account.verifyIfFull();
+        });
     }
     generateRedisPayload() {
         const _payload = {
@@ -111,7 +106,27 @@ class Block {
         };
         return JSON.stringify(_payload);
     }
+    hydrate() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.hydrateAccount();
+            const _stringifiedBlock = yield dataStore.get(this.redisKey);
+            if (!_stringifiedBlock) {
+                throw new Error(`${this.name} does not exist`);
+            }
+            const _blockContents = JSON.parse(_stringifiedBlock);
+            const { payload } = _blockContents;
+            this.payload = payload;
+        });
+    }
+    hydrateAccount() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.account = yield account_1.default.get(this.accountUUID);
+        });
+    }
 }
+_a = Block;
+Block.lifeSpanDays = Number(process.env.BLOCK_LIFESPAN);
+Block.lifeSpan = Number(86400 * _a.lifeSpanDays);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)()
@@ -125,4 +140,11 @@ __decorate([
     (0, class_validator_1.IsObject)(),
     (0, block_1.IsValidPayloadSize)()
 ], Block.prototype, "payload", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)()
+], Block.prototype, "account", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)()
+], Block.prototype, "redisKey", void 0);
 exports.default = Block;

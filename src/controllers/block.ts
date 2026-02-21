@@ -1,32 +1,22 @@
 // Extarnal Libs
 
 // External Files
-import Account from '../models/account'
 import Block from '../models/block'
 import logService from '../services/logger'
+import { IBlockPublic } from '../interfaces/block'
 
 // Logger setup
 const logger = new logService('Block Controller')
 
 class BlockController {
-  public static async create(accountUUID: string, name: string, payload: JSON): Promise<JSON> {
+  public static async create(accountUUID: string, name: string, payload: JSON): Promise<IBlockPublic> {
     try {
-      logger.info(`Creating block ${name} in account: ${accountUUID}`)
-
-      const _account = await Account.get(accountUUID)
-      const _accountFull = await _account.checkIfFull()
-
-      if (_accountFull) {
-        const _errorMessage = 'max number of baskets reached'
-        throw new Error(_errorMessage)
-      }
-
       const _block = new Block(accountUUID, name, payload)
+      await _block.verifyAccountNotFull()
       await _block.store()
 
-
+      logger.info(`Block ${name} created in account: ${accountUUID}`)
       const _blockDetails = _block.sanitize()
-
       return _blockDetails
     } catch (error) {
       logger.error(`Block creation failed: ${error.message}, account: ${accountUUID}`)
@@ -34,13 +24,12 @@ class BlockController {
     }
   }
 
-  public static async get(accountUUID: string, name: string): Promise<JSON> {
+  public static async get(accountUUID: string, name: string): Promise<IBlockPublic> {
     try {
-      logger.info(`Retrieving block: ${name} in account: ${accountUUID}`)
-
       const _block = await Block.get(accountUUID, name)
-      const _blockDetails = _block.sanitize()
 
+      logger.info(`Block ${name} retrieved from account: ${accountUUID}`)
+      const _blockDetails = _block.sanitize()
       return _blockDetails
     } catch (error) {
       logger.error(`Block retrieval failed: ${error.message}, account: ${accountUUID}`)
@@ -48,15 +37,13 @@ class BlockController {
     }
   }
 
-  public static async update(accountUUID: string, name: string, data: JSON): Promise<JSON> {
+  public static async update(accountUUID: string, name: string, data: JSON): Promise<IBlockPublic> {
     try {
-      logger.info(`Updating block ${name} in account: ${accountUUID}`)
-
       const _block = await Block.get(accountUUID, name)
-
       await _block.update(data)
-      const _blockDetails = _block.sanitize()
 
+      logger.info(`Block ${name} updated in account: ${accountUUID}`)
+      const _blockDetails = _block.sanitize()
       return _blockDetails
     } catch (error) {
       logger.error(`Block update failed: ${error.message}, account: ${accountUUID}`)
@@ -66,11 +53,8 @@ class BlockController {
 
   public static async delete(accountUUID: string, name: string): Promise<void> {
     try {
-      logger.info(`Removing block ${name} from account: ${accountUUID}`)
-
       const _block = await Block.get(accountUUID, name)
       await _block.delete()
-
       logger.info(`Block ${name} was successfully removed from account: ${accountUUID}`)
     } catch (error) {
       logger.error(`Block deletion failed: ${error.message}, account: ${accountUUID}`)

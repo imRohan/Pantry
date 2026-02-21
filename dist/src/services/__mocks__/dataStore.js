@@ -12,6 +12,7 @@ const dataStore = {
     get: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
     set: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
     remove: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
+    refreshTTL: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
     find: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
     scan: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),
     ping: jest.fn(() => __awaiter(void 0, void 0, void 0, function* () { })),

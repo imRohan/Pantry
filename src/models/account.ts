@@ -19,6 +19,8 @@ import { IAccountPrivate, IAccountPublic, IAccountUpdateParams } from '../interf
 import { IBlockInfo } from '../interfaces/block'
 
 class Account {
+  public static readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
+  public static readonly lifeSpan = Number(86400 * this.lifeSpanDays)
 
   @IsUUID('4')
   public uuid: string
@@ -40,10 +42,11 @@ class Account {
   @IsNotEmpty()
   @IsArray()
   private errors: string[]
+  @IsNotEmpty()
+  @IsString()
+  private redisKey: string
 
   // Constants
-  private readonly lifeSpanDays = Number(process.env.ACCOUNT_LIFESPAN)
-  private readonly lifeSpan = Number(86400 * this.lifeSpanDays)
   private readonly defaultMaxNumberOfBlocks = 100
 
   public constructor(params: any) {
@@ -55,24 +58,15 @@ class Account {
     this.maxNumberOfBlocks = maxNumberOfBlocks ?? this.defaultMaxNumberOfBlocks
     this.errors = errors ?? []
     this.uuid = uuid ?? uuidv4()
+    this.redisKey = `account:${this.uuid}`
   }
 
 
   public static async get(uuid: string): Promise<Account> {
-    const _accountKey = Account.generateRedisKey(uuid)
-
-    const _stringifiedAccount = await dataStore.get(_accountKey)
-
-    if (!_stringifiedAccount) {
-      throw new Error(`pantry with id: ${uuid} not found`)
-    }
-
-    const _accountParams = Account.convertRedisPayload(_stringifiedAccount)
-    const _accountObject = new Account(_accountParams)
-
-    await _accountObject.refreshTTL()
-
-    return _accountObject
+    const _account = new Account({ uuid })
+    await _account.hydrate()
+    await _account.refreshTTL()
+    return _account
   }
 
   public static async getTotalNumber(): Promise<number> {
@@ -90,15 +84,6 @@ class Account {
     return _total
   }
 
-  private static convertRedisPayload(stringifiedAccount: string): IAccountPrivate {
-    const _account: IAccountPrivate = JSON.parse(stringifiedAccount)
-    return _account
-  }
-
-  private static generateRedisKey(uuid: string): string {
-    return `account:${uuid}`
-  }
-
   public async update(newData: Partial<IAccountUpdateParams>): Promise<void> {
     const { name, description, notifications } = newData
 
@@ -109,18 +94,14 @@ class Account {
     await this.store()
   }
 
-  public async store(): Promise<string> {
+  public async store(): Promise<void> {
     const _errors = await validate(this)
     if (_errors.length > 0) {
       throw new Error(`Validation failed: ${_errors}`)
     }
 
-    const _accountKey = Account.generateRedisKey(this.uuid)
     const _stringifiedAccount = this.generateRedisPayload()
-
-    await dataStore.set(_accountKey, _stringifiedAccount, this.lifeSpan)
-
-    return this.uuid
+    await dataStore.set(this.redisKey, _stringifiedAccount, Account.lifeSpan)
   }
 
   public async sanitize(): Promise<IAccountPublic> {
@@ -139,24 +120,26 @@ class Account {
     return _sanitizedItems
   }
 
-  public async checkIfFull(): Promise<boolean> {
+  public async verifyIfFull(): Promise<boolean> {
     const _blocks = await this.getBlocks()
     const _isFull = _blocks.length === this.maxNumberOfBlocks
-    return _isFull
+    if (_isFull) {
+      throw new Error('maximum storage limit has been reached')
+    } else {
+      return true
+    }
   }
 
   public async delete(): Promise<void> {
-    const _accountKey = Account.generateRedisKey(this.uuid)
-    await dataStore.remove(_accountKey)
+    await dataStore.remove(this.redisKey)
   }
 
   public async refreshTTL(): Promise<void> {
-    await this.store()
+    await dataStore.refreshTTL(this.redisKey, Account.lifeSpan)
   }
 
   public async getBlocks(): Promise<IBlockInfo[]> {
-    const _accountKey = Account.generateRedisKey(this.uuid)
-    const _blockKeys = await dataStore.find(`${_accountKey}::block:*`)
+    const _blockKeys = await dataStore.find(`${this.redisKey}::block:*`)
     const _blocks: IBlockInfo[] = await Promise.all(_blockKeys.map(async (key) => {
       const _ttl = await dataStore.ttl(key)
       const _sanitizedName = key.split(':')[4]
@@ -185,6 +168,23 @@ class Account {
       uuid: this.uuid,
     }
     return JSON.stringify(_accountDetails)
+  }
+
+  private async hydrate(): Promise<void> {
+    const _stringifiedAccount = await dataStore.get(this.redisKey)
+
+    if (!_stringifiedAccount) {
+      throw new Error(`pantry with id: ${this.uuid} not found`)
+    }
+
+    const _accountParams: IAccountPrivate = JSON.parse(_stringifiedAccount)
+    const { name, description, contactEmail, notifications, maxNumberOfBlocks, errors } = _accountParams
+    this.name = name
+    this.description = description
+    this.contactEmail = contactEmail
+    this.notifications = notifications
+    this.maxNumberOfBlocks = maxNumberOfBlocks
+    this.errors = errors
   }
 }
 
