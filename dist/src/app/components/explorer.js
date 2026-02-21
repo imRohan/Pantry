@@ -36,7 +36,6 @@ const explorer = {
     data() {
         return {
             basket: null,
-            errorsModalVisible: false,
         };
     },
     computed: {
@@ -51,16 +50,16 @@ const explorer = {
         },
     },
     methods: {
-        openErrorsModal() {
-            this.errorsModalVisible = true;
+        daysToDeletion(ttl) {
+            const _expiryDate = new Date();
+            _expiryDate.setSeconds(ttl);
+            return this.getDiffOfDates(new Date(), _expiryDate);
         },
-        closeErrorsModal() {
-            this.errorsModalVisible = false;
-        },
-        getDateOfDeletion(ttl) {
-            const _currentDate = new Date();
-            _currentDate.setSeconds(ttl);
-            return _currentDate.toISOString().split('T')[0];
+        getDiffOfDates(start, end) {
+            const _msPerDay = 1000 * 60 * 60 * 24;
+            const startUTC = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+            const endUTC = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+            return Math.floor((endUTC - startUTC) / _msPerDay);
         },
         refresh() {
             this.$emit('refresh');
