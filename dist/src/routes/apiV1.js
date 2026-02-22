@@ -47,7 +47,8 @@ _apiV1Router.post('/create', (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.send(_newAccountUUID);
     }
     catch (error) {
-        res.status(400).send(`Could not create new pantry: ${error.message}`);
+        res.status(400).json({ error: 'Could not create new pantry',
+            details: error.message });
     }
 }));
 _apiV1Router.put('/:pantryID', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,7 +60,8 @@ _apiV1Router.put('/:pantryID', (req, res) => __awaiter(void 0, void 0, void 0, f
         res.send(_response);
     }
     catch (error) {
-        res.status(400).send(`Could not update pantry: ${error.message}`);
+        res.status(400).json({ error: 'Could not update pantry',
+            details: error.message });
     }
 }));
 _apiV1Router.get('/:pantryID', bruteForce.getMiddleware({
@@ -75,7 +77,8 @@ _apiV1Router.get('/:pantryID', bruteForce.getMiddleware({
         res.send(_account);
     }
     catch (error) {
-        res.status(400).send(`Could not get pantry: ${error.message}`);
+        res.status(400).json({ error: 'Could not get pantry',
+            details: error.message });
     }
 }));
 _apiV1Router.delete('/:pantryID', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -86,7 +89,8 @@ _apiV1Router.delete('/:pantryID', (req, res) => __awaiter(void 0, void 0, void 0
         res.status(204);
     }
     catch (error) {
-        res.status(400).send(`Could not delete pantry: ${error.message}`);
+        res.status(400).json({ error: 'Could not delete pantry',
+            details: error.message });
     }
 }));
 _apiV1Router.post('/:pantryID/basket/:basketName', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -98,7 +102,8 @@ _apiV1Router.post('/:pantryID/basket/:basketName', (req, res) => __awaiter(void 
         res.send(_response);
     }
     catch (error) {
-        res.status(400).send(`Could not create basket: ${error.message}`);
+        res.status(400).json({ error: 'Could not create basket',
+            details: error.message });
     }
 }));
 _apiV1Router.put('/:pantryID/basket/:basketName', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -110,7 +115,8 @@ _apiV1Router.put('/:pantryID/basket/:basketName', (req, res) => __awaiter(void 0
         res.send(_response);
     }
     catch (error) {
-        res.status(400).send(`Could not update basket: ${error.message}`);
+        res.status(400).json({ error: 'Could not update basket',
+            details: error.message });
     }
 }));
 _apiV1Router.get('/:pantryID/basket/:basketName', bruteForce.getMiddleware({
@@ -126,7 +132,8 @@ _apiV1Router.get('/:pantryID/basket/:basketName', bruteForce.getMiddleware({
         res.send(_response);
     }
     catch (error) {
-        res.status(400).send(`Could not get basket: ${error.message}`);
+        res.status(400).json({ error: 'Could not get basket',
+            details: error.message });
     }
 }));
 _apiV1Router.delete('/:pantryID/basket/:basketName', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -137,7 +144,8 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', (req, res) => __awaiter(voi
         res.send(_response);
     }
     catch (error) {
-        res.status(400).send(`Could not delete basket: ${error.message}`);
+        res.status(400).json({ error: 'Could not delete basket',
+            details: error.message });
     }
 }));
 _apiV1Router.get('/:pantryID/basket/:basketName/public', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -148,7 +156,8 @@ _apiV1Router.get('/:pantryID/basket/:basketName/public', (req, res) => __awaiter
         res.send(_newPublicBasketUUID);
     }
     catch (error) {
-        res.status(400).send(`Could not create new Public Basket: ${error.message}`);
+        res.status(400).json({ error: 'Could create public basket',
+            details: error.message });
     }
 }));
 function basketParams(req) {

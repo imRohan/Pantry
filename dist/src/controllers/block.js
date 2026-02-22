@@ -30,7 +30,7 @@ class BlockController {
                 return _blockDetails;
             }
             catch (error) {
-                logger.error(`Block creation failed: ${error.message}, account: ${accountUUID}`);
+                logger.error(`Block creation failed: ${error.message}`);
                 throw error;
             }
         });
@@ -44,7 +44,7 @@ class BlockController {
                 return _blockDetails;
             }
             catch (error) {
-                logger.error(`Block retrieval failed: ${error.message}, account: ${accountUUID}`);
+                logger.error(`Block retrieval failed: ${error.message}`);
                 throw error;
             }
         });
@@ -59,7 +59,7 @@ class BlockController {
                 return _blockDetails;
             }
             catch (error) {
-                logger.error(`Block update failed: ${error.message}, account: ${accountUUID}`);
+                logger.error(`Block update failed: ${error.message}`);
                 throw error;
             }
         });
@@ -72,7 +72,7 @@ class BlockController {
                 logger.info(`Block ${name} was successfully removed from account: ${accountUUID}`);
             }
             catch (error) {
-                logger.error(`Block deletion failed: ${error.message}, account: ${accountUUID}`);
+                logger.error(`Block deletion failed: ${error.message}`);
                 throw error;
             }
         });
