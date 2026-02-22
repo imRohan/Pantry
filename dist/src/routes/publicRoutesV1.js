@@ -30,7 +30,8 @@ _publicV1Router.get('/:publicBasketID', (req, res) => __awaiter(void 0, void 0, 
         res.send(_basket);
     }
     catch (error) {
-        res.status(400).send(`Could not get Public Basket: ${error.message}`);
+        res.status(400).json({ error: 'Could not get public basket',
+            detials: error.message });
     }
 }));
 exports.default = _publicV1Router;

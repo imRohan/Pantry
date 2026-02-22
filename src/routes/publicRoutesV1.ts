@@ -21,7 +21,8 @@ _publicV1Router.get('/:publicBasketID', async (req, res) => {
 
     res.send(_basket)
   } catch (error) {
-    res.status(400).send(`Could not get Public Basket: ${error.message}`)
+    res.status(400).json({ error: 'Could not get public basket',
+                           detials: error.message })
   }
 })
 

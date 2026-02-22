@@ -27,11 +27,12 @@ _systemV1Router.get('/status', (req, res) => __awaiter(void 0, void 0, void 0, f
         }
         else {
             logger.warn('Unauthorized client');
-            res.status(401).send('Unauthorized');
+            res.status(401).json({ error: 'Unauthorized' });
         }
     }
     catch (error) {
-        res.status(400).send(`Could not get system status: ${error.message}`);
+        res.status(400).json({ error: 'Could not get system status',
+            details: error.message });
     }
 }));
 exports.default = _systemV1Router;

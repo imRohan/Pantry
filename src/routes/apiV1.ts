@@ -44,7 +44,8 @@ _apiV1Router.post('/create', async (req, res) => {
 
     res.send(_newAccountUUID)
   } catch (error) {
-    res.status(400).send(`Could not create new pantry: ${error.message}`)
+    res.status(400).json({ error: 'Could not create new pantry',
+                           details: error.message })
   }
 })
 
@@ -58,7 +59,8 @@ _apiV1Router.put('/:pantryID', async (req, res) => {
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(`Could not update pantry: ${error.message}`)
+    res.status(400).json({ error: 'Could not update pantry',
+                           details: error.message })
   }
 })
 
@@ -78,7 +80,8 @@ _apiV1Router.get('/:pantryID',
 
       res.send(_account)
     } catch (error) {
-      res.status(400).send(`Could not get pantry: ${error.message}`)
+      res.status(400).json({ error: 'Could not get pantry',
+                             details: error.message })
     }
   }
 )
@@ -92,7 +95,8 @@ _apiV1Router.delete('/:pantryID', async (req, res) => {
 
     res.status(204)
   } catch (error) {
-    res.status(400).send(`Could not delete pantry: ${error.message}`)
+    res.status(400).json({ error: 'Could not delete pantry',
+                           details: error.message })
   }
 })
 
@@ -106,7 +110,8 @@ _apiV1Router.post('/:pantryID/basket/:basketName', async (req, res) => {
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(`Could not create basket: ${error.message}`)
+    res.status(400).json({ error: 'Could not create basket',
+                           details: error.message })
   }
 })
 
@@ -120,7 +125,8 @@ _apiV1Router.put('/:pantryID/basket/:basketName', async (req, res) => {
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(`Could not update basket: ${error.message}`)
+    res.status(400).json({ error: 'Could not update basket',
+                           details: error.message })
   }
 })
 
@@ -140,7 +146,8 @@ _apiV1Router.get('/:pantryID/basket/:basketName',
 
       res.send(_response)
     } catch (error) {
-      res.status(400).send(`Could not get basket: ${error.message}`)
+      res.status(400).json({ error: 'Could not get basket',
+                             details: error.message })
     }
   }
 )
@@ -154,7 +161,8 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
 
     res.send(_response)
   } catch (error) {
-    res.status(400).send(`Could not delete basket: ${error.message}`)
+    res.status(400).json({ error: 'Could not delete basket',
+                           details: error.message })
   }
 })
 
@@ -167,7 +175,8 @@ _apiV1Router.get('/:pantryID/basket/:basketName/public', async (req, res) => {
 
     res.send(_newPublicBasketUUID)
   } catch (error) {
-    res.status(400).send(`Could not create new Public Basket: ${error.message}`)
+    res.status(400).json({ error: 'Could create public basket',
+                           details: error.message })
   }
 })
 
