@@ -72,12 +72,12 @@ const basket = {
     },
     async save(): Promise<void> {
       const { data } = await axios({
-        method: 'POST',
+        method: 'PUT',
         data: this.data,
         url: this.basketPath(),
       })
-      alert(`${this.name} contents saved!`)
-      this.set(data)
+      alert(`${this.name} contents updated!`)
+      this.data = data
     },
     openShareModal(): void {
       this.getPublicBasket()
