@@ -3,6 +3,8 @@ import {
   IsNotEmpty,
   IsObject,
   IsString,
+  IsDate,
+  IsOptional,
   validate,
 } from 'class-validator'
 import merge = require('deepmerge')
@@ -12,7 +14,7 @@ import { IsValidPayloadSize } from '../decorators/block'
 import * as dataStore from '../services/dataStore'
 
 // Interfaces
-import { IBlock, IBlockPublic } from '../interfaces/block'
+import { IBlock, IBlockMetadata, IBlockPublic } from '../interfaces/block'
 import Account from './account'
 
 class Block {
@@ -32,19 +34,28 @@ class Block {
   @IsNotEmpty()
   public account: Account
   @IsNotEmpty()
+  @IsDate()
+  public createdAt: Date
+  @IsOptional()
+  @IsDate()
+  public updatedAt: Date
+  @IsNotEmpty()
   @IsString()
   private redisKey: string
 
-  public constructor(accountUUID: string, name: string, payload: JSON) {
+  public constructor(accountUUID: string, name: string, payload: JSON = null,
+                     createdAt: Date = new Date()) {
     this.name = name
     this.payload = payload
     this.accountUUID = accountUUID
-    this.redisKey = `account:${this.accountUUID}::block:${this.name}`
+    this.createdAt = createdAt
     this.account = null
+    this.updatedAt = null
+    this.redisKey = `account:${this.accountUUID}::block:${this.name}`
   }
 
   public static async get(accountUUID: string, name: string): Promise<Block> {
-    const _block = new Block(accountUUID, name, null)
+    const _block = new Block(accountUUID, name)
     await _block.hydrate()
     await _block.refreshTTL()
     return _block
@@ -63,6 +74,7 @@ class Block {
   public async update(newData: JSON): Promise<JSON> {
     const _updatedPayload = merge(this.payload, newData)
     this.payload = _updatedPayload
+    this.updatedAt = new Date()
     await this.store()
 
     return _updatedPayload
@@ -77,7 +89,7 @@ class Block {
   }
 
   public sanitize(): IBlockPublic {
-    return { ...this.payload }
+    return { ...this.payload, _metadata: this.metadata() }
   }
 
   public async verifyAccountNotFull(): Promise<void> {
@@ -85,11 +97,20 @@ class Block {
     await this.account.verifyIfFull()
   }
 
+  private metadata(): IBlockMetadata {
+    return {
+      createdAt: this.createdAt.toUTCString(),
+      updatedAt: this.updatedAt ? this.updatedAt.toUTCString() : null,
+    }
+  }
+
   private generateRedisPayload(): string {
     const _payload: IBlock = {
       accountUUID: this.accountUUID,
       name: this.name,
       payload: this.payload,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     }
     return JSON.stringify(_payload)
   }
@@ -103,8 +124,10 @@ class Block {
     }
 
     const _blockContents: IBlock = JSON.parse(_stringifiedBlock)
-    const { payload } = _blockContents
+    const { payload, createdAt, updatedAt } = _blockContents
     this.payload = payload
+    this.createdAt = createdAt ? new Date(createdAt) : new Date()
+    this.updatedAt = updatedAt ? new Date(updatedAt) : null
   }
 
   private async hydrateAccount(): Promise<void> {

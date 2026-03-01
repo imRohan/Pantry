@@ -8,6 +8,9 @@ const changelog = {
         return {
             items: [
                 {
+                    description: 'Add Metadata to Baskets',
+                },
+                {
                     description: 'Introduce Public Basket Endpoints',
                 },
                 {

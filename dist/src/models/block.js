@@ -46,16 +46,18 @@ const block_1 = require("../decorators/block");
 const dataStore = __importStar(require("../services/dataStore"));
 const account_1 = __importDefault(require("./account"));
 class Block {
-    constructor(accountUUID, name, payload) {
+    constructor(accountUUID, name, payload = null, createdAt = new Date()) {
         this.name = name;
         this.payload = payload;
         this.accountUUID = accountUUID;
-        this.redisKey = `account:${this.accountUUID}::block:${this.name}`;
+        this.createdAt = createdAt;
         this.account = null;
+        this.updatedAt = null;
+        this.redisKey = `account:${this.accountUUID}::block:${this.name}`;
     }
     static get(accountUUID, name) {
         return __awaiter(this, void 0, void 0, function* () {
-            const _block = new Block(accountUUID, name, null);
+            const _block = new Block(accountUUID, name);
             yield _block.hydrate();
             yield _block.refreshTTL();
             return _block;
@@ -75,6 +77,7 @@ class Block {
         return __awaiter(this, void 0, void 0, function* () {
             const _updatedPayload = merge(this.payload, newData);
             this.payload = _updatedPayload;
+            this.updatedAt = new Date();
             yield this.store();
             return _updatedPayload;
         });
@@ -90,7 +93,7 @@ class Block {
         });
     }
     sanitize() {
-        return Object.assign({}, this.payload);
+        return Object.assign(Object.assign({}, this.payload), { _metadata: this.metadata() });
     }
     verifyAccountNotFull() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -98,11 +101,19 @@ class Block {
             yield this.account.verifyIfFull();
         });
     }
+    metadata() {
+        return {
+            createdAt: this.createdAt.toUTCString(),
+            updatedAt: this.updatedAt ? this.updatedAt.toUTCString() : null,
+        };
+    }
     generateRedisPayload() {
         const _payload = {
             accountUUID: this.accountUUID,
             name: this.name,
             payload: this.payload,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
         };
         return JSON.stringify(_payload);
     }
@@ -114,8 +125,10 @@ class Block {
                 throw new Error(`${this.name} does not exist`);
             }
             const _blockContents = JSON.parse(_stringifiedBlock);
-            const { payload } = _blockContents;
+            const { payload, createdAt, updatedAt } = _blockContents;
             this.payload = payload;
+            this.createdAt = createdAt ? new Date(createdAt) : new Date();
+            this.updatedAt = updatedAt ? new Date(updatedAt) : null;
         });
     }
     hydrateAccount() {
@@ -143,6 +156,14 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsNotEmpty)()
 ], Block.prototype, "account", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsDate)()
+], Block.prototype, "createdAt", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)()
+], Block.prototype, "updatedAt", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)()

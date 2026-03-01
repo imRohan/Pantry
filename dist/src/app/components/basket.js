@@ -84,12 +84,12 @@ const basket = {
         save() {
             return __awaiter(this, void 0, void 0, function* () {
                 const { data } = yield axios({
-                    method: 'POST',
+                    method: 'PUT',
                     data: this.data,
                     url: this.basketPath(),
                 });
-                alert(`${this.name} contents saved!`);
-                this.set(data);
+                alert(`${this.name} contents updated!`);
+                this.data = data;
             });
         },
         openShareModal() {

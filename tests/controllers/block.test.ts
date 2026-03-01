@@ -27,6 +27,8 @@ const _existingBlock = {
   accountUUID: _existingAccount.uuid,
   name: 'ExistingBlock',
   payload: { derp: 'flerp' },
+  createdAt: new Date(),
+  updatedAt: null,
 }
 
 afterEach(() => {
@@ -43,7 +45,7 @@ describe('When creating a block', () => {
 
     const _response = await BlockController.create(_accountUUID, 'NewBlock', _payload)
 
-    expect(_response).toEqual({ derp: 'flerp' })
+    expect(_response).toMatchObject({ derp: 'flerp' })
   })
 
   it ('allows for empty payload', async () => {
@@ -53,7 +55,7 @@ describe('When creating a block', () => {
 
     const _response = await BlockController.create(_accountUUID, 'NewBlock', JSON.parse('{}'))
 
-    expect(_response).toEqual({})
+    expect(_response).toMatchObject({})
   })
 
   it ('refreshes the TTL of the account', async () => {
@@ -65,6 +67,40 @@ describe('When creating a block', () => {
     await BlockController.create(_existingAccount.uuid, 'NewBlock', _payload)
 
     expect(mockedDataStore.refreshTTL).toHaveBeenCalledWith(_redisKey, Account.lifeSpan)
+  })
+
+  it ('includes metadata', async() => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
+
+    const _response = await BlockController
+      .create(_existingAccount.uuid, 'NewBlock', JSON.parse('{}'))
+
+    expect(_response).toHaveProperty('_metadata')
+  })
+
+  it ('includes createdAt in the metadata', async() => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
+
+    const { _metadata } = await BlockController
+      .create(_existingAccount.uuid, 'NewBlock', JSON.parse('{}'))
+
+    expect(_metadata).toHaveProperty('createdAt')
+  })
+
+
+  it ('does not set a value for updatedAt', async() => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
+
+    const { _metadata } = await BlockController
+      .create(_existingAccount.uuid, 'NewBlock', JSON.parse('{}'))
+
+    expect(_metadata.updatedAt).toBeNull()
   })
 
   it ('throws an error if validation fails', async () => {
@@ -110,7 +146,7 @@ describe('When updating a block', () => {
     const _response = await BlockController
       .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
 
-    expect(_response).toEqual({ derp: 'flerp', newKey: 'newValue' })
+    expect(_response).toMatchObject({ derp: 'flerp', newKey: 'newValue' })
   })
 
   it ('refreshes the TTL of the block', async () => {
@@ -139,6 +175,67 @@ describe('When updating a block', () => {
     expect(mockedDataStore.refreshTTL).toHaveBeenCalledWith(_redisKey, Account.lifeSpan)
   })
 
+  it ('includes metadata', async() => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const _response = await BlockController
+      .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
+
+    expect(_response).toHaveProperty('_metadata')
+  })
+
+  it ('includes createdAt in the metadata', async() => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const { _metadata } = await BlockController
+      .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
+
+    expect(_metadata).toHaveProperty('createdAt')
+  })
+
+  it ('does not update the createdAt value metadata', async() => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const { _metadata } = await BlockController
+      .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
+
+    expect(_metadata.createdAt).toEqual(_existingBlock.createdAt.toUTCString())
+  })
+
+
+  it ('includes updatedAt in the metadata', async() => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const { _metadata } = await BlockController
+      .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
+
+    expect(_metadata.updatedAt).toBeDefined()
+  })
+
+  it ('updates the updatedAt value metadata', async() => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const { _metadata } = await BlockController
+      .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
+
+    expect(_metadata.updatedAt).not.toEqual(_existingBlock.updatedAt)
+  })
+
   it ('throws an error if the account does not exist', async () => {
     mockedDataStore.get.
       mockReturnValueOnce(Promise.resolve(null))
@@ -165,15 +262,25 @@ describe('When updating a block', () => {
 
 describe('When retrieving a block', () => {
   it ('successfully returns payload of block', async () => {
-    const _accountUUID = '6dc70531-d0bf-4b3a-8265-b20f8a69e180'
     mockedDataStore.get.
       mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
-    const _payload = await BlockController.get(_accountUUID, 'NewBlock')
+    const _payload = await BlockController.get(_existingAccount.uuid, 'NewBlock')
 
-    expect(_payload).toEqual({ derp: 'flerp' })
+    expect(_payload).toMatchObject({ derp: 'flerp' })
+  })
+
+  it ('the response includes the metadata of the block', async () => {
+    mockedDataStore.get.
+      mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const _payload = await BlockController.get(_existingAccount.uuid, 'NewBlock')
+
+    expect(_payload).toHaveProperty('_metadata')
   })
 
   it ('refreshes the TTL of the block', async () => {

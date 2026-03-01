@@ -46,6 +46,8 @@ const _existingBlock: IBlock = {
   accountUUID: _existingAccount.uuid,
   name: 'ExistingBlock',
   payload: { derp: 'flerp' },
+  createdAt: new Date(),
+  updatedAt: null,
 }
 
 afterEach(() => {

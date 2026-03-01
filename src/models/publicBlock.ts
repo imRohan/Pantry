@@ -76,7 +76,9 @@ class PublicBlock {
   }
 
   public sanitizedBlock(): IBlockPublic {
-    return this.block.sanitize()
+    const _sanitizedBlock = this.block.sanitize()
+    delete _sanitizedBlock._metadata
+    return _sanitizedBlock
   }
 
   private async hydrate(): Promise<void> {

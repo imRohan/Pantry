@@ -85,7 +85,9 @@ class PublicBlock {
         });
     }
     sanitizedBlock() {
-        return this.block.sanitize();
+        const _sanitizedBlock = this.block.sanitize();
+        delete _sanitizedBlock._metadata;
+        return _sanitizedBlock;
     }
     hydrate() {
         return __awaiter(this, void 0, void 0, function* () {

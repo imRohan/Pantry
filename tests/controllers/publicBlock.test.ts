@@ -28,6 +28,8 @@ const _existingBlock: IBlock = {
   accountUUID: _existingAccount.uuid,
   name: 'ExistingBlock',
   payload: { derp: 'flerp' },
+  createdAt: new Date(),
+  updatedAt: null,
 }
 
 const _existingPublicBlock: IPublicBlock = {
@@ -86,7 +88,20 @@ describe('When retrieving a public block', () => {
 
     const _payload = await PublicBlockController.get(_existingPublicBlock.id)
 
-    expect(_payload).toEqual({ derp: 'flerp' })
+    expect(_payload).toMatchObject({ derp: 'flerp' })
+  })
+
+  it ('the response does not include the metadata of the associated block', async () => {
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
+
+    const _payload = await PublicBlockController.get(_existingPublicBlock.id)
+
+    expect(_payload).not.toHaveProperty('_metadata')
   })
 
   it ('refreshes the TTL of the public block', async () => {

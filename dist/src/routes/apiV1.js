@@ -150,7 +150,7 @@ _apiV1Router.delete('/:pantryID/basket/:basketName', (req, res) => __awaiter(voi
 }));
 _apiV1Router.get('/:pantryID/basket/:basketName/public', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { pantryID, basketName } = publicBasketParams(req);
+        const { pantryID, basketName } = basketParams(req);
         logger.info(`[GET] Create Public Basket for ${pantryID}, ${basketName}`);
         const _newPublicBasketUUID = yield publicBlock_1.default.create(pantryID, basketName);
         res.send(_newPublicBasketUUID);
@@ -169,10 +169,5 @@ function accountParams(req) {
     const { params } = req;
     const { pantryID } = params;
     return { pantryID };
-}
-function publicBasketParams(req) {
-    const { params } = req;
-    const { pantryID, basketName, publicBasketID } = params;
-    return { pantryID, basketName, publicBasketID };
 }
 exports.default = _apiV1Router;
