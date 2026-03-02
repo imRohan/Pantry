@@ -78,6 +78,7 @@ class PublicBlock {
   public sanitizedBlock(): IBlockPublic {
     const _sanitizedBlock = this.block.sanitize()
     delete _sanitizedBlock._metadata
+    delete _sanitizedBlock._schema
     return _sanitizedBlock
   }
 

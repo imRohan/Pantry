@@ -1,5 +1,6 @@
 // External Files
 const axios = require('axios')
+const jsonEditor = require('vue-json-editor').default
 
 // Configs
 const configs = require('../config.ts')
@@ -27,10 +28,22 @@ const explorer = {
     explorerOnboarding,
     basket,
     modal,
+    'json-edit': jsonEditor,
   },
   data(): any {
     return {
       basket: null,
+      schemaModalVisible: false,
+      schemaExample: {
+        _schema: {
+          toppings: { type: 'array' },
+          size: { type: 'string' },
+          price: { type: 'number' },
+        },
+        toppings: ['pepperoni', 'mushrooms', 'hot peppers'],
+        size: 'large',
+        price: 19.99,
+      },
     }
   },
   computed: {
@@ -118,6 +131,9 @@ const explorer = {
         const { name } = this.pantry.baskets[0]
         this.viewBasket(name)
       }
+    },
+    toggleSchemaModal(): void {
+      this.schemaModalVisible = !this.schemaModalVisible
     },
   },
 }
