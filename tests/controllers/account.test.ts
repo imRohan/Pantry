@@ -2,12 +2,12 @@
 import AccountController from '../../src/controllers/account'
 import Account from '../../src/models/account'
 import Crm from '../../src/services/crm'
-import Mailer from '../../src/services/mailer'
+import EventTracker from '../../src/services/eventTracker'
 import * as dataStore from '../../src/services/dataStore'
 import * as recaptcha from '../../src/services/recaptcha'
 
 jest.mock('../../src/services/dataStore')
-jest.mock('../../src/services/mailer')
+jest.mock('../../src/services/eventTracker')
 jest.mock('../../src/services/crm')
 jest.mock('../../src/services/recaptcha')
 
@@ -61,8 +61,8 @@ describe('When creating an account', () => {
     expect(_uuid).toBeDefined()
   })
 
-  it ('sends a welcome email', async () => {
-    const _spy = jest.spyOn(Mailer, 'sendWelcomeEmail')
+  it ('tracks signup as an event', async () => {
+    const _spy = jest.spyOn(EventTracker, 'trackSignup')
 
     const _uuid: string = await AccountController.create(_newAccountParams)
 
