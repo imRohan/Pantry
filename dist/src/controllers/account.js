@@ -36,8 +36,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const account_1 = __importDefault(require("../models/account"));
 const block_1 = __importDefault(require("../models/block"));
 const crm_1 = __importDefault(require("../services/crm"));
-const mailer_1 = __importDefault(require("../services/mailer"));
 const logger_1 = __importDefault(require("../services/logger"));
+const eventTracker_1 = __importDefault(require("../services/eventTracker"));
 const recaptcha = __importStar(require("../services/recaptcha"));
 // Logger setup
 const logger = new logger_1.default('Account Controller');
@@ -54,7 +54,7 @@ class AccountController {
                 yield _account.store();
                 const { contactEmail } = params;
                 void crm_1.default.addNewUser(contactEmail, _account.uuid);
-                void mailer_1.default.sendWelcomeEmail(contactEmail, _account.uuid, _account.name);
+                void eventTracker_1.default.trackSignup(contactEmail, _account.uuid, _account.name);
                 logger.logAndSlack(`Account created for ${contactEmail}: ${_account.uuid}`);
                 return _account.uuid;
             }
