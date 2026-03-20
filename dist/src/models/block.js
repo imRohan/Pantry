@@ -41,6 +41,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Extarnal Libs
 const class_validator_1 = require("class-validator");
 const merge = require("deepmerge");
+const ajv_1 = __importDefault(require("ajv"));
 // External Files
 const block_1 = require("../decorators/block");
 const dataStore = __importStar(require("../services/dataStore"));
@@ -53,6 +54,7 @@ class Block {
         this.createdAt = createdAt;
         this.account = null;
         this.updatedAt = null;
+        this.schema = null;
         this.redisKey = `account:${this.accountUUID}::block:${this.name}`;
     }
     static get(accountUUID, name) {
@@ -76,6 +78,7 @@ class Block {
     update(newData) {
         return __awaiter(this, void 0, void 0, function* () {
             const _updatedPayload = merge(this.payload, newData);
+            this.validateSchema(_updatedPayload);
             this.payload = _updatedPayload;
             this.updatedAt = new Date();
             yield this.store();
@@ -129,11 +132,42 @@ class Block {
             this.payload = payload;
             this.createdAt = createdAt ? new Date(createdAt) : new Date();
             this.updatedAt = updatedAt ? new Date(updatedAt) : null;
+            this.loadSchema();
         });
     }
     hydrateAccount() {
         return __awaiter(this, void 0, void 0, function* () {
             this.account = yield account_1.default.get(this.accountUUID);
+        });
+    }
+    loadSchema() {
+        const { _schema } = this.payload;
+        if (_schema) {
+            this.schema = {
+                type: 'object',
+                additionalProperties: true,
+                properties: Object.assign({}, _schema),
+            };
+        }
+    }
+    validateSchema(payload) {
+        if (!this.schema) {
+            return;
+        }
+        delete this.schema._schema;
+        const _ajv = new ajv_1.default({ strict: false });
+        const _validate = _ajv.compile(this.schema);
+        const _valid = _validate(payload);
+        if (!_valid) {
+            const _errors = this.formatValidationErrors(_validate.errors);
+            throw new Error(`Schema validation failed: ${_errors}`);
+        }
+    }
+    formatValidationErrors(errors) {
+        return errors.map((error) => {
+            const { instancePath, message } = error;
+            const _key = instancePath.replace('/', '');
+            return `'${_key}' ${message}`;
         });
     }
 }
@@ -168,4 +202,8 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)()
 ], Block.prototype, "redisKey", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsObject)()
+], Block.prototype, "schema", void 0);
 exports.default = Block;

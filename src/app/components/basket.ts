@@ -71,13 +71,20 @@ const basket = {
       }
     },
     async save(): Promise<void> {
-      const { data } = await axios({
+      await axios({
         method: 'PUT',
         data: this.data,
         url: this.basketPath(),
+      }).then((response) => {
+        const { data } = response
+        alert(`${this.name} contents updated!`)
+        this.data = data
+      }).catch((axiosError) => {
+        const { data: _errorData } = axiosError.response
+        const { error, details } = _errorData
+        const _message = `${error} - ${details}`
+        alert(_message)
       })
-      alert(`${this.name} contents updated!`)
-      this.data = data
     },
     openShareModal(): void {
       this.getPublicBasket()

@@ -83,13 +83,20 @@ const basket = {
         },
         save() {
             return __awaiter(this, void 0, void 0, function* () {
-                const { data } = yield axios({
+                yield axios({
                     method: 'PUT',
                     data: this.data,
                     url: this.basketPath(),
+                }).then((response) => {
+                    const { data } = response;
+                    alert(`${this.name} contents updated!`);
+                    this.data = data;
+                }).catch((axiosError) => {
+                    const { data: _errorData } = axiosError.response;
+                    const { error, details } = _errorData;
+                    const _message = `${error} - ${details}`;
+                    alert(_message);
                 });
-                alert(`${this.name} contents updated!`);
-                this.data = data;
             });
         },
         openShareModal() {

@@ -185,8 +185,8 @@ describe('When deleting an account', () => {
   it('deletes all existing blocks', async () => {
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
     mockedDataStore.find.mockReturnValueOnce(
       Promise.resolve(
         [`account:${_existingAccount.uuid}::block:${_existingBlock.name}`]

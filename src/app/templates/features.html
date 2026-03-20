@@ -17,6 +17,54 @@
           <div class="absolute flex items-center justify-center h-12 w-12
             rounded-md bg-orange-500 text-white">
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7
+                       3s-7-1.343-7-3z"></path>
+              <path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657
+                       3 7z"></path>
+              <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7
+                       3z"></path>
+            </svg>
+          </div>
+          <p class="ml-16 text-lg leading-6 font-medium text-gray-900">
+            Generous Storage Limit
+          </p>
+        </dt>
+        <dd class="mt-2 ml-16 text-base text-gray-500">
+          Your Pantry can have 100 baskets (JSON objects), each with a max size
+          of 1.44mb. That's a lot of JSON, and we think it's a great starting
+          point for developers.
+        </dd>
+      </div>
+
+      <div class="relative">
+        <dt>
+          <div class="absolute flex items-center justify-center h-12 w-12
+            rounded-md bg-orange-500 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24
+              24" stroke-width="2" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5
+                10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0
+                2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0
+                0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+          </div>
+          <p class="ml-16 text-lg leading-6 font-medium text-gray-900">
+            Supports JSON Schema
+          </p>
+        </dt>
+        <dd class="mt-2 ml-16 text-base text-gray-500">
+          Data integrity is the backbone of any good project. So stop worrying
+          about malformed data breaking your frontend by enabling
+          optional JSON schema validation for each of your baskets.
+        </dd>
+      </div>
+
+      <div class="relative">
+        <dt>
+          <div class="absolute flex items-center justify-center h-12 w-12
+            rounded-md bg-orange-500 text-white">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0
@@ -33,7 +81,7 @@
         </dt>
         <dd class="mt-2 ml-16 text-base text-gray-500">
           We've built a very straightforward and easy-to-use API which you can
-          use to CRUD your Pantry's data. Simple and intuitive - that's the
+          use to CRUD your Pantry's baskets. Simple and intuitive - that's the
           goal.
         </dd>
       </div>
@@ -42,24 +90,27 @@
         <dt>
           <div class="absolute flex items-center justify-center h-12 w-12
             rounded-md bg-orange-500 text-white">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7
-                       3s-7-1.343-7-3z"></path>
-              <path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657
-                       3 7z"></path>
-              <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7
-                       3z"></path>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24
+              24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12
+                21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0
+                1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0
+                18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1
+                7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953
+                11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686
+                0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0
+                0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0
+                0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
             </svg>
           </div>
           <p class="ml-16 text-lg leading-6 font-medium text-gray-900">
-            Generous Storage Limit
+            Generate Public URLS
           </p>
         </dt>
         <dd class="mt-2 ml-16 text-base text-gray-500">
-          Each Pantry can hold over 100mb of data. That's a lot of JSON, and we
-          think it's a great starting point for developers to build their
-          projects.
+          Expose your data to users by using public urls. These are
+          "share anywhere" read only paths that protect your Pantry's ID and
+          Basket details.
         </dd>
       </div>
 
@@ -76,9 +127,9 @@
           </p>
         </dt>
         <dd class="mt-2 ml-16 text-base text-gray-500">
-          We also offer a interactive dashboard which you can use to interact with
+          We also offer a slick dashboard which you can use to interact with
           your Pantry's baskets. This intuitive interface is especially helpful
-          when debugging your application!
+          when debugging your application.
         </dd>
       </div>
 

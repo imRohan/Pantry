@@ -8,6 +8,7 @@ import {
   validate,
 } from 'class-validator'
 import merge = require('deepmerge')
+import Ajv from 'ajv'
 
 // External Files
 import { IsValidPayloadSize } from '../decorators/block'
@@ -42,6 +43,9 @@ class Block {
   @IsNotEmpty()
   @IsString()
   private redisKey: string
+  @IsOptional()
+  @IsObject()
+  private schema: any
 
   public constructor(accountUUID: string, name: string, payload: JSON = null,
                      createdAt: Date = new Date()) {
@@ -51,6 +55,7 @@ class Block {
     this.createdAt = createdAt
     this.account = null
     this.updatedAt = null
+    this.schema = null
     this.redisKey = `account:${this.accountUUID}::block:${this.name}`
   }
 
@@ -73,6 +78,7 @@ class Block {
 
   public async update(newData: JSON): Promise<JSON> {
     const _updatedPayload = merge(this.payload, newData)
+    this.validateSchema(_updatedPayload)
     this.payload = _updatedPayload
     this.updatedAt = new Date()
     await this.store()
@@ -128,10 +134,42 @@ class Block {
     this.payload = payload
     this.createdAt = createdAt ? new Date(createdAt) : new Date()
     this.updatedAt = updatedAt ? new Date(updatedAt) : null
+    this.loadSchema()
   }
 
   private async hydrateAccount(): Promise<void> {
     this.account = await Account.get(this.accountUUID)
+  }
+
+  private loadSchema(): void {
+    const { _schema } = this.payload
+    if(_schema) {
+      this.schema = {
+        type: 'object',
+        additionalProperties: true,
+        properties: { ..._schema },
+      }
+    }
+  }
+
+  private validateSchema(payload: JSON): void {
+    if(!this.schema) { return }
+    delete this.schema._schema
+    const _ajv = new Ajv({ strict: false })
+    const _validate = _ajv.compile(this.schema)
+    const _valid = _validate(payload)
+    if(!_valid) {
+      const _errors = this.formatValidationErrors(_validate.errors)
+      throw new Error(`Schema validation failed: ${_errors}`)
+    }
+  }
+
+  private formatValidationErrors(errors: any): string[] {
+    return errors.map((error) => {
+      const { instancePath, message } = error
+      const _key = instancePath.replace('/','')
+      return `'${_key}' ${message}`
+    })
   }
 }
 

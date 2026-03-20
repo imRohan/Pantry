@@ -45,9 +45,9 @@ afterEach(() => {
 
 describe('When creating a public block', () => {
   it ('returns the public blocks id', async () => {
-    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
     const _response = await PublicBlockController.create(_existingAccount.uuid, _existingBlock.name)
 
@@ -56,9 +56,8 @@ describe('When creating a public block', () => {
 
   it ('refreshes the TTL of the block', async () => {
     mockedDataStore.get
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
-    mockedDataStore.get
-      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
     const _redisKey = `account:${_existingAccount.uuid}::block:${_existingBlock.name}`
 
     await PublicBlockController.create(_existingAccount.uuid, _existingBlock.name)
@@ -68,7 +67,9 @@ describe('When creating a public block', () => {
 
   describe('When the block does not exist', () => {
     it ('throws an error', async () => {
-      mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
+      mockedDataStore.get
+        .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+        .mockReturnValueOnce(Promise.resolve(null))
 
       await expect(PublicBlockController.create(_existingAccount.uuid, _existingBlock.name))
         .rejects
@@ -81,9 +82,7 @@ describe('When retrieving a public block', () => {
   it ('successfully returns payload of the associated block', async () => {
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
-    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
     const _payload = await PublicBlockController.get(_existingPublicBlock.id)
@@ -94,9 +93,7 @@ describe('When retrieving a public block', () => {
   it ('the response does not include the metadata of the associated block', async () => {
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
-    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
 
     const _payload = await PublicBlockController.get(_existingPublicBlock.id)
@@ -107,9 +104,7 @@ describe('When retrieving a public block', () => {
   it ('refreshes the TTL of the public block', async () => {
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
-    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
     const _redisKey = `public_block:${_existingPublicBlock.id}`
 
@@ -122,9 +117,7 @@ describe('When retrieving a public block', () => {
   it ('refreshes the TTL of the block', async () => {
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
-    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
-    mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
     const _redisKey = `account:${_existingAccount.uuid}::block:${_existingBlock.name}`
 
@@ -141,5 +134,28 @@ describe('When retrieving a public block', () => {
     await expect(PublicBlockController.get(_existingPublicBlock.id))
       .rejects
       .toThrow(`${_existingPublicBlock.id} does not exist`)
+  })
+
+  describe('and the block has a schema', () => {
+    it ('the response does not include the schema of the associated block', async () => {
+      const _block = {
+        accountUUID: _existingAccount.uuid,
+        name: 'ExistingBlock',
+        payload: {
+          userName: 'flerp',
+          _schema: {
+            name: { type: 'string' },
+          },
+        },
+      }
+      mockedDataStore.get
+        .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingPublicBlock)))
+        .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+        .mockReturnValueOnce(Promise.resolve(JSON.stringify(_block)))
+
+      const _payload = await PublicBlockController.get(_existingPublicBlock.id)
+
+      expect(_payload).not.toHaveProperty('_schema')
+    })
   })
 })

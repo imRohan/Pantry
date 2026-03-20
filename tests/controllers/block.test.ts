@@ -258,6 +258,54 @@ describe('When updating a block', () => {
       .rejects
       .toThrow(`${_blockName} does not exist`)
   })
+
+  describe('that has an existing schema', async ()=> {
+    it ('updates the payload if the contents match the schema', async () => {
+      const _newPayload = JSON.parse('{"name": "Test" }')
+      const _block = {
+        accountUUID: _existingAccount.uuid,
+        name: 'ExistingBlock',
+        payload: {
+          userName: 'flerp',
+          _schema: {
+            name: { name: 'string' },
+          },
+        },
+      }
+      mockedDataStore.get.
+        mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      mockedDataStore.get
+        .mockReturnValueOnce(Promise.resolve(JSON.stringify(_block)))
+
+      const _response = await BlockController
+        .update(_existingAccount.uuid, _existingBlock.name, _newPayload)
+
+      expect(_response).toMatchObject({ name: 'Test' })
+    })
+
+    it ('throws an error if the blocks contents dont match the schema', async () => {
+      const _newPayload = JSON.parse('{"name": 1337 }')
+      const _block = {
+        accountUUID: _existingAccount.uuid,
+        name: 'ExistingBlock',
+        payload: {
+          userName: 'flerp',
+          _schema: {
+            name: { type: 'string' },
+          },
+        },
+      }
+      mockedDataStore.get.
+        mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      mockedDataStore.get
+        .mockReturnValueOnce(Promise.resolve(JSON.stringify(_block)))
+
+      await expect(BlockController
+        .update(_existingAccount.uuid, _block.name, _newPayload))
+        .rejects
+        .toThrow('Schema validation failed')
+    })
+  })
 })
 
 describe('When retrieving a block', () => {
