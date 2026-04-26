@@ -1,7 +1,5 @@
 // External Libs
 import express = require('express')
-import expressBrute = require('express-brute')
-import redisStore = require('express-brute-redis')
 
 // External Files
 import AccountController from '../controllers/account'
@@ -15,21 +13,6 @@ import { IBlockRequestParams } from '../interfaces/block'
 
 // Logger setup
 const logger = new logService('API')
-
-// Express Brute setup (1 request per 1/2 sec)
-const store = new redisStore()
-const failCallback = (req, res, next, nextValid) => {
-  const message = `Please wait till ${nextValid} to make future requests`
-  res.status(429).send(`Pantry API limit reached. ${message}`)
-}
-const bruteForce = new expressBrute(store, {
-  failCallback,
-  freeRetries: 5,
-  minWait: 9000, // 9s
-  maxWait: 9000, // 9s
-  lifetime: 10, // 10s,
-  refreshTimeoutOnRequest: false,
-})
 
 // Router setup
 const _apiV1Router = express.Router()
@@ -63,27 +46,19 @@ _apiV1Router.put('/:pantryID', async (req, res) => {
   }
 })
 
-_apiV1Router.get('/:pantryID',
-  bruteForce.getMiddleware({
-    key: (req, res, next) => {
-      const { pantryID } = accountParams(req)
-      next(pantryID)
-    },
-  }),
-  async (req, res) => {
-    try {
-      const { pantryID } = accountParams(req)
+_apiV1Router.get('/:pantryID', async (req, res) => {
+  try {
+    const { pantryID } = accountParams(req)
 
-      logger.info('[GET] Get Account', { pantryID })
-      const _account = await AccountController.get(pantryID)
+    logger.info('[GET] Get Account', { pantryID })
+    const _account = await AccountController.get(pantryID)
 
-      res.send(_account)
-    } catch (error) {
-      res.status(400).json({ error: 'Could not get pantry',
-                             details: error.message })
-    }
+    res.send(_account)
+  } catch (error) {
+    res.status(400).json({ error: 'Could not get pantry',
+                           details: error.message })
   }
-)
+})
 
 _apiV1Router.delete('/:pantryID', async (req, res) => {
   try {
@@ -129,27 +104,19 @@ _apiV1Router.put('/:pantryID/basket/:basketName', async (req, res) => {
   }
 })
 
-_apiV1Router.get('/:pantryID/basket/:basketName',
-  bruteForce.getMiddleware({
-    key: (req, res, next) => {
-      const { pantryID } = accountParams(req)
-      next(pantryID)
-    },
-  }),
-  async (req, res) => {
-    try {
-      const { pantryID, basketName } = basketParams(req)
+_apiV1Router.get('/:pantryID/basket/:basketName', async (req, res) => {
+  try {
+    const { pantryID, basketName } = basketParams(req)
 
-      logger.info('[GET] Get Basket', { pantryID, basketName })
-      const _response = await BlockController.get(pantryID, basketName)
+    logger.info('[GET] Get Basket', { pantryID, basketName })
+    const _response = await BlockController.get(pantryID, basketName)
 
-      res.send(_response)
-    } catch (error) {
-      res.status(400).json({ error: 'Could not get basket',
-                             details: error.message })
-    }
+    res.send(_response)
+  } catch (error) {
+    res.status(400).json({ error: 'Could not get basket',
+                           details: error.message })
   }
-)
+})
 
 _apiV1Router.delete('/:pantryID/basket/:basketName', async (req, res) => {
   try {
