@@ -14,8 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // External Libs
 const express = require("express");
-const expressBrute = require("express-brute");
-const redisStore = require("express-brute-redis");
 // External Files
 const account_1 = __importDefault(require("../controllers/account"));
 const block_1 = __importDefault(require("../controllers/block"));
@@ -23,20 +21,6 @@ const publicBlock_1 = __importDefault(require("../controllers/publicBlock"));
 const logger_1 = __importDefault(require("../services/logger"));
 // Logger setup
 const logger = new logger_1.default('API');
-// Express Brute setup (1 request per 1/2 sec)
-const store = new redisStore();
-const failCallback = (req, res, next, nextValid) => {
-    const message = `Please wait till ${nextValid} to make future requests`;
-    res.status(429).send(`Pantry API limit reached. ${message}`);
-};
-const bruteForce = new expressBrute(store, {
-    failCallback,
-    freeRetries: 5,
-    minWait: 9000,
-    maxWait: 9000,
-    lifetime: 10,
-    refreshTimeoutOnRequest: false,
-});
 // Router setup
 const _apiV1Router = express.Router();
 _apiV1Router.post('/create', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -64,12 +48,7 @@ _apiV1Router.put('/:pantryID', (req, res) => __awaiter(void 0, void 0, void 0, f
             details: error.message });
     }
 }));
-_apiV1Router.get('/:pantryID', bruteForce.getMiddleware({
-    key: (req, res, next) => {
-        const { pantryID } = accountParams(req);
-        next(pantryID);
-    },
-}), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+_apiV1Router.get('/:pantryID', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { pantryID } = accountParams(req);
         logger.info('[GET] Get Account', { pantryID });
@@ -119,12 +98,7 @@ _apiV1Router.put('/:pantryID/basket/:basketName', (req, res) => __awaiter(void 0
             details: error.message });
     }
 }));
-_apiV1Router.get('/:pantryID/basket/:basketName', bruteForce.getMiddleware({
-    key: (req, res, next) => {
-        const { pantryID } = accountParams(req);
-        next(pantryID);
-    },
-}), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+_apiV1Router.get('/:pantryID/basket/:basketName', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { pantryID, basketName } = basketParams(req);
         logger.info('[GET] Get Basket', { pantryID, basketName });
