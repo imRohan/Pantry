@@ -9,7 +9,7 @@ import {
   IsUUID,
   validate,
 } from 'class-validator'
-import uuidv4 = require('uuid/v4')
+import { v4 as uuidv4 } from 'uuid'
 
 // External Files
 import * as dataStore from '../services/dataStore'

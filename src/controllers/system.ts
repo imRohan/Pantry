@@ -23,9 +23,10 @@ class SystemController {
 
       logger.info('System status retrieved')
       return _status
-    } catch (error) {
-      logger.error(`System status retrieval failed: ${error.message}`)
-
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`System status retrieval failed: ${error.message}`)
+      }
       const _errorStatus = {
         website: true,
         api: true,

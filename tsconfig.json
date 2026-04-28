@@ -5,6 +5,7 @@
       "es2017",
       "dom"
     ],
+    "types": ["jest"],
     "allowJs": true,
     "checkJs": true,
     "module": "commonjs",

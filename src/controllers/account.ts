@@ -33,8 +33,10 @@ class AccountController {
 
       logger.logAndSlack(`Account created for ${contactEmail}: ${_account.uuid}`)
       return _account.uuid
-    } catch (error) {
-      logger.error(`Account creation failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Account creation failed: ${error.message}`)
+      }
       throw error
     }
   }
@@ -47,8 +49,10 @@ class AccountController {
       logger.info(`Account ${uuid} was updated`)
       const _accountDetails = _account.sanitize()
       return _accountDetails
-    } catch (error) {
-      logger.error(`Account update failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Account update failed: ${error.message}`)
+      }
       throw error
     }
   }
@@ -60,8 +64,10 @@ class AccountController {
 
       logger.info(`Account ${uuid} retrieved`)
       return _accountDetails
-    } catch (error) {
-      logger.error(`Account retrieval failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Account retrieval failed: ${error.message}`)
+      }
       throw error
     }
   }
@@ -82,8 +88,10 @@ class AccountController {
 
       logger.info(`Account ${uuid} deleted`)
       return 'Your Pantry has been deleted!'
-    } catch (error) {
-      logger.error(`Account deletion failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Account deletion failed: ${error.message}`)
+      }
       throw error
     }
   }

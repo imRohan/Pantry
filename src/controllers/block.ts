@@ -18,8 +18,10 @@ class BlockController {
       logger.info(`Block ${name} created in account: ${accountUUID}`)
       const _blockDetails = _block.sanitize()
       return _blockDetails
-    } catch (error) {
-      logger.error(`Block creation failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Block creation failed: ${error.message}`)
+      }
       throw error
     }
   }
@@ -31,8 +33,10 @@ class BlockController {
       logger.info(`Block ${name} retrieved from account: ${accountUUID}`)
       const _blockDetails = _block.sanitize()
       return _blockDetails
-    } catch (error) {
-      logger.error(`Block retrieval failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Block retrieval failed: ${error.message}`)
+      }
       throw error
     }
   }
@@ -45,8 +49,10 @@ class BlockController {
       logger.info(`Block ${name} updated in account: ${accountUUID}`)
       const _blockDetails = _block.sanitize()
       return _blockDetails
-    } catch (error) {
-      logger.error(`Block update failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Block update failed: ${error.message}`)
+      }
       throw error
     }
   }
@@ -56,8 +62,10 @@ class BlockController {
       const _block = await Block.get(accountUUID, name)
       await _block.delete()
       logger.info(`Block ${name} was successfully removed from account: ${accountUUID}`)
-    } catch (error) {
-      logger.error(`Block deletion failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Block deletion failed: ${error.message}`)
+      }
       throw error
     }
   }

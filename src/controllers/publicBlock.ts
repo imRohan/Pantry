@@ -14,8 +14,10 @@ class PublicBlockController {
 
       logger.info(`Public Block created: ${_publicBlockUUID}`)
       return _publicBlockUUID
-    } catch (error) {
-      logger.error(`Public Block creation failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Public Block creation failed: ${error.message}`)
+      }
       throw error
     }
   }
@@ -26,8 +28,10 @@ class PublicBlockController {
 
       logger.info(`Public Block retrieved: ${id}`)
       return _publicBlock.sanitizedBlock()
-    } catch (error) {
-      logger.error(`Public Block retrieval failed: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Public Block retrieval failed: ${error.message}`)
+      }
       throw error
     }
   }

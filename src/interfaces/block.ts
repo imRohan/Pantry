@@ -3,7 +3,7 @@ export interface IBlock {
   name: string,
   payload: any,
   createdAt: Date,
-  updatedAt: Date,
+  updatedAt: Date | null,
 }
 
 export interface IBlockInfo {
@@ -18,10 +18,10 @@ export interface IBlockRequestParams {
 
 export interface IBlockMetadata {
   createdAt: string
-  updatedAt: string
+  updatedAt: string | null
 }
 
 export interface IBlockPublic {
   [key: string]: unknown,
-  _metadata: IBlockMetadata
+  _metadata?: IBlockMetadata
 }

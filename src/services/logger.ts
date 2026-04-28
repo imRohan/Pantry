@@ -29,7 +29,7 @@ class Logger {
   }
 
   private buildLogClient(name: string) {
-    return pino({ name, prettyPrint: true })
+    return pino({ name })
   }
 
   // Send logs to not only the logging client, but also outbound to Slack.

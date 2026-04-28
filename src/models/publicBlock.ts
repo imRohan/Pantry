@@ -18,10 +18,10 @@ class PublicBlock {
 
   @IsNotEmpty()
   @IsString()
-  private accountUUID: string
+  private accountUUID: string | null
   @IsNotEmpty()
   @IsString()
-  private blockName: string
+  private blockName: string | null
   @IsNotEmpty()
   @IsString()
   private id: string
@@ -29,9 +29,10 @@ class PublicBlock {
   @IsString()
   private redisKey: string
   @IsNotEmpty()
-  private block: Block
+  private block: Block | null
 
-  public constructor(accountUUID: string, blockName: string, id: string = null) {
+  public constructor(accountUUID: string | null, blockName: string | null,
+                     id: string | null = null) {
     this.accountUUID = accountUUID
     this.blockName = blockName
     this.id = id ?? this.generateHash()
@@ -76,10 +77,14 @@ class PublicBlock {
   }
 
   public sanitizedBlock(): IBlockPublic {
-    const _sanitizedBlock = this.block.sanitize()
-    delete _sanitizedBlock._metadata
-    delete _sanitizedBlock._schema
-    return _sanitizedBlock
+    if (this.block) {
+      const _sanitizedBlock = this.block.sanitize()
+      delete _sanitizedBlock._metadata
+      delete _sanitizedBlock._schema
+      return _sanitizedBlock
+    } else {
+      return {}
+    }
   }
 
   private async hydrate(): Promise<void> {
@@ -98,7 +103,9 @@ class PublicBlock {
 
   private async hydrateBlock(): Promise<void> {
     try {
-      this.block = await Block.get(this.accountUUID, this.blockName)
+      if (this.accountUUID && this.blockName) {
+        this.block = await Block.get(this.accountUUID, this.blockName)
+      }
     } catch (_error) {
       throw new Error('basket not found, please contact the Pantry owner')
     }
@@ -111,12 +118,16 @@ class PublicBlock {
   }
 
   private generateRedisPayload(): string {
-    const _publicBlock: IPublicBlock = {
-      accountUUID: this.accountUUID,
-      blockName: this.blockName,
-      id: this.id,
+    if (this.accountUUID && this.blockName) {
+      const _publicBlock: IPublicBlock = {
+        accountUUID: this.accountUUID,
+        blockName: this.blockName,
+        id: this.id,
+      }
+      return JSON.stringify(_publicBlock)
+    } else {
+      return JSON.stringify({})
     }
-    return JSON.stringify(_publicBlock)
   }
 
   private async refreshTTL(): Promise<void> {

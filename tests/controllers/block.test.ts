@@ -100,7 +100,7 @@ describe('When creating a block', () => {
     const { _metadata } = await BlockController
       .create(_existingAccount.uuid, 'NewBlock', JSON.parse('{}'))
 
-    expect(_metadata.updatedAt).toBeNull()
+    expect(_metadata?.updatedAt).toBeNull()
   })
 
   it ('throws an error if validation fails', async () => {
@@ -108,7 +108,7 @@ describe('When creating a block', () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
     mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
 
-    await expect(BlockController.create(_accountUUID, 'NewBlock', null))
+    await expect(BlockController.create(_accountUUID, 'NewBlock', JSON.parse('{}')))
       .rejects
       .toThrow('Validation failed:')
   })
@@ -208,7 +208,7 @@ describe('When updating a block', () => {
     const { _metadata } = await BlockController
       .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
 
-    expect(_metadata.createdAt).toEqual(_existingBlock.createdAt.toUTCString())
+    expect(_metadata?.createdAt).toEqual(_existingBlock.createdAt.toUTCString())
   })
 
 
@@ -221,7 +221,7 @@ describe('When updating a block', () => {
     const { _metadata } = await BlockController
       .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
 
-    expect(_metadata.updatedAt).toBeDefined()
+    expect(_metadata?.updatedAt).toBeDefined()
   })
 
   it ('updates the updatedAt value metadata', async() => {
@@ -233,7 +233,7 @@ describe('When updating a block', () => {
     const { _metadata } = await BlockController
       .update(_existingAccount.uuid, _existingBlock.name, _newBlockData)
 
-    expect(_metadata.updatedAt).not.toEqual(_existingBlock.updatedAt)
+    expect(_metadata?.updatedAt).not.toEqual(_existingBlock.updatedAt)
   })
 
   it ('throws an error if the account does not exist', async () => {

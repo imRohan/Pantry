@@ -31,23 +31,24 @@ class Block {
   @IsNotEmpty()
   @IsObject()
   @IsValidPayloadSize()
-  public payload: any
+  public payload: any | null
   @IsNotEmpty()
-  public account: Account
+  public account: Account | null
   @IsNotEmpty()
   @IsDate()
   public createdAt: Date
   @IsOptional()
   @IsDate()
-  public updatedAt: Date
+  public updatedAt: Date | null
   @IsNotEmpty()
   @IsString()
   private redisKey: string
   @IsOptional()
   @IsObject()
-  private schema: any
+  private schema: any | null
 
-  public constructor(accountUUID: string, name: string, payload: JSON = null,
+  public constructor(accountUUID: string, name: string,
+                     payload: JSON | null = null,
                      createdAt: Date = new Date()) {
     this.name = name
     this.payload = payload
@@ -100,7 +101,7 @@ class Block {
 
   public async verifyAccountNotFull(): Promise<void> {
     await this.hydrateAccount()
-    await this.account.verifyIfFull()
+    await this.account?.verifyIfFull()
   }
 
   private metadata(): IBlockMetadata {
@@ -165,7 +166,7 @@ class Block {
   }
 
   private formatValidationErrors(errors: any): string[] {
-    return errors.map((error) => {
+    return errors.map((error: { instancePath: string, message: string }) => {
       const { instancePath, message } = error
       const _key = instancePath.replace('/','')
       return `'${_key}' ${message}`
