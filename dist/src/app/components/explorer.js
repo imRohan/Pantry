@@ -23,6 +23,7 @@ const explorerEmpty = require('./explorerEmpty.ts');
 const explorerOnboarding = require('./explorerOnboarding.ts');
 const basket = require('./basket.ts');
 const modal = require('./modal.ts');
+const newBasketModal = require('./newBasketModal.ts');
 const explorer = {
     name: 'explorer',
     props: ['pantry'],
@@ -33,12 +34,14 @@ const explorer = {
         explorerOnboarding,
         basket,
         modal,
+        newBasketModal,
         'json-edit': jsonEditor,
     },
     data() {
         return {
             basket: null,
             schemaModalVisible: false,
+            createBasketModalVisible: false,
             schemaExample: {
                 _schema: {
                     toppings: { type: 'array' },
@@ -78,20 +81,19 @@ const explorer = {
             this.$emit('refresh');
             this.basket = null;
         },
-        createBasket() {
+        createBasket(basketName, payload) {
             return __awaiter(this, void 0, void 0, function* () {
-                const _randomNumber = Math.floor((Math.random() * 100) + 1);
-                const _defaultName = `newBasket${_randomNumber}`;
-                const _name = prompt('What is the name of the new basket?', _defaultName);
-                if (_name) {
+                if (basketName) {
                     yield axios({
                         method: 'POST',
-                        data: {
-                            key: 'value',
-                        },
-                        url: `${API_PATH}/pantry/${this.pantry.id}/basket/${_name}`,
+                        data: payload,
+                        url: `${API_PATH}/pantry/${this.pantry.id}/basket/${basketName}`,
                     });
                     this.refresh();
+                    this.toggleCreateBasketModal();
+                }
+                else {
+                    alert('Please enter a basket name');
                 }
             });
         },
@@ -144,6 +146,9 @@ const explorer = {
         },
         toggleSchemaModal() {
             this.schemaModalVisible = !this.schemaModalVisible;
+        },
+        toggleCreateBasketModal() {
+            this.createBasketModalVisible = !this.createBasketModalVisible;
         },
     },
 };

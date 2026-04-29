@@ -1,0 +1,16 @@
+<div @click="clicked" class="group relative cursor-pointer overflow-hidden
+  bg-white py-5 px-3 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-sm
+  sm:rounded-lg sm:px-10 hover:bg-gray-100">
+  <div class="space-y-2 text-sm leading-7 text-gray-600">
+    <a href="#" class="text-lg font-medium text-orange-400">
+      <slot name="title">
+        Card Title
+      </slot>
+    </a>
+    <p>
+      <slot name="content">
+        Card content goes here
+      </slot>
+    </p>
+  </div>
+</div>

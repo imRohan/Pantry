@@ -1,0 +1,58 @@
+<div>
+  <template v-if="visible">
+    <modal @clicked="createBasket" @close="closeModal">
+      <template v-slot:icon>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+        stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+        </svg>
+      </template>
+      <template v-slot:title>New Basket</template>
+      <template v-slot:content>
+        <h2 class="pt-2 pb-4 text-md font-medium text-gray-900">
+          Basket Name
+        </h2>
+        <input id="newBasketName" type="text"
+               v-model="basketName"
+               placeholder="Please enter a basket name"
+               class="block w-full px-4 py-3 rounded-md border-2 text-base
+                      border-grey-200
+                      text-gray-900 placeholder-gray-500 focus:outline-none
+                      focus:ring-2 focus:ring-offset-2 focus:ring-orange-300
+                      focus:ring-offset-orange-900">
+        <h2 class="py-4 text-md font-medium text-gray-900">
+          Choose a Starting Template
+        </h2>
+        <div class="grid grid-cols-3 gap-4">
+          <template v-for="template in templates">
+            <card @click="setTemplate(template.fileName)">
+              <template v-slot:title>{{ template.name }}</template>
+              <template v-slot:content>
+                {{ template.description }}
+              </template>
+            </card>
+          </template>
+          <card @click="setBlankTemplate">
+            <template v-slot:title>Empty Template</template>
+            <template v-slot:content>
+              Start fresh with an empty JSON basket. You know what you're
+              building.
+            </template>
+          </card>
+        </div>
+        <template v-if="payloadIsNotEmpty">
+          <h2 class="py-4 text-md font-medium text-gray-900">
+            Preview
+          </h2>
+          <json-edit
+            v-model="payload"
+            :mode="'code'"
+            :show-btns="false" />
+        </template>
+      </template>
+      <template v-slot:actionButton>
+        Create {{ basketName }}
+      </template>
+    </modal>
+  </template>
+</div>
