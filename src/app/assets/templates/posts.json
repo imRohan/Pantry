@@ -1,0 +1,132 @@
+{
+  "posts": [
+    {
+      "id": 101,
+      "author_id": 1,
+      "title": "Getting Started with JSON",
+      "slug": "getting-started-with-json",
+      "excerpt": "Learn the basics of JSON syntax and structure.",
+      "status": "published",
+      "views": 1542,
+      "comments": 12,
+      "created": "2024-01-05",
+      "tags": [
+        "json",
+        "tutorial",
+        "beginner"
+      ]
+    },
+    {
+      "id": 102,
+      "author_id": 2,
+      "title": "Advanced JSON Schema Validation",
+      "slug": "advanced-json-schema-validation",
+      "excerpt": "Deep dive into JSON Schema for robust data validation.",
+      "status": "published",
+      "views": 892,
+      "comments": 8,
+      "created": "2024-01-08",
+      "tags": [
+        "json",
+        "schema",
+        "validation"
+      ]
+    },
+    {
+      "id": 103,
+      "author_id": 1,
+      "title": "JSON vs XML: A Comparison",
+      "slug": "json-vs-xml-comparison",
+      "excerpt": "Exploring the differences between JSON and XML.",
+      "status": "published",
+      "views": 2103,
+      "comments": 24,
+      "created": "2024-01-10",
+      "tags": [
+        "json",
+        "xml",
+        "comparison"
+      ]
+    },
+    {
+      "id": 104,
+      "author_id": 3,
+      "title": "Working with JSON in JavaScript",
+      "slug": "working-with-json-javascript",
+      "excerpt": "Master JSON parsing and stringification in JS.",
+      "status": "published",
+      "views": 3421,
+      "comments": 31,
+      "created": "2024-01-12",
+      "tags": [
+        "json",
+        "javascript",
+        "tutorial"
+      ]
+    },
+    {
+      "id": 105,
+      "author_id": 2,
+      "title": "RESTful APIs and JSON",
+      "slug": "restful-apis-and-json",
+      "excerpt": "How JSON became the standard for REST APIs.",
+      "status": "published",
+      "views": 1876,
+      "comments": 15,
+      "created": "2024-01-14",
+      "tags": [
+        "json",
+        "api",
+        "rest"
+      ]
+    },
+    {
+      "id": 106,
+      "author_id": 4,
+      "title": "JSON Performance Tips",
+      "slug": "json-performance-tips",
+      "excerpt": "Optimize your JSON handling for better performance.",
+      "status": "draft",
+      "views": 0,
+      "comments": 0,
+      "created": "2024-01-15",
+      "tags": [
+        "json",
+        "performance",
+        "optimization"
+      ]
+    },
+    {
+      "id": 107,
+      "author_id": 1,
+      "title": "Common JSON Mistakes",
+      "slug": "common-json-mistakes",
+      "excerpt": "Avoid these common pitfalls when working with JSON.",
+      "status": "published",
+      "views": 4532,
+      "comments": 42,
+      "created": "2024-01-03",
+      "tags": [
+        "json",
+        "mistakes",
+        "debugging"
+      ]
+    },
+    {
+      "id": 108,
+      "author_id": 3,
+      "title": "JSON in Python",
+      "slug": "json-in-python",
+      "excerpt": "Complete guide to JSON handling in Python.",
+      "status": "published",
+      "views": 2891,
+      "comments": 19,
+      "created": "2024-01-07",
+      "tags": [
+        "json",
+        "python",
+        "tutorial"
+      ]
+    }
+  ]
+}

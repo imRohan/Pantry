@@ -17,6 +17,7 @@ const explorerEmpty = require('./explorerEmpty.ts')
 const explorerOnboarding = require('./explorerOnboarding.ts')
 const basket = require('./basket.ts')
 const modal = require('./modal.ts')
+const newBasketModal = require('./newBasketModal.ts')
 
 const explorer = {
   name: 'explorer',
@@ -28,12 +29,14 @@ const explorer = {
     explorerOnboarding,
     basket,
     modal,
+    newBasketModal,
     'json-edit': jsonEditor,
   },
   data(): any {
     return {
       basket: null,
       schemaModalVisible: false,
+      createBasketModalVisible: false,
       schemaExample: {
         _schema: {
           toppings: { type: 'array' },
@@ -73,20 +76,18 @@ const explorer = {
       this.$emit('refresh')
       this.basket = null
     },
-    async createBasket(): Promise<void> {
-      const _randomNumber = Math.floor((Math.random() * 100) + 1)
-      const _defaultName = `newBasket${_randomNumber}`
-      const _name = prompt('What is the name of the new basket?', _defaultName)
-      if (_name) {
+    async createBasket(basketName: string, payload: unknown): Promise<void> {
+      if (basketName) {
         await axios({
           method: 'POST',
-          data: {
-            key: 'value',
-          },
-          url: `${API_PATH}/pantry/${this.pantry.id}/basket/${_name}`,
+          data: payload,
+          url: `${API_PATH}/pantry/${this.pantry.id}/basket/${basketName}`,
         })
 
         this.refresh()
+        this.toggleCreateBasketModal()
+      } else {
+        alert('Please enter a basket name')
       }
     },
     async renamePantry(): Promise<void> {
@@ -134,6 +135,9 @@ const explorer = {
     },
     toggleSchemaModal(): void {
       this.schemaModalVisible = !this.schemaModalVisible
+    },
+    toggleCreateBasketModal(): void {
+      this.createBasketModalVisible = !this.createBasketModalVisible
     },
   },
 }

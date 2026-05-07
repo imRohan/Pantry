@@ -1,0 +1,27 @@
+[
+    {
+        "fileName": "users",
+        "name": "User List",
+        "description": "Realistic sample user data for testing authentication systems, user management features"
+    },
+    {
+        "fileName": "posts",
+        "name": "Blog Posts",
+        "description": "Sample blog post data for testing CMS features, content management, and publishing workflows."
+    },
+    {
+        "fileName": "events",
+        "name": "Event List",
+        "description": "Sample event data for testing calendar features, registrations, and event management."
+    },
+    {
+        "fileName": "pokemon",
+        "name": "Pokémon Info",
+        "description": "The original 150 Pokémon, complete with their stats, classifications, evolutions, and attacks."
+    },
+    {
+        "fileName": "airports",
+        "name": "World Airports",
+        "description": "Top 30 busiest international airports with IATA codes and coordinates."
+    }
+]
