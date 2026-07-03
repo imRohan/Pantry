@@ -1,0 +1,31 @@
+<div>
+	<h3 class="text-xs font-semibold text-gray-500 uppercase">
+		Changelog
+	</h3>
+	<ul role="list" class="mt-4 space-y-3">
+		<template v-for="item in items">
+			<li class="relative flex gap-x-4">
+				<div class="absolute top-0 -bottom-6 left-0 flex w-6 justify-center">
+					<div class="w-px bg-gray-200"></div>
+				</div>
+				<div class="relative flex size-6 flex-none items-center justify-center bg-white">
+					<div class="size-1.5 rounded-full bg-gray-100 ring ring-gray-300"></div>
+				</div>
+				<p class="flex-auto py-0.5 text-xs/5 text-gray-500">
+					{{ item.description }}
+				</p>
+			</li>
+		</template>
+		<li class="relative flex gap-x-4">
+			<div class="relative flex size-6 flex-none items-center justify-center bg-white">
+				<div class="size-1.5 rounded-full bg-gray-100 ring ring-gray-300"></div>
+			</div>
+			<p class="flex-auto py-0.5 text-xs/5 text-orange-600">
+				<a href="https://github.com/imRohan/Pantry/commits/master/"
+					 target="_blank">
+					View all changes
+				</a>
+			</p>
+		</li>
+	</ul>
+</div>

@@ -3,4 +3,5 @@ export interface ISystemStatus {
   api: boolean,
   dataStore: boolean,
   activeAccounts: number,
+  publicBlocks: number
 }

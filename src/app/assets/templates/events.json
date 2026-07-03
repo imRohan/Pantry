@@ -1,0 +1,114 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Tech Conference 2024",
+      "type": "conference",
+      "start": "2024-03-15T09:00:00Z",
+      "end": "2024-03-17T18:00:00Z",
+      "location": "San Francisco, CA",
+      "attendees": 500,
+      "virtual": false,
+      "price": 299
+    },
+    {
+      "id": 2,
+      "title": "JavaScript Workshop",
+      "type": "workshop",
+      "start": "2024-02-20T14:00:00Z",
+      "end": "2024-02-20T17:00:00Z",
+      "location": "Online",
+      "attendees": 150,
+      "virtual": true,
+      "price": 49
+    },
+    {
+      "id": 3,
+      "title": "Startup Pitch Night",
+      "type": "meetup",
+      "start": "2024-02-10T18:30:00Z",
+      "end": "2024-02-10T21:00:00Z",
+      "location": "New York, NY",
+      "attendees": 75,
+      "virtual": false,
+      "price": 0
+    },
+    {
+      "id": 4,
+      "title": "AI & Machine Learning Summit",
+      "type": "conference",
+      "start": "2024-04-22T09:00:00Z",
+      "end": "2024-04-24T17:00:00Z",
+      "location": "Austin, TX",
+      "attendees": 800,
+      "virtual": false,
+      "price": 449
+    },
+    {
+      "id": 5,
+      "title": "React Advanced Course",
+      "type": "course",
+      "start": "2024-02-05T10:00:00Z",
+      "end": "2024-02-26T12:00:00Z",
+      "location": "Online",
+      "attendees": 200,
+      "virtual": true,
+      "price": 199
+    },
+    {
+      "id": 6,
+      "title": "Product Design Sprint",
+      "type": "workshop",
+      "start": "2024-03-01T09:00:00Z",
+      "end": "2024-03-05T17:00:00Z",
+      "location": "Seattle, WA",
+      "attendees": 30,
+      "virtual": false,
+      "price": 599
+    },
+    {
+      "id": 7,
+      "title": "Monthly Developer Meetup",
+      "type": "meetup",
+      "start": "2024-01-25T19:00:00Z",
+      "end": "2024-01-25T21:00:00Z",
+      "location": "Chicago, IL",
+      "attendees": 45,
+      "virtual": false,
+      "price": 0
+    },
+    {
+      "id": 8,
+      "title": "Cloud Architecture Webinar",
+      "type": "webinar",
+      "start": "2024-02-15T11:00:00Z",
+      "end": "2024-02-15T12:30:00Z",
+      "location": "Online",
+      "attendees": 350,
+      "virtual": true,
+      "price": 0
+    },
+    {
+      "id": 9,
+      "title": "DevOps Bootcamp",
+      "type": "course",
+      "start": "2024-03-10T09:00:00Z",
+      "end": "2024-03-14T17:00:00Z",
+      "location": "Denver, CO",
+      "attendees": 40,
+      "virtual": false,
+      "price": 1299
+    },
+    {
+      "id": 10,
+      "title": "Women in Tech Networking",
+      "type": "meetup",
+      "start": "2024-02-28T18:00:00Z",
+      "end": "2024-02-28T20:30:00Z",
+      "location": "Boston, MA",
+      "attendees": 60,
+      "virtual": false,
+      "price": 15
+    }
+  ]
+}

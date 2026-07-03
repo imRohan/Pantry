@@ -1,0 +1,244 @@
+{
+  "airports": [
+    {
+      "code": "ATL",
+      "name": "Hartsfield-Jackson Atlanta International",
+      "city": "Atlanta",
+      "country": "US",
+      "lat": 33.6407,
+      "lon": -84.4277
+    },
+    {
+      "code": "PEK",
+      "name": "Beijing Capital International",
+      "city": "Beijing",
+      "country": "CN",
+      "lat": 40.0801,
+      "lon": 116.5846
+    },
+    {
+      "code": "DXB",
+      "name": "Dubai International",
+      "city": "Dubai",
+      "country": "AE",
+      "lat": 25.2528,
+      "lon": 55.3644
+    },
+    {
+      "code": "LAX",
+      "name": "Los Angeles International",
+      "city": "Los Angeles",
+      "country": "US",
+      "lat": 33.9425,
+      "lon": -118.4081
+    },
+    {
+      "code": "HND",
+      "name": "Tokyo Haneda",
+      "city": "Tokyo",
+      "country": "JP",
+      "lat": 35.5494,
+      "lon": 139.7798
+    },
+    {
+      "code": "ORD",
+      "name": "O'Hare International",
+      "city": "Chicago",
+      "country": "US",
+      "lat": 41.9742,
+      "lon": -87.9073
+    },
+    {
+      "code": "LHR",
+      "name": "London Heathrow",
+      "city": "London",
+      "country": "GB",
+      "lat": 51.47,
+      "lon": -0.4543
+    },
+    {
+      "code": "PVG",
+      "name": "Shanghai Pudong International",
+      "city": "Shanghai",
+      "country": "CN",
+      "lat": 31.1443,
+      "lon": 121.8083
+    },
+    {
+      "code": "CDG",
+      "name": "Paris Charles de Gaulle",
+      "city": "Paris",
+      "country": "FR",
+      "lat": 49.0097,
+      "lon": 2.5479
+    },
+    {
+      "code": "DFW",
+      "name": "Dallas/Fort Worth International",
+      "city": "Dallas",
+      "country": "US",
+      "lat": 32.8998,
+      "lon": -97.0403
+    },
+    {
+      "code": "CAN",
+      "name": "Guangzhou Baiyun International",
+      "city": "Guangzhou",
+      "country": "CN",
+      "lat": 23.3924,
+      "lon": 113.2988
+    },
+    {
+      "code": "AMS",
+      "name": "Amsterdam Schiphol",
+      "city": "Amsterdam",
+      "country": "NL",
+      "lat": 52.3105,
+      "lon": 4.7683
+    },
+    {
+      "code": "FRA",
+      "name": "Frankfurt Airport",
+      "city": "Frankfurt",
+      "country": "DE",
+      "lat": 50.0379,
+      "lon": 8.5622
+    },
+    {
+      "code": "IST",
+      "name": "Istanbul Airport",
+      "city": "Istanbul",
+      "country": "TR",
+      "lat": 41.2753,
+      "lon": 28.7519
+    },
+    {
+      "code": "SIN",
+      "name": "Singapore Changi",
+      "city": "Singapore",
+      "country": "SG",
+      "lat": 1.3644,
+      "lon": 103.9915
+    },
+    {
+      "code": "ICN",
+      "name": "Incheon International",
+      "city": "Seoul",
+      "country": "KR",
+      "lat": 37.4602,
+      "lon": 126.4407
+    },
+    {
+      "code": "DEN",
+      "name": "Denver International",
+      "city": "Denver",
+      "country": "US",
+      "lat": 39.8561,
+      "lon": -104.6737
+    },
+    {
+      "code": "BKK",
+      "name": "Suvarnabhumi Airport",
+      "city": "Bangkok",
+      "country": "TH",
+      "lat": 13.69,
+      "lon": 100.7501
+    },
+    {
+      "code": "JFK",
+      "name": "John F. Kennedy International",
+      "city": "New York",
+      "country": "US",
+      "lat": 40.6413,
+      "lon": -73.7781
+    },
+    {
+      "code": "HKG",
+      "name": "Hong Kong International",
+      "city": "Hong Kong",
+      "country": "HK",
+      "lat": 22.308,
+      "lon": 113.9185
+    },
+    {
+      "code": "KUL",
+      "name": "Kuala Lumpur International",
+      "city": "Kuala Lumpur",
+      "country": "MY",
+      "lat": 2.7456,
+      "lon": 101.7099
+    },
+    {
+      "code": "MAD",
+      "name": "Adolfo Suárez Madrid–Barajas",
+      "city": "Madrid",
+      "country": "ES",
+      "lat": 40.4983,
+      "lon": -3.5676
+    },
+    {
+      "code": "SFO",
+      "name": "San Francisco International",
+      "city": "San Francisco",
+      "country": "US",
+      "lat": 37.6213,
+      "lon": -122.379
+    },
+    {
+      "code": "MIA",
+      "name": "Miami International",
+      "city": "Miami",
+      "country": "US",
+      "lat": 25.7959,
+      "lon": -80.287
+    },
+    {
+      "code": "SYD",
+      "name": "Sydney Kingsford Smith",
+      "city": "Sydney",
+      "country": "AU",
+      "lat": -33.9399,
+      "lon": 151.1753
+    },
+    {
+      "code": "MUC",
+      "name": "Munich Airport",
+      "city": "Munich",
+      "country": "DE",
+      "lat": 48.3537,
+      "lon": 11.775
+    },
+    {
+      "code": "BCN",
+      "name": "Barcelona–El Prat",
+      "city": "Barcelona",
+      "country": "ES",
+      "lat": 41.2974,
+      "lon": 2.0833
+    },
+    {
+      "code": "YYZ",
+      "name": "Toronto Pearson International",
+      "city": "Toronto",
+      "country": "CA",
+      "lat": 43.6777,
+      "lon": -79.6248
+    },
+    {
+      "code": "MEX",
+      "name": "Mexico City International",
+      "city": "Mexico City",
+      "country": "MX",
+      "lat": 19.4361,
+      "lon": -99.0719
+    },
+    {
+      "code": "NRT",
+      "name": "Narita International",
+      "city": "Tokyo",
+      "country": "JP",
+      "lat": 35.772,
+      "lon": 140.3929
+    }
+  ]
+}

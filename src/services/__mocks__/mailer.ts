@@ -1,6 +1,6 @@
-const mailer = {
+const Mailer = {
   sendWelcomeEmail: jest.fn(async () => { }),
   sendAccountErrorsEmail: jest.fn(async () => { }),
 }
 
-export = mailer
+export = Mailer

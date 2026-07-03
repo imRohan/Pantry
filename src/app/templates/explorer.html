@@ -11,49 +11,66 @@
       </div>
       <div class="mt-5 flex-grow flex flex-col">
         <nav class="flex-1 px-2 pb-4">
+          <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            Baskets
+          </h3>
           <template v-for="{ name, ttl } in pantry.baskets">
             <a href="#"
                :class="[activeBasket === name ? 'bg-gray-100' : '']"
-               class="hover:bg-gray-50 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+               class="hover:bg-gray-50 mb-2 px-3 py-3 flex items-center rounded"
                @click="viewBasket(name)">
               <svg class="text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-              <span class="truncate">{{ name }}</span>
+              <div>
+                <div class="text-sm font-medium truncate">
+                  {{ name }}
+                </div>
+                <div class="text-xs text-gray-400 truncate">
+                  Expires in {{ daysToDeletion(ttl) }} days
+                </div>
+              </div>
             </a>
           </template>
-          <div :class="[isPantryEmpty ? 'mt-0' : 'mt-8']">
-            <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
-                id="projects-headline">
-              Basket Actions
-            </h3>
-            <div class="mt-1 space-y-1" aria-labelledby="projects-headline">
-              <a href="#"
-                 class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
-                 @click="createBasket">
-                <span class="truncate">Create basket</span>
-              </a>
-              <br>
-              <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
-                  id="projects-headline2">
-                Pantry Actions
-              </h3>
-              <a href="#"
-                  class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
-                  @click="renamePantry">
-                <span class="truncate">Change name</span>
-              </a>
-              <a href="#"
-                  class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
-                  @click="changePantryDescription">
-                <span class="truncate">Change description</span>
-              </a>
-              <template v-if="errorsExist">
-                <a href="#"
-                   class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
-                   @click="openErrorsModal">
-                  <span class="truncate">View Errors</span>
-                </a>
-              </template>
+          <a href="#"
+             class="hover:bg-gray-50 my-2 px-3 py-3 flex items-center rounded"
+             @click="toggleCreateBasketModal">
+            <svg class="text-orange-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
+                 fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12
+              9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <div>
+              <div class="text-sm font-medium truncate">
+                Create Basket
+              </div>
             </div>
+          </a>
+          <div :class="[isPantryEmpty ? 'mt-0' : 'mt-8']">
+            <h3 class="text-xs mb-1 font-semibold text-gray-500 uppercase tracking-wider">
+              Pro Tips & Tricks
+            </h3>
+            <a href="#"
+                class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
+                @click="toggleSchemaModal">
+              <span class="truncate">Add a JSON Schema</span>
+            </a>
+          </div>
+          <div class="mt-4">
+            <h3 class="text-xs mb-1 font-semibold text-gray-500 uppercase tracking-wider">
+              Pantry Actions
+            </h3>
+            <a href="#"
+                class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
+                @click="renamePantry">
+              <span class="truncate">Change name</span>
+            </a>
+            <a href="#"
+                class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
+                @click="changePantryDescription">
+              <span class="truncate">Change description</span>
+            </a>
+          </div>
+          <div class="mt-10">
+            <changelog />
           </div>
         </nav>
       </div>
@@ -70,43 +87,102 @@
       <explorerOnboarding @load-basket="loadBasket" />
     </template>
   </div>
-  <template v-if="errorsExist && errorsModalVisible">
-    <modal @close="closeErrorsModal">
+  <template v-if="schemaModalVisible">
+    <modal @close="toggleSchemaModal" :read-only="true">
       <template v-slot:icon>
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+        stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15
+        9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592
+        3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622
+        0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+        </svg>
       </template>
-      <template v-slot:title>Error Logs</template>
+      <template v-slot:title>Why Your Baskets Need a JSON Schema</template>
       <template v-slot:content>
-        <div class="flow-root">
-          <ul role="list" class="-mb-8">
-            <template v-for="(error, index) in pantry.errors">
-              <li>
-                <div class="relative pb-8">
-                  <template v-if="index !== pantry.errors.length -1">
-                  <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
-                  </template>
-                  <div class="relative flex space-x-3">
-                    <div>
-                      <span class="h-8 w-8 rounded-full bg-red-400 flex items-center justify-center ring-8 ring-white">
-                        <svg class="w-6 h-6" fill="none" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                      </span>
-                    </div>
-                    <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                      <div>
-                        <p class="text-sm text-gray-500">
-                          {{ error }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </template>
+        <p class="font-sans text-sm text-gray-600">
+          Think of a JSON Schema as a set of house rules for your basket. Without
+          a schema, your basket is like a party with no guest list. Anyone
+          and anything can get in, even if they're going to cause trouble.
+        </p>
+        <h2 class="my-2 text-md font-medium text-gray-900">
+          Example: Pizza Order Basket
+        </h2>
+        <p class="font-sans text-sm text-gray-600">
+          Imagine you run a pizza shop and you track orders in a basket with
+          this specific format:
+          <ul class="list-disc px-8">
+            <li>
+              Toppings must be an array (list).
+            </li>
+            <li>
+              Size must be a string (words).
+            </li>
+            <li>
+              Price must be a number.
+            </li>
           </ul>
+        </p>
+        <h2 class="my-2 text-md font-medium text-gray-900">
+          Add a Schema to Your Basket
+        </h2>
+        <p class="font-sans text-sm text-gray-600 mb-4">
+          Pantry supports the
+          <a class="text-orange-600"
+             href="https://json-schema.org/understanding-json-schema/reference" target="_blank">
+            JSON Schema Protocol
+          </a>, and can validate each basket with it's own schema. By adding
+          a
+          <span class="text-orange-600 bg-gray-100 text-mono px-1 rounded">
+            _schema
+          </span>
+          object inside of the basket, Pantry will validate any
+          <a class="text-orange-600"
+                    href="https://documenter.getpostman.com/view/3281832/SzmZeMLC#f1c2c2b2-63d3-42f6-b30d-94b08ed68ca9"
+                    target="_blank">
+            data updates (PUT)
+          </a>
+          and only store them if all of the schema's rules are
+          followed.
+        </p>
+        <json-edit
+          v-model="schemaExample"
+          :mode="'code'"
+          :show-btns="false" />
+        <p class="mt-4 font-sans text-sm text-gray-600">
+          When you or your user try to update a basket with data that fails to
+          validate (does not follow the schema's rules), an error will be
+          returned by our api, explaining what rule was broken.
+        </p>
+        <p class="mt-2 font-sans text-sm text-gray-600">
+          For example, let's say someone tried to update the
+          <span class="text-orange-600 bg-gray-100 text-mono px-1 rounded">
+            price
+          </span>
+          attribute to
+          <span class="text-orange-600 bg-gray-100 text-mono px-1 rounded">
+            "free"
+          </span>.
+        </p>
+        <p class="mt-2 font-sans text-sm text-gray-600">
+          Pantry will reject the request since
+          <span class="text-orange-600 bg-gray-100 text-mono px-1 rounded">
+            price
+          </span>
+          must be a number, and the following error will be returned:
+        </p>
+        <div class="mt-2 p-2 text-sm text-white bg-gray-700 rounded-md">
+          [400] Schema validation failed: 'price' must be number
         </div>
+        <h2 class="my-2 text-md font-medium text-gray-900">
+          Hope this Helps! 🫡
+        </h2>
+        <p class="font-sans text-sm text-gray-600">
+          Now let's give your baskets superpowers and add a JSON Schema to
+          them. It's easy and will reduce a lot of headaches in the future.
+        </p>
       </template>
     </modal>
   </template>
+  <newBasketModal @createBasket="createBasket" @close="toggleCreateBasketModal" :visible="createBasketModalVisible" />
 </div>

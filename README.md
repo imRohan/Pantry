@@ -1,3 +1,4 @@
+![preview](https://github.com/user-attachments/assets/e6762b5a-479a-4261-8e5c-e6b5d04344c5)
 # Pantry
 [![build](https://github.com/imRohan/Pantry/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/imRohan/Pantry/actions/workflows/continuous_integration.yml)
 ![Maintainability](https://api.codeclimate.com/v1/badges/8f1460270ced1f60744c/maintainability)
@@ -32,3 +33,7 @@ using it's default settings
 #### Open Example HTML page
 
 Open `http://localhost:3000/` in the browser of your choice
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=imRohan/Pantry&type=date&legend=top-left)](https://www.star-history.com/#imRohan/Pantry&type=date&legend=top-left)

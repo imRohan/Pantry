@@ -1,5 +1,5 @@
-const crm = {
+const Crm = {
   addNewUser: jest.fn(async () => {}),
 }
 
-export = crm
+export = Crm

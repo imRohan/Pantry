@@ -3,9 +3,9 @@
 // External Files
 import Account from '../models/account'
 import Block from '../models/block'
-import * as crm from '../services/crm'
+import Crm from '../services/crm'
 import logService from '../services/logger'
-import * as mailer from '../services/mailer'
+import EventTracker from '../services/eventTracker'
 import * as recaptcha from '../services/recaptcha'
 
 // Interfaces
@@ -25,14 +25,14 @@ class AccountController {
       }
 
       const _account = new Account(params)
-      const _accountUUID = await _account.store()
+      await _account.store()
 
       const { contactEmail } = params
-      await mailer.sendWelcomeEmail(contactEmail, _accountUUID)
-      crm.addNewUser(contactEmail, _accountUUID)
+      void Crm.addNewUser(contactEmail, _account.uuid)
+      void EventTracker.trackSignup(contactEmail, _account.uuid, _account.name)
 
-      logger.logAndSlack(`Account created for ${contactEmail}: ${_accountUUID}`)
-      return _accountUUID
+      logger.logAndSlack(`Account created for ${contactEmail}: ${_account.uuid}`)
+      return _account.uuid
     } catch (error) {
       logger.error(`Account creation failed: ${error.message}`)
       throw error
@@ -42,12 +42,10 @@ class AccountController {
   public static async update(uuid: string, data: Partial<IAccountUpdateParams>): Promise<IAccountPublic> {
     try {
       const _account = await Account.get(uuid)
-
       await _account.update(data)
 
+      logger.info(`Account ${uuid} was updated`)
       const _accountDetails = _account.sanitize()
-
-      logger.info('Account updated')
       return _accountDetails
     } catch (error) {
       logger.error(`Account update failed: ${error.message}`)
@@ -60,7 +58,7 @@ class AccountController {
       const _account = await Account.get(uuid)
       const _accountDetails = _account.sanitize()
 
-      logger.info('Account retrieved')
+      logger.info(`Account ${uuid} retrieved`)
       return _accountDetails
     } catch (error) {
       logger.error(`Account retrieval failed: ${error.message}`)
@@ -73,7 +71,7 @@ class AccountController {
       const _account = await Account.get(uuid)
       const _blocks = await _account.getBlocks()
 
-      logger.info(`Deleting account: ${uuid}`)
+      logger.info(`Starting deletion of account: ${uuid}`)
       for (const _item of _blocks) {
         const { name } = _item
         logger.info(`Deleting block ${name} in account: ${uuid}`)
@@ -82,7 +80,7 @@ class AccountController {
       }
       await _account.delete()
 
-      logger.info(`Account: ${uuid} deleted`)
+      logger.info(`Account ${uuid} deleted`)
       return 'Your Pantry has been deleted!'
     } catch (error) {
       logger.error(`Account deletion failed: ${error.message}`)

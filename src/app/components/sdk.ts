@@ -22,6 +22,13 @@ const sdk = {
           verified: true,
         },
         {
+          name: 'pantryclient-esp',
+          platform: 'ESP32/ESP8266',
+          author: 'Zakrzewiaczek',
+          link: 'https://github.com/Zakrzewiaczek/pantryclient-esp',
+          verified: false,
+        },
+        {
           name: 'libPantryDotNet',
           platform: '.Net',
           author: 'Krutonium',
@@ -105,6 +112,20 @@ const sdk = {
           link: 'https://github.com/DinoscapeProgramming/PantryJS/',
           verified: false,
         },
+        {
+          name: 'pantry',
+          platform: 'Common Lisp',
+          author: 'Aleksandar Simić',
+          link: 'https://github.com/dotemacs/pantry/',
+          verified: false,
+        },
+        {
+          name: 'pantry',
+          platform: 'Nushell',
+          author: 'Shaoyan Ji',
+          link: 'https://gist.github.com/shaoyanji/dbc5d6e8fe8abb338226a28cd5f8d6cd',
+          verified: false,
+        },
       ],
       defaultBadgeClasses: `flex-shrink-0 inline-block px-2 py-0.5
                             text-xs font-medium
@@ -122,6 +143,7 @@ const sdk = {
         'nim': 'bg-yellow-400',
         'java': 'bg-red-400',
         'dart': 'bg-blue-500',
+        'nushell': 'bg-green-200',
       }
 
       return _table[_platform] ?? 'bg-gray-200'

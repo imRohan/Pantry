@@ -1,12 +1,13 @@
 // External Files
 import AccountController from '../../src/controllers/account'
-import * as crm from '../../src/services/crm'
+import Account from '../../src/models/account'
+import Crm from '../../src/services/crm'
+import EventTracker from '../../src/services/eventTracker'
 import * as dataStore from '../../src/services/dataStore'
-import * as mailer from '../../src/services/mailer'
 import * as recaptcha from '../../src/services/recaptcha'
 
 jest.mock('../../src/services/dataStore')
-jest.mock('../../src/services/mailer')
+jest.mock('../../src/services/eventTracker')
 jest.mock('../../src/services/crm')
 jest.mock('../../src/services/recaptcha')
 
@@ -45,6 +46,8 @@ const _existingBlock: IBlock = {
   accountUUID: _existingAccount.uuid,
   name: 'ExistingBlock',
   payload: { derp: 'flerp' },
+  createdAt: new Date(),
+  updatedAt: null,
 }
 
 afterEach(() => {
@@ -58,19 +61,19 @@ describe('When creating an account', () => {
     expect(_uuid).toBeDefined()
   })
 
-  it ('sends a welcome email', async () => {
-    const _spy = jest.spyOn(mailer, 'sendWelcomeEmail')
+  it ('tracks signup as an event', async () => {
+    const _spy = jest.spyOn(EventTracker, 'trackSignup')
 
     const _uuid: string = await AccountController.create(_newAccountParams)
 
-    expect(_spy).toHaveBeenCalled()
-    expect(_spy).toHaveBeenCalledWith(_newAccountParams.contactEmail, _uuid)
+    expect(_spy).toHaveBeenCalledWith(_newAccountParams.contactEmail, _uuid,
+      _newAccountParams.name)
 
     _spy.mockRestore()
   })
 
   it ('stores user details in crm platform', async () => {
-    const _spy = jest.spyOn(crm, 'addNewUser')
+    const _spy = jest.spyOn(Crm, 'addNewUser')
 
     const _uuid: string = await AccountController.create(_newAccountParams)
 
@@ -150,6 +153,16 @@ describe('When retrieving an account', () => {
     expect(_accountBase).toBeDefined()
   })
 
+  it ('refreshes the TTL of the account', async () => {
+    mockedDataStore.get.mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+    mockedDataStore.find.mockReturnValueOnce(Promise.resolve([]))
+    const _redisKey = `account:${_existingAccount.uuid}`
+
+    await AccountController.get(_existingAccount.uuid)
+
+    expect(mockedDataStore.refreshTTL).toHaveBeenCalledWith(_redisKey, Account.lifeSpan)
+  })
+
   it ('throws an error if account does not exist', async () => {
     mockedDataStore.get.mockReturnValueOnce(Promise.resolve(null))
 
@@ -172,8 +185,8 @@ describe('When deleting an account', () => {
   it('deletes all existing blocks', async () => {
     mockedDataStore.get
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
+      .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingAccount)))
       .mockReturnValueOnce(Promise.resolve(JSON.stringify(_existingBlock)))
-
     mockedDataStore.find.mockReturnValueOnce(
       Promise.resolve(
         [`account:${_existingAccount.uuid}::block:${_existingBlock.name}`]

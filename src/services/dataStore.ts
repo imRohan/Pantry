@@ -78,6 +78,19 @@ export async function remove(key: string): Promise<void> {
   }
 }
 
+export async function refreshTTL(key: string, expiryTTL: number): Promise<void> {
+  try {
+    const _redisClient = redis.createClient()
+    const _expire = promisify(_redisClient.expire).bind(_redisClient)
+    await _expire(key, expiryTTL)
+    _redisClient.quit()
+    return
+  } catch(error) {
+    logger.error(`Error when refreshing TTL of a key: ${error.message}`)
+    throw new Error('Pantry is having critical issues')
+  }
+}
+
 export async function find(pattern: string): Promise<string[]> {
   try {
     const _redisClient = redis.createClient()

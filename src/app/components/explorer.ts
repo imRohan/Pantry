@@ -1,5 +1,6 @@
 // External Files
 const axios = require('axios')
+const jsonEditor = require('vue-json-editor').default
 
 // Configs
 const configs = require('../config.ts')
@@ -11,25 +12,41 @@ const explorerTemplate = require('../templates/explorer.html')
 const API_PATH = configs.apiPath
 
 // Components
+const changelog = require('./changelog.ts')
 const explorerEmpty = require('./explorerEmpty.ts')
 const explorerOnboarding = require('./explorerOnboarding.ts')
 const basket = require('./basket.ts')
 const modal = require('./modal.ts')
+const newBasketModal = require('./newBasketModal.ts')
 
 const explorer = {
   name: 'explorer',
   props: ['pantry'],
   template: explorerTemplate,
   components: {
+    changelog,
     explorerEmpty,
     explorerOnboarding,
     basket,
     modal,
+    newBasketModal,
+    'json-edit': jsonEditor,
   },
   data(): any {
     return {
       basket: null,
-      errorsModalVisible: false,
+      schemaModalVisible: false,
+      createBasketModalVisible: false,
+      schemaExample: {
+        _schema: {
+          toppings: { type: 'array' },
+          size: { type: 'string' },
+          price: { type: 'number' },
+        },
+        toppings: ['pepperoni', 'mushrooms', 'hot peppers'],
+        size: 'large',
+        price: 19.99,
+      },
     }
   },
   computed: {
@@ -44,35 +61,33 @@ const explorer = {
     },
   },
   methods: {
-    openErrorsModal(): void {
-      this.errorsModalVisible = true
+    daysToDeletion(ttl: number): number {
+      const _expiryDate = new Date()
+      _expiryDate.setSeconds(ttl)
+      return this.getDiffOfDates(new Date(), _expiryDate)
     },
-    closeErrorsModal(): void {
-      this.errorsModalVisible = false
-    },
-    getDateOfDeletion(ttl: number): string {
-      const _currentDate = new Date()
-      _currentDate.setSeconds(ttl)
-      return _currentDate.toISOString().split('T')[0]
+    getDiffOfDates(start: Date, end: Date): number {
+      const _msPerDay = 1000 * 60 * 60 * 24
+      const startUTC = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())
+      const endUTC = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate())
+      return Math.floor((endUTC - startUTC) / _msPerDay)
     },
     refresh(): void {
       this.$emit('refresh')
       this.basket = null
     },
-    async createBasket(): Promise<void> {
-      const _randomNumber = Math.floor((Math.random() * 100) + 1)
-      const _defaultName = `newBasket${_randomNumber}`
-      const _name = prompt('What is the name of the new basket?', _defaultName)
-      if (_name) {
+    async createBasket(basketName: string, payload: unknown): Promise<void> {
+      if (basketName) {
         await axios({
           method: 'POST',
-          data: {
-            key: 'value',
-          },
-          url: `${API_PATH}/pantry/${this.pantry.id}/basket/${_name}`,
+          data: payload,
+          url: `${API_PATH}/pantry/${this.pantry.id}/basket/${basketName}`,
         })
 
         this.refresh()
+        this.toggleCreateBasketModal()
+      } else {
+        alert('Please enter a basket name')
       }
     },
     async renamePantry(): Promise<void> {
@@ -117,6 +132,12 @@ const explorer = {
         const { name } = this.pantry.baskets[0]
         this.viewBasket(name)
       }
+    },
+    toggleSchemaModal(): void {
+      this.schemaModalVisible = !this.schemaModalVisible
+    },
+    toggleCreateBasketModal(): void {
+      this.createBasketModalVisible = !this.createBasketModalVisible
     },
   },
 }
