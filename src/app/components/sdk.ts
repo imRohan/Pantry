@@ -106,6 +106,13 @@ const sdk = {
           verified: false,
         },
         {
+          name: 'PantryJS',
+          platform: 'Node.js',
+          author: 'DinoscapeProgramming',
+          link: 'https://github.com/DinoscapeProgramming/PantryJS/',
+          verified: false,
+        },
+        {
           name: 'pantry',
           platform: 'Common Lisp',
           author: 'Aleksandar Simić',
